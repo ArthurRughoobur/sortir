@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,6 +53,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'registred')]
+    private Collection $eventList;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'organizer')]
+    private Collection $organizer;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
+
+    public function __construct()
+    {
+        $this->eventList = new ArrayCollection();
+        $this->organizer = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -213,6 +237,75 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoto(?string $photo): static
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEventList(): Collection
+    {
+        return $this->eventList;
+    }
+
+    public function addEventList(Event $eventList): static
+    {
+        if (!$this->eventList->contains($eventList)) {
+            $this->eventList->add($eventList);
+            $eventList->addRegistred($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventList(Event $eventList): static
+    {
+        if ($this->eventList->removeElement($eventList)) {
+            $eventList->removeRegistred($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getOrganizer(): Collection
+    {
+        return $this->organizer;
+    }
+
+    public function addOrganizer(Event $organizer): static
+    {
+        if (!$this->organizer->contains($organizer)) {
+            $this->organizer->add($organizer);
+            $organizer->setOrganizer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganizer(Event $organizer): static
+    {
+        if ($this->organizer->removeElement($organizer)) {
+            // set the owning side to null (unless already changed)
+            if ($organizer->getOrganizer() === $this) {
+                $organizer->setOrganizer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
 
         return $this;
     }

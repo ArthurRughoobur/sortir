@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,35 @@ class Event
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $canceledInfo = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    private ?Category $category = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'eventList')]
+    private Collection $registred;
+
+    #[ORM\ManyToOne(inversedBy: 'organizer')]
+    private ?User $organizer = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Adress $adress = null;
+
+    public function __construct()
+    {
+        $this->registred = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +151,90 @@ class Event
     public function setCanceledInfo(?string $canceledInfo): static
     {
         $this->canceledInfo = $canceledInfo;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getRegistred(): Collection
+    {
+        return $this->registred;
+    }
+
+    public function addRegistred(User $registred): static
+    {
+        if (!$this->registred->contains($registred)) {
+            $this->registred->add($registred);
+        }
+
+        return $this;
+    }
+
+    public function removeRegistred(User $registred): static
+    {
+        $this->registred->removeElement($registred);
+
+        return $this;
+    }
+
+    public function getOrganizer(): ?User
+    {
+        return $this->organizer;
+    }
+
+    public function setOrganizer(?User $organizer): static
+    {
+        $this->organizer = $organizer;
+
+        return $this;
+    }
+
+    public function getAdress(): ?Adress
+    {
+        return $this->adress;
+    }
+
+    public function setAdress(?Adress $adress): static
+    {
+        $this->adress = $adress;
 
         return $this;
     }

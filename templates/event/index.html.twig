@@ -3,23 +3,27 @@
 {% block title %}{% endblock %}
 
 {% block body %}
+    <section class="eventList">
 
-    {% for event in events %}
-        <article>
-            <a href="">
-                <span>{{ event.name }}</span>
-                <span>{{ event.category }}</span>
-                <span>{{ event. }}</span>
+        {% for event in events %}
+            <a class="eventCard" href="{{ path('event_detail', {'id': event.id}) }}">
+                <span>Nom de la sortie : {{ event.name }}</span>
+                <span>Catégorie de la sortie : {{ event.category.name }}</span>
+                <span>Date de la sortie : {{ event.dateStart|date("d/m/Y H:m") }}</span>
+                <span>Clôture : {{ event.deadline | date("d/m/Y") }}</span>
+                <span>inscrits/places : {{ event.registred.count }}/{{ event.maxIscription }}</span>
+                <span>Etat : {{ event.status.name }}</span>
+                {% if app.user %}
+                    <span>Vous été inscrit a l'event</span>
 
+                {% else %}
+                    <span>Vous n'été pas inscrit a l'event</span>
 
+                {% endif %}
 
             </a>
-
-        </article>
-
-
-    {% endfor %}
-
+        {% endfor %}
+    </section>
 
 
 

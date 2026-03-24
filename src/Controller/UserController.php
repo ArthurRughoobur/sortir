@@ -37,7 +37,7 @@ final class UserController extends AbstractController
            $entityManager->flush();
            $this->addFlash('success', 'Mise à jour du profil effectuée !');
 
-           return $this->redirectToRoute('main_home');
+           return $this->redirectToRoute('main_event');
        }
            return $this->render('user/update.html.twig', [
                'userForm2' => $userForm,

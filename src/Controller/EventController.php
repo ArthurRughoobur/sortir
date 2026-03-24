@@ -17,4 +17,15 @@ final class EventController extends AbstractController
             'events' => $events,
         ]);
     }
+    #[Route('/detail/{id}', name: 'event_detail', requirements: ['id' => '\d+'])]
+    public function detailEvent(int $id, EventRepository $eventRepository): Response
+    {
+        $event = $eventRepository->find($id);
+
+        return $this->render('event/detailEvent.html.twig',[
+            'event' => $event,
+        ]);
+    }
+
+
 }

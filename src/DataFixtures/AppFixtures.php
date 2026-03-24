@@ -104,7 +104,7 @@ class AppFixtures extends Fixture
             $user->setEmail($faker->email);
             $user->setActive($faker->boolean());
             $user->setStudent($faker->boolean());
-            $user->setPhoto($faker->imageUrl());
+            $user->setPhoto("portrait.png");
             $user->setCampus($faker->randomElement($campus));
             $manager->persist($user);
 

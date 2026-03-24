@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% embed 'form/template-form.html.twig' with {form : userForm2} %}
+    {% embed 'views/form/template-form.html.twig' with {form : userForm2} %}
         {% block formTitle %} MON PROFIL : {% endblock %}
         {% block buttonLabel %} Update !{% endblock %}
        {% endembed %}

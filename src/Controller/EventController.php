@@ -28,4 +28,10 @@ final class EventController extends AbstractController
     }
 
 
-}
+
+    #[Route('/create_event', name: 'create_event')]
+    public function createEvent(EventRepository $eventRepository): Response
+    {
+    }
+    }
+

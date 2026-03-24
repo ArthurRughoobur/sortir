@@ -2,9 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Adress;
 use App\Entity\Campus;
 use App\Entity\Category;
 use App\Entity\City;
+use App\Entity\Event;
 use App\Entity\Status;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -18,6 +20,7 @@ class AppFixtures extends Fixture
     {
 
     }
+
     public function load(ObjectManager $manager): void
     {
         $this->addCampus($manager);
@@ -25,6 +28,8 @@ class AppFixtures extends Fixture
         $this->addStatus($manager);
         $this->addCity($manager);
         $this->addCategory($manager);
+        $this->addAdresse($manager);
+        $this->addEvent($manager);
     }
 
     public function addCampus(ObjectManager $manager)
@@ -82,8 +87,6 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-
-
     public function addUsers(ObjectManager $manager)
     {
         $faker = Factory::create();
@@ -109,5 +112,74 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
+    public function addAdresse(ObjectManager $manager)
+    {
+        $faker = Factory::create();
+        $city = $manager->getRepository(City::class)->findAll();
+        $activities = [
+            'Randonnée',
+            'Escalade',
+            'Restaurant',
+            'Cinéma',
+            'Natation',
+            'Football',
+            'Jeux vidéo',
+            'Bowling',
+            'Karting',
+            'Musculation'
+        ];
+        foreach ($activities as $activity) {
+            $address = new Adress();
+            $address->setName($faker->randomElement($activities));
+            $address->setStreet($faker->streetAddress);
+            $address->setCity($faker->randomElement($city));
+            $address->setLatitude($faker->latitude);
+            $address->setLongitude($faker->longitude);
+            $manager->persist($address);
+        }
+        $manager->flush();
+    }
+
+    public function addEvent(ObjectManager $manager)
+    {
+        $faker = Factory::create();
+        $campus = $manager->getRepository(Campus::class)->findAll();
+        $adresses = $manager->getRepository(Adress::class)->findAll();
+        $statuses = $manager->getRepository(Status::class)->findAll();
+        $organizer = $manager->getRepository(User::class)->findAll();
+        $registred = $manager->getRepository(User::class)->findAll();
+        $categories = $manager->getRepository(Category::class)->findAll();
+
+        $sortie =
+            [
+                'Rando forêt', 'Rando montagne', 'Balade nature', 'Randonnée bord de mer', 'Rando parc naturel',
+                'Escalade en salle', 'Escalade en falaise', 'Bloc indoor', 'Via ferrata', 'Escalade débutant',
+                'McDo', 'Burger King', 'Restaurant italien', 'Restaurant chinois', 'Restaurant gastronomique',
+                'Pizzeria', 'Buffet à volonté', 'Cinéville', 'UGC', 'Pathé', 'Cinéma indépendant', 'Soirée Netflix',
+                'Piscine municipale', 'Piscine olympique', 'Aqua gym', 'Natation en mer', 'Parc aquatique',
+                'Match entre amis', 'Five (foot indoor)', 'Entraînement club', 'Match compétition', 'Foot loisir',
+                'Session ranked', 'Session chill', 'Tournoi online', 'LAN entre amis', 'Speedrun', 'Bowling entre amis',
+                'Soirée bowling', 'Compétition bowling', 'Bowling + arcade', 'Karting indoor', 'Karting outdoor',
+                'Course entre amis', 'Session chrono', 'Grand prix', 'Séance haut du corps', 'Séance jambes',
+                'Full body', 'Cardio training', 'Cross training',
+            ];
+        foreach ($sortie as $name) {
+            $event = new Event();
+            $event->setName($name);
+            $event->setDateStart(($faker->dateTimeBetween('-1 months', 'now')));
+            $event->setDeadline($faker->dateTimeBetween($event->getDateStart()));
+            $event->setDuration($faker->numberBetween(30, 60));
+            $event->setMaxIscription($faker->numberBetween(5, 15));
+            $event->setEventInfo($faker->text(25));
+            $event->setCategory($faker->randomElement($categories));
+            $event->setAdress($faker->randomElement($adresses));
+            $event->setStatus($faker->randomElement($statuses));
+            $event->setCampus($faker->randomElement($campus));
+            $event->addRegistred($faker->randomElement($registred));
+            $event->setOrganizer($faker->randomElement($organizer));
+            $manager->persist($event);
+        }
+        $manager->flush();
+    }
 
 }

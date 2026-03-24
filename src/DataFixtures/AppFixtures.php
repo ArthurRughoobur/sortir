@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Campus;
+use App\Entity\Category;
 use App\Entity\City;
 use App\Entity\Status;
 use App\Entity\User;
@@ -16,6 +17,14 @@ class AppFixtures extends Fixture
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
     {
 
+    }
+    public function load(ObjectManager $manager): void
+    {
+        $this->addCampus($manager);
+        $this->addUsers($manager);
+        $this->addStatus($manager);
+        $this->addCity($manager);
+        $this->addCategory($manager);
     }
 
     public function addCampus(ObjectManager $manager)
@@ -60,13 +69,20 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function load(ObjectManager $manager): void
+    public function addCategory(ObjectManager $manager)
     {
-        $this->addCampus($manager);
-        $this->addUsers($manager);
-        $this->addStatus($manager);
-        $this->addCity($manager);
+        $categories = ['Sorties gourmandes', 'Culture & divertissement',
+            'Vie nocturne', 'Shopping & flânerie', 'Activités en plein air',
+            'Loisirs & jeux', 'Sport & bien-être', 'Créatif & insolite', 'Social & rencontres'];
+        foreach ($categories as $name) {
+            $newCategory = new Category();
+            $newCategory->setName($name);
+            $manager->persist($newCategory);
+        }
+        $manager->flush();
     }
+
+
 
     public function addUsers(ObjectManager $manager)
     {

@@ -49,7 +49,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
         }
 
 
-         return new RedirectResponse($this->urlGenerator->generate('main_home'));
+         return new RedirectResponse($this->urlGenerator->generate('main_event'));
 
     }
 

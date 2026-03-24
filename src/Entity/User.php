@@ -49,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $active = null;
 
     #[ORM\Column]
-    private ?bool $student = null;
+    private ?bool $student = true;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;

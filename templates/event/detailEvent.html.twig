@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <article>
+
+        <span>Nom de la sortie : {{ event.name }}</span>
+        <span>Catégorie de la sortie : {{ event.category.name }}</span>
+        <span>Date et heure de la sortie : {{ event.dateStart|date("d/m/Y H:m") }}</span>
+        <span>Date limite d'inscription : {{ event.deadline | date("d/m/Y") }}</span>
+        <span>inscrits/places : {{ event.registred.count }}/{{ event.maxIscription }}</span>
+        <span>Etat : {{ event.status.name }}</span>
+        <span>Inscrit : {{ event.organizer.name }}</span>
+        <span>Campus : {{ event.campus.name }}</span>
+        <span>Lieu : {{ event.adress.city.name }}</span>
+        <span>Rue : {{ event.adress.street }}</span>
+        <span>Code Postal : {{ event.adress.city.zipCode }}</span>
+        <span>Latitude : {{ event.adress.latitude }}</span>
+        <span>Longitude : {{ event.adress.longitude }}</span>
+        <span>Description et infos : {{ event.eventInfo }}</span>
+        <div>
+            <span>
+{#                Liste des participants : {{ event. }}#}
+            </span>
+        </div>
+    </article>
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

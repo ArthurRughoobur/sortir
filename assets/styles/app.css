@@ -1,3 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Fredericka+the+Great&display=swap');
 body {
-    background-color: skyblue;
+    margin: 0;
+    min-height: 100vh;
+    color: black;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+}
+a{
+    text-decoration: none;
+}
+.bodyContainer {
+    width: 95%;
+    margin: 0 auto;
+    padding: 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.eventList {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+    font-size: 0.95rem;
+}
+
+.eventCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 180px;
+    padding: 1.25rem;
+    border: 1px solid;
+    border-radius: 18px;
+    backdrop-filter: blur(3px);
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.eventCard:hover,
+.eventCard:focus-visible {
+    transform: translateY(-6px);
+    border-color: black;
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
+}
+
+.eventCard:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 4px;
 }

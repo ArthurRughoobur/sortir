@@ -2,17 +2,36 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+
+    <title>{% block title %}On S'fait ca !{% endblock %}</title>
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+    <link rel="icon" href="{{ asset('img/logo.png') }}">
+
 </head>
 <body>
-{% block body %}
-{% endblock %}
-
-{% block footer %}
-
-{% endblock %}
+<div class="container">
+    <header>
+        <a href="{{ path('main_event') }}">
+            <img src="{{ asset('img/logo.png') }}" alt="logo">
+        </a>
+        {% include 'views/nav/nav.html.twig' %}
+    </header>
+    <main>
+        {# read and display all flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% block body %}{% endblock %}
+    </main>
+    <footer>
+        {% include 'views/nav/nav.html.twig' %}
+    </footer>
+</div>
 </body>
 </html>

@@ -6,13 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class MainController extends AbstractController
+final class EventController extends AbstractController
 {
-    #[Route('/', name: 'main_home')]
-    public function index(): Response
+    #[Route('/', name: 'main_event')]
+    public function mainEvent(): Response
     {
-        return $this->render('main/index.html.twig', [
-
-        ]);
+        return $this->render('event/index.html.twig');
     }
 }

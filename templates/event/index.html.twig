@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Hello EventController!{% endblock %}
 
 {% block body %}
 <style>
@@ -9,13 +9,12 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello</h1>
+    <h1>Hello {{ controller_name }}! ✅</h1>
 
     This friendly message is coming from:
     <ul>
-        <h1>COUCOU je change ici</h1>
-        <li>Your controller at <code>D:/wamp64/www/sortir/src/Controller/MainController.php</code></li>
-        <li>Your template at <code>D:/wamp64/www/sortir/templates/main/index.html.twig</code></li>
+        <li>Your controller at <code>D:/wamp64/www/sortir/src/Controller/EventController.php</code></li>
+        <li>Your template at <code>D:/wamp64/www/sortir/templates/event/index.html.twig</code></li>
     </ul>
 </div>
 {% endblock %}

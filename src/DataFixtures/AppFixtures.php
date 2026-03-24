@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Campus;
+use App\Entity\Status;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -27,10 +28,21 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
+    public function addStatus(ObjectManager $manager){
+        $statusList = ['En création', 'Ouverte', 'Clôturée', 'En cours', 'Terminée', 'Annulée', 'Historisée'];
+        foreach ($statusList as $status) {
+            $newStatus = new Status();
+            $newStatus->setName($status);
+            $manager->persist($newStatus);
+        }
+        $manager->flush();
+    }
+
     public function load(ObjectManager $manager): void
     {
         $this->addCampus($manager);
         $this->addUsers($manager);
+        $this->addStatus($manager);
     }
 
     public function addUsers(ObjectManager $manager)

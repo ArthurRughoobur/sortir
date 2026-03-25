@@ -106,7 +106,7 @@ class AppFixtures extends Fixture
             $user->setUsername($data['username']);
             $user->setRoles($data['roles']);
             $user->setPassword($this->passwordHasher->hashPassword($user, '123456'));
-            $user->setName($faker->userName());
+            $user->setName($faker->firstName());
             $user->setLastname($faker->lastName());
             $user->setPhone($faker->phoneNumber());
             $user->setEmail($faker->unique()->safeEmail());
@@ -211,8 +211,7 @@ class AppFixtures extends Fixture
             }
 
             $event->setMaxIscription($faker->numberBetween(5, 15));
-            $event->setEventInfo($faker->sentence(8));
-            $event->setEventInfo($faker->sentence(8));
+            $event->setEventInfo($faker->realText( 255));
             $event->setCategory($faker->randomElement($categories));
             $event->setAdress($faker->randomElement($adresses));
             $event->setCampus($faker->randomElement($campus));

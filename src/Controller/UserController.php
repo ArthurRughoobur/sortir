@@ -33,23 +33,32 @@ final class UserController extends AbstractController
             $file = $userForm->get('photo')->getData();
             $user->setPhoto(
                 $fileUploader->upload($file, 'img', $user->getName()));
-
-
             //hash du mdp
-
             $plainPassword = $userForm->get('password')->getData();
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Mise à jour du profil effectuée !');
+            return $this->redirectToRoute('main_event');
+        }
+        return $this->render('user/update.html.twig', [
+            'userForm2' => $userForm,
+            'user' => $user,
+        ]);
 
-           return $this->redirectToRoute('main_event');
-       }
-           return $this->render('user/update.html.twig', [
-               'userForm2' => $userForm,
-               'user' => $user,
-           ]);
-
+    }
+    #[Route('/user/detail/{id}', name: 'user_detail_id', requirements: ['id'=>'\d+'], methods: ['GET'])]
+    public function userDetailById
+    (
+        int $id,
+        UserRepository $userRepository,
+    )
+    :Response
+    {
+        $userById = $userRepository->find($id);
+        return $this->render('user/userDetailById.html.twig',[
+            'userById' => $userById,
+            ]
+        );
     }
 }

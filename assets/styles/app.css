@@ -9,6 +9,10 @@ body {
 a{
     text-decoration: none;
 }
+.logoNav{
+    width: 15rem;
+    height: auto;
+}
 .bodyContainer {
     width: 95%;
     margin: 0 auto;

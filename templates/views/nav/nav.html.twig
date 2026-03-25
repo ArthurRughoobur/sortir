@@ -1,8 +1,8 @@
 <nav>
     <ul>
         <li><a href="{{ path('main_event') }}">Accueil</a></li>
-        <li><a href="{{ path('main_mentions_légales') }}">Mentions légales</a></li>
-        <li><a href="{{ path('main_about_us') }}">Qui somme nous</a></li>
+        <li><a href="{{ path('main_mentions') }}">Mentions légales</a></li>
+        <li><a href="{{ path('main_about') }}">Qui somme nous</a></li>
 
         {% if app.user %}
             {% if is_granted("ROLE_ADMIN") %}

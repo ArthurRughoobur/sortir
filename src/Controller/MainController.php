@@ -8,14 +8,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class MainController extends AbstractController
 {
-    #[Route('/mentionsLegales', name: 'main_mentions_légales')]
+    #[Route('/mentions-légales', name: 'main_mentions')]
     public function mentionsLegales(): Response
     {
-        return $this->render('main/mentions_légales.html.twig',);
+        return $this->render('main/mentions.html.twig',);
     }
-    #[Route('/aboutUs', name: 'main_about_us')]
+    #[Route('/qui-sommes-nous', name: 'main_about')]
     public function aboutUs(): Response
     {
-        return $this->render('main/aboutUs.html.twig',);
+        return $this->render('main/about.html.twig',);
     }
 }

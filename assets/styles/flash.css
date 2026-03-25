@@ -1,0 +1,50 @@
+/* =========================
+   FLASH MESSAGES
+========================= */
+.flash {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    max-inline-size: min(25ch, 90vw);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: white;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: toast 3.3s ease forwards;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.flash-success {
+    background-color: rgba(38, 154, 0, 0.77);
+}
+
+.flash-error {
+    background-color: rgba(200, 40, 40, 0.9);
+}
+
+.flash-warning {
+    background-color: rgba(214, 142, 0, 0.9);
+}
+
+@keyframes toast {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+        visibility: hidden;
+    }
+}

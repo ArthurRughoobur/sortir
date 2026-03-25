@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Components\EventFormComponent;
+use App\Entity\Event;
+use App\Form\EventType;
 use App\Repository\EventRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +36,36 @@ final class EventController extends AbstractController
     #[Route('/create_event', name: 'create_event')]
     public function createEvent(EventRepository $eventRepository): Response
     {
+//        $component -> save();
+//        $component -> publish();
+
+//        $event = new Event();
+//        $eventForm = $this->createForm(EventType::class, $event);
+//
+//        $eventForm->handleRequest($request);
+//        if ($eventForm->isSubmitted() && $eventForm->isValid()) {
+//            if ($eventForm->getClickedButton() && 'save' === $eventForm->getClickedButton()->getName()) {
+//                $event->setStatus("En création");
+//                $this->addFlash('success', ['Evènement '. $event->getName().'sauvegardé !']);
+//            }
+//            if ($eventForm->getClickedButton() && 'publish' === $eventForm->getClickedButton()->getName()) {
+//                $event->setStatus("Ouverte");
+//                $this->addFlash('success', ['Evènement '. $event->getName().'crée !']);
+//            }
+//            if ($eventForm->getClickedButton() && 'cancel' === $eventForm->getClickedButton()->getName()) {
+//                $this->addFlash('success', ['Evènement '. $event->getName().'annulé !']);
+//                return $this->redirectToRoute('main_event');
+//
+//            }
+//            $entityManager->persist($event);
+//            $entityManager->flush();
+
+//            return $this->redirectToRoute('main_event');
+//        }
+        return $this->render('event/createEvent.html.twig', [
+
+        ]);
+
     }
 
     #[Route('/inscription/{id}', name: 'inscription_event', requirements: ['id' => '\d+'])]

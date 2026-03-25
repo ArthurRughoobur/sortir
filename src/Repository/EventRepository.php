@@ -16,28 +16,50 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    //    /**
-    //     * @return Event[] Returns an array of Event objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    function findEventList()
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb
+            ->join('e.registred', 'r')
+            ->addSelect('r')
+            ->join('e.organizer', 'o')
+            ->addSelect('o')
+            ->join('e.campus', 'c')
+            ->addSelect('c')
+            ->join('e.category', 'ca')
+            ->addSelect('ca')
+            ->join('e.status', 's')
+            ->addSelect('s')
+            ->andWhere('s.name = :status')
+            ->setParameter('status', 'Ouverte');
 
-    //    public function findOneBySomeField($value): ?Event
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
+    public function findEventById($id): ?Event
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.registred', 'r')
+            ->addSelect('r')
+            ->leftJoin('e.organizer', 'o')
+            ->addSelect('o')
+            ->leftJoin('e.campus', 'c')
+            ->addSelect('c')
+            ->leftJoin('e.status', 's')
+            ->addSelect('s')
+            ->leftJoin('e.category', 'ca')
+            ->addSelect('ca')
+            ->leftJoin('e.adress', 'a')
+            ->addSelect('a')
+            ->leftjoin('a.city', 'ci')
+            ->addSelect('ci')
+            ->andWhere('e.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+
 }

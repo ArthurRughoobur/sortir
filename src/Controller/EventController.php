@@ -12,7 +12,7 @@ final class EventController extends AbstractController
     #[Route('/', name: 'main_event')]
     public function mainEvent(EventRepository $eventRepository): Response
     {
-        $events = $eventRepository->findAll();
+        $events = $eventRepository->findEventList();
         return $this->render('event/index.html.twig',[
             'events' => $events,
         ]);
@@ -20,7 +20,7 @@ final class EventController extends AbstractController
     #[Route('/detail/{id}', name: 'event_detail', requirements: ['id' => '\d+'])]
     public function detailEvent(int $id, EventRepository $eventRepository): Response
     {
-        $event = $eventRepository->find($id);
+        $event = $eventRepository->findEventById($id);
 
         return $this->render('event/detailEvent.html.twig',[
             'event' => $event,

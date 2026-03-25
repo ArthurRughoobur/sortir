@@ -17,11 +17,15 @@
         <span>Latitude : {{ event.adress.latitude }}</span>
         <span>Longitude : {{ event.adress.longitude }}</span>
         <span>Description et infos : {{ event.eventInfo }}</span>
-        <div>
-            <span>
-{#                Liste des participants : {{ event. }}#}
-            </span>
-        </div>
+
+        <ul>
+            {% for user in event.registred %}
+                <li>
+                    {{ user.name }} {{ user.lastname }}
+            {% else %}
+                <li>Aucun participant</li>
+            {% endfor %}
+        </ul>
     </article>
 
 {% endblock %}

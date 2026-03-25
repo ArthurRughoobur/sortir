@@ -1,0 +1,45 @@
+<div {{ attributes }}>
+    {{ form_errors(form) }}
+
+    {{ form_start(form, {
+    'attr': {
+    'data-model': 'on(change)|*'
+    }
+    }) }}
+
+    <div class="mb-3">
+        {{ form_label(form.adress) }}
+        {{ form_widget(form.adress, {
+            'attr': {
+                'data-model': 'adress',
+                'data-action': 'live#update',
+                'class': 'form-control'
+            }
+        }) }}
+    </div>
+
+    <div class="mb-3">
+        <label>Rue :</label>
+        <input type="text" value="{{ street }}" readonly class="form-control">
+    </div>
+
+    {% for field in form.children %}
+        {% if field.vars.name not in ['adress', 'save', 'publish'] %}
+            {{ form_row(field) }}
+        {% endif %}
+    {% endfor %}
+
+    <div class="d-flex gap-2">
+        <button type="submit" name="save" value="save" class="btn btn-secondary"
+                data-action="live#action"
+                data-live-action-param="save">Sauvegarder</button>
+        <button type="submit" name="publish" value="publish" class="btn btn-primary"
+                data-action="live#action"
+                data-live-action-param="publish">Publier la sortie</button>
+        <a href="{{ path('main_event') }}" class="btn btn-secondary mt-3">
+            Annuler !
+        </a>
+    </div>
+
+    {{ form_end(form) }}
+</div>

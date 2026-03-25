@@ -44,10 +44,10 @@ class UserType extends AbstractType
             ]);
         $builder
             ->add('lastname', TextType::class, [
-                'label' => 'Prenom : '
+                'label' => 'Nom : '
             ])
             ->add('name', TextType::class, [
-                'label' => 'Nom : '
+                'label' => 'Prenom : '
             ])
             ->add('phone', TextType::class, [
                 'label'=> 'Numéro de téléphone : '

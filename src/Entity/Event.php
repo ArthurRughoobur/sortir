@@ -88,7 +88,7 @@ class Event
         return $this->dateStart;
     }
 
-    public function setDateStart(\DateTime $dateStart): static
+    public function setDateStart(?\DateTime $dateStart): static
     {
         $this->dateStart = $dateStart;
 
@@ -112,7 +112,7 @@ class Event
         return $this->deadline;
     }
 
-    public function setDeadline(\DateTime $deadline): static
+    public function setDeadline(?\DateTime $deadline): static
     {
         $this->deadline = $deadline;
 

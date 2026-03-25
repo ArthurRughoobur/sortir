@@ -20,12 +20,16 @@
 
         <ul>
             {% for user in event.registred %}
-                <li>
-                    {{ user.name }} {{ user.lastname }}
+                <a href="{{ path('user_detail_id', {'id': user.id}) }}">
+                    <li>{{ user.name }} {{ user.lastname }}</li>
+                </a>
             {% else %}
                 <li>Aucun participant</li>
             {% endfor %}
         </ul>
+        <button>
+
+        </button>
     </article>
 
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h3>{{ userById.username }}</h3>
+    <span>Prénom : {{ userById.name }}</span>
+    <span>Nom : {{ userById.lastname }}</span>
+    <span>Téléphone : {{ userById.phone }}</span>
+    <span>Email : {{ userById.email }}</span>
+    <span>Campus : {{ userById.campus.name }}</span>
+    <span>{{ userById.student == 1 ? 'Ancien élève' : 'En formation' }}</span>
+{% endblock %}
+

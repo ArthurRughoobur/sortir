@@ -11,10 +11,9 @@
                 <span>Catégorie de la sortie : {{ event.category.name }}</span>
                 <span>Date de la sortie : {{ event.dateStart|date("d/m/Y H:m") }}</span>
                 <span>Clôture : {{ event.deadline | date("d/m/Y") }}</span>
-                <span>inscrits/places : {{ event.registred.count }}/{{ event.maxIscription }}</span>
-                <span>Etat : {{ event.status.name }}</span>
-                <span>{{ event.organizer.name }} {{ event.organizer.lastname }}</span>
-
+                <span>Inscrits / Places : {{ event.registred.count }} / {{ event.maxIscription }}</span>
+                <span>Statut : {{ event.status.name }}</span>
+                <span>Organisateur : {{ event.organizer.name }} {{ event.organizer.lastname }}</span>
 
                 {% if app.user in event.registred %}
                     <span>✔️ Inscrit</span>

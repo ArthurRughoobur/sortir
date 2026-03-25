@@ -85,7 +85,9 @@ final class EventController extends AbstractController
             throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
         }
         $event->addRegistred($user);
+        $entityManager->persist($event);
         $entityManager->flush();
+        $this->addFlash('success', 'Vous été bien inscrit.');
         return $this->redirectToRoute('event_detail', ['id' => $id]);
 
     }
@@ -110,6 +112,7 @@ $user = $this->getUser();
         $event->removeRegistred($user);
         $entityManager->persist($event);
         $entityManager->flush();
+        $this->addFlash('success', 'Vous été bien désinscrit.');
 return $this->redirectToRoute('event_detail', ['id' => $id]);
     }
 

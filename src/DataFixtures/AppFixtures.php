@@ -216,7 +216,12 @@ class AppFixtures extends Fixture
             $event->setAdress($faker->randomElement($adresses));
             $event->setCampus($faker->randomElement($campus));
 
-            $selectedOrganizer = $faker->randomElement($users);
+            $availableOrganizers = array_values(array_filter($users, function ($user) {
+                return !in_array('ROLE_ADMIN', $user->getRoles(), true)
+                    && $user->getUsername() !== 'Admin';
+            }));
+
+            $selectedOrganizer = $faker->randomElement($availableOrganizers);
             $event->setOrganizer($selectedOrganizer);
 
             $availableParticipants = array_values(array_filter($users, function ($user) use ($selectedOrganizer) {

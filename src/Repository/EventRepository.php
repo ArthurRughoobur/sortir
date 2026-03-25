@@ -18,23 +18,21 @@ class EventRepository extends ServiceEntityRepository
 
     function findEventList()
     {
-        $qb = $this->createQueryBuilder('e');
-        $qb
-            ->join('e.registred', 'r')
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.registred', 'r')
             ->addSelect('r')
-            ->join('e.organizer', 'o')
+            ->leftJoin('e.organizer', 'o')
             ->addSelect('o')
-            ->join('e.campus', 'c')
+            ->leftJoin('e.campus', 'c')
             ->addSelect('c')
-            ->join('e.category', 'ca')
+            ->leftJoin('e.category', 'ca')
             ->addSelect('ca')
-            ->join('e.status', 's')
+            ->leftJoin('e.status', 's')
             ->addSelect('s')
             ->andWhere('s.name = :status')
-            ->setParameter('status', 'Ouverte');
-
-        $query = $qb->getQuery();
-        return $query->getResult();
+            ->setParameter('status', 'Ouverte')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findEventById($id): ?Event

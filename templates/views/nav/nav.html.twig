@@ -11,6 +11,7 @@
 
             {% endif %}
             <li><a href="{{ path('app_logout') }}">Se Déconnecter</a></li>
+            <li><a href="{{ path('create_event') }}">Créer un évènement</a></li>
             <li><a href="{{ path('update', {'id': app.user.id}) }}">Mon Profil</a>
             </li>
         {% else %}

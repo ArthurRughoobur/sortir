@@ -2,23 +2,16 @@
     {{ form_errors(form) }}
 
     {{ form_start(form, {
-    'attr': {
-    'data-model': 'on(change)|*'
-    }
+        attr: {
+            'data-model': 'on(change)|*'
+        }
     }) }}
 
-    <div class="mb-3">
-        {{ form_label(form.adress) }}
-        {{ form_widget(form.adress, {
-            'attr': {
-                'data-model': 'adress',
-                'data-action': 'live#update',
-                'class': 'form-control'
-            }
-        }) }}
+    <div class="">
+        {{ form_row(form.adress) }}
     </div>
 
-    <div class="mb-3">
+    <div class="">
         <label>Rue :</label>
         <input type="text" value="{{ street }}" readonly class="form-control">
     </div>
@@ -29,14 +22,30 @@
         {% endif %}
     {% endfor %}
 
-    <div class="d-flex gap-2">
-        <button type="submit" name="save" value="save" class="btn btn-secondary"
-                data-action="live#action"
-                data-live-action-param="save">Sauvegarder</button>
-        <button type="submit" name="publish" value="publish" class="btn btn-primary"
-                data-action="live#action"
-                data-live-action-param="publish">Publier la sortie</button>
-        <a href="{{ path('main_event') }}" class="btn btn-secondary mt-3">
+    <div class="">
+        <button
+            type="submit"
+            name="save"
+            value="save"
+            class="btn btn-secondary"
+            data-action="live#action"
+            data-live-action-param="save"
+        >
+            Sauvegarder
+        </button>
+
+        <button
+            type="submit"
+            name="publish"
+            value="publish"
+            class="btn btn-primary"
+            data-action="live#action"
+            data-live-action-param="publish"
+        >
+            Publier la sortie
+        </button>
+
+        <a href="{{ path('main_event') }}" class="btn btn-secondary">
             Annuler !
         </a>
     </div>

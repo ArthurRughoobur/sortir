@@ -27,9 +27,12 @@
                 <li>Aucun participant</li>
             {% endfor %}
         </ul>
-        <button>
-
-        </button>
+        <a href="{{ path('inscription_event', {'id': event.id}) }}">
+            <button class="">Inscription !</button>
+        </a>
+        <a href="{{ path('desinscription_event', {'id': event.id}) }}">
+            <button class="">Désinscription !</button>
+        </a>
     </article>
 
 {% endblock %}

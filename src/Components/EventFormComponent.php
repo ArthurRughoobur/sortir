@@ -115,10 +115,5 @@ final class EventFormComponent extends AbstractController
         return $this->redirectToRoute('main_event');
 
     }
-    public function addFlash(string $type, string $message): void {
-        $request = $this->requestStack->getCurrentRequest();
-        if ($request && $request->hasSession()) {
-            $request->getSession()->getFlashBag()->add($type, $message);
-        }
-    }
+
 }

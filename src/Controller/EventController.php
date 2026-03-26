@@ -41,7 +41,6 @@ final class EventController extends AbstractController
         ]);
     }
 
-
     #[Route('/create_event', name: 'create_event')]
     public function createEvent(): Response
     {
@@ -110,8 +109,8 @@ final class EventController extends AbstractController
         EntityManagerInterface $entityManager,
     ): Response
     {
-$event = $eventRepository->findEventById($id);
-$user = $this->getUser();
+        $event = $eventRepository->findEventById($id);
+        $user = $this->getUser();
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
@@ -122,7 +121,16 @@ $user = $this->getUser();
         $entityManager->persist($event);
         $entityManager->flush();
         $this->addFlash('success', 'Vous été bien désinscrit.');
-return $this->redirectToRoute('event_detail', ['id' => $id]);
+        return $this->redirectToRoute('event_detail', ['id' => $id]);
     }
 
+
+    #[Route('/delete/{id}', name: 'delete_event', requirements: ['id' => '\d+'])]
+    public function deleteEvent
+    (
+
+    )
+    {
+
+    }
 }

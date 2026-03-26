@@ -57,12 +57,12 @@ final class EventFormComponent extends AbstractController
         $event = $this->initialFormData ?? new Event();
 
 
-        if ($this->id !== null) {
-            $event = $this->eventRepository->find($this->id);
-            if($event->getUser() != $this->getUser()) {
-                throw $this->createAccessDeniedException("Ce n'est pas ton évènement");
-            }
-                }
+//        if ($this->id !== null) {
+//            $event = $this->eventRepository->find($this->id);
+//            if($event->getUser() != $this->getUser()) {
+//                throw $this->createAccessDeniedException("Ce n'est pas ton évènement");
+//            }
+//                }
         $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();
         $this->latitude = $event->getAdress()?->getLatitude();

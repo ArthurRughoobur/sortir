@@ -31,11 +31,15 @@ final class UserController extends AbstractController
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             $file = $userForm->get('photo')->getData();
-            $user->setPhoto(
-                $fileUploader->upload($file, 'img', $user->getName()));
+            if ($file) {
+                $user->setPhoto(
+                    $fileUploader->upload($file, 'img', $user->getName()));
+            }
             //hash du mdp
             $plainPassword = $userForm->get('password')->getData();
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            if ($plainPassword) {
+                $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            }
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Mise à jour du profil effectuée !');
@@ -47,17 +51,17 @@ final class UserController extends AbstractController
         ]);
 
     }
-    #[Route('/user/detail/{id}', name: 'user_detail_id', requirements: ['id'=>'\d+'], methods: ['GET'])]
+
+    #[Route('/user/detail/{id}', name: 'user_detail_id', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function userDetailById
     (
-        int $id,
+        int            $id,
         UserRepository $userRepository,
-    )
-    :Response
+    ): Response
     {
         $userById = $userRepository->find($id);
-        return $this->render('user/userDetailById.html.twig',[
-            'userById' => $userById,
+        return $this->render('user/userDetailById.html.twig', [
+                'userById' => $userById,
             ]
         );
     }

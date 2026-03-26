@@ -8,7 +8,10 @@
             Créer un évènement
         {% endif %}
     </h1>
-    {{ component('event_form', {initialFormData: event ?? null}) }}
+    {{ component('event_form', {
+        'initialFormData': event ?? null,
+        'id': event.id ?? null
+    }) }}
 
 
 {% endblock %}

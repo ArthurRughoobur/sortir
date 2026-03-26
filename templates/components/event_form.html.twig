@@ -11,7 +11,7 @@
         attr: {
             'data-model': 'on(change)|*',
             'data-action': 'live#action:prevent',
-
+            'onsubmit': 'return false;'
         }
     }) }}
 
@@ -38,7 +38,7 @@
 
 
     {% for field in form.children %}
-        {% if field.vars.name not in ['adress', 'save', 'publish'] %}
+        {% if field.vars.name not in ['adress', 'save', 'publish','cancel'] %}
             {{ form_row(field) }}
         {% endif %}
     {% endfor %}
@@ -54,7 +54,8 @@
         >
             Sauvegarder
         </button>
-
+    </div>
+    <div class="">
         <button
             type="submit"
             name="publish"
@@ -65,12 +66,53 @@
         >
             Publier la sortie
         </button>
-
-        <a href="{{ path('main_event') }}" class="btn btn-secondary">
-            Annuler!
-        </a>
+    </div>
+    <div class="">
+        <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="openCancel()"
+        >
+            Annuler la sortie
+        </button>
+        <div class="">
+            <a href="{{ path('main_event') }}">
+                <button class="btn btn-secondary">
+                    Retour au menu
+                </button>
+            </a>
+        </div>
     </div>
 
-    {{ form_end(form) }}
+    {#            Popup motif annulation #}
+    <div id="cancel" class="cancelPopUp" style="display:none;">
+        <div class="popUpContent">
+            <p>Voulez vous vraiment annuler l'évènement ?</p>
+            <p>Motif d'annulation obligatoire</p>
+            <label>
+                <textarea data-model="cancelReason" placeholder="Motif d'annulation (obligatoire)"></textarea>
+            </label>
+            <div>
+                <button type="button" class="btn btn-secondary" onclick="closeCancel()">Fermer</button>
+                <button type="button" class="btn btn-secondary" data-action="live#action"
+                        data-live-action-param="cancel">Confirmer
+                </button>
+            </div>
+        </div>
+    </div>
 
 </div>
+<script>
+    function openCancel() {
+        document.getElementById('cancel').style.display = 'flex';
+    }
+
+    function closeCancel() {
+        document.getElementById('cancel').style.display = 'none';
+
+
+    }
+
+</script>
+{{ form_end(form) }}
+

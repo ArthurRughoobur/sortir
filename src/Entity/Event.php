@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use http\Message;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -17,21 +19,29 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Merci de saisir un non d'évènement ! ")]
+    #[Assert\Length(max: 255, maxMessage: "Max {{ limit }} characters !")]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
+    #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTime $dateStart = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
     private ?int $duration = null;
 
     #[ORM\Column]
+    #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
     private ?\DateTime $deadline = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
     private ?int $maxIscription = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message:"Merci de donner un peu d'informations ! ")]
     private ?string $eventInfo = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

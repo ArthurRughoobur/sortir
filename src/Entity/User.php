@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -19,6 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: "Merci de rentrer un pseudo !")]
     private ?string $username = null;
 
     /**
@@ -31,18 +34,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Saisissez votre mot de passe afin de modifier le profil !")]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Merci de saisir un nom !")]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Merci de saisir un prénom !")]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\notBlank(message: "Merci de saisir un téléphone !")]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email(message: "Merci de saisir un email !")]
     private ?string $email = null;
 
     #[ORM\Column]

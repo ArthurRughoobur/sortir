@@ -37,7 +37,7 @@ class UserType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
                 'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
+                'required' => false,
                 'first_options' => ['label' => 'Mot de passe : '],
                 'second_options' => ['label' => 'Mot de passe : '],
 

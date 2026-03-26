@@ -3,7 +3,9 @@
 
     {{ form_start(form, {
         attr: {
-            'data-model': 'on(change)|*'
+            'data-model': 'on(change)|*',
+            'data-action': 'live#action:prevent',
+
         }
     }) }}
 
@@ -46,7 +48,7 @@
         </button>
 
         <a href="{{ path('main_event') }}" class="btn btn-secondary">
-            Annuler !
+            Annuler!
         </a>
     </div>
 

@@ -6,9 +6,11 @@ use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
@@ -17,7 +19,7 @@ use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AsLiveComponent('event_form')]
-final class EventFormComponent
+final class EventFormComponent extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentWithFormTrait;
@@ -40,22 +42,22 @@ final class EventFormComponent
     protected function instantiateForm(): FormInterface
     {
         $event = $this->initialFormData ?? new Event();
-        $this->street = $event->getAdress()?->getStreet(); // initial render
+        $this->street = $event->getAdress()?->getStreet();
         return $this->formFactory->create(EventType::class, $event);
     }
 
-    // priority < 0 => exécuté APRES le PreReRender du trait (priority par défaut)
+
     #[PreReRender(priority: -10)]
     public function updateStreetAfterAutoSubmit(): void
     {
-        $event = $this->getForm()->getData(); // form déjà soumis par le trait
+        $event = $this->getForm()->getData();
         $this->street = $event->getAdress()?->getStreet();
     }
 
     #[LiveAction]
-    public function save(): void
+    public function save():RedirectResponse
     {
-        $this->submitForm(); // en LiveAction, le form n'est pas encore soumis citeturn7view0
+        $this->submitForm();
         $event = $this->getForm()->getData();
 
         $status = $this->statusRepository->findOneBy(['name' => 'En création']);
@@ -69,14 +71,15 @@ final class EventFormComponent
         $this->em->flush();
 
         $this->addFlash('success', 'Événement sauvegardé !');
+        return $this->redirectToRoute('main_event');
 
     }
 
 
     #[LiveAction]
-    public function publish(): void
+    public function publish(): RedirectResponse
     {
-        $this->submitForm(); // en LiveAction, le form n'est pas encore soumis citeturn7view0
+        $this->submitForm();
         $event = $this->getForm()->getData();
         $status = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
         $user = $this->security->getUser();
@@ -90,6 +93,7 @@ final class EventFormComponent
         $this->em->flush();
 
         $this->addFlash('success', 'Événement publié !');
+        return $this->redirectToRoute('main_event');
 
     }
 }

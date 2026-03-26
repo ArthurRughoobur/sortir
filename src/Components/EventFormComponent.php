@@ -3,8 +3,6 @@
 namespace App\Components;
 
 use AllowDynamicProperties;
-use App\Entity\Adress;
-use App\Entity\City;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\EventRepository;

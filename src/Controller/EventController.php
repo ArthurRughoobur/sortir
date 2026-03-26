@@ -42,9 +42,21 @@ final class EventController extends AbstractController
     }
 
     #[Route('/create_event', name: 'create_event')]
-    #[Route('/update_event', name: 'update_event', requirements: ['id' => '\d+'])]
-    public function createEvent(): Response
-    {
+    #[Route('/update_event/{id}', name: 'update_event', requirements: ['id' => '\d+'])]
+    public function createEvent(Request $request,EventRepository $eventRepository): Response
+    {       $event = null;
+        $id = $request->attributes->get('id');
+
+        if ($id !== null) {
+            $event = $eventRepository->find($id);
+            if (!$event) {
+                throw $this->createNotFoundException('Événement introuvable.');
+            }
+        }
+
+        return $this->render('event/createEvent.html.twig', [
+            'event' => $event,
+        ]);
 //        $component -> save();
 //        $component -> publish();
 
@@ -71,9 +83,7 @@ final class EventController extends AbstractController
 
 //            return $this->redirectToRoute('main_event');
 //        }
-        return $this->render('event/createEvent.html.twig', [
 
-        ]);
 
     }
 

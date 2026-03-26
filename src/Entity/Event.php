@@ -23,20 +23,20 @@ class Event
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
-    #[Assert\GreaterThanOrEqual('today')]
+//    #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
+//    #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTime $dateStart = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
+//    #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
     private ?int $duration = null;
 
     #[ORM\Column]
-    #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
+//    #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
     private ?\DateTime $deadline = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
+//    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
     private ?int $maxIscription = null;
 
     #[ORM\Column(type: Types::TEXT)]

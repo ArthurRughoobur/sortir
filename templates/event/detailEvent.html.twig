@@ -17,6 +17,8 @@
         <span>Latitude : {{ event.adress.latitude }}</span>
         <span>Longitude : {{ event.adress.longitude }}</span>
         <span>Description et infos : {{ event.eventInfo }}</span>
+        <span>Détail annulation : {{ event.canceledInfo }}</span>
+
 
         <ul>
             {% for user in event.registred %}
@@ -33,7 +35,7 @@
         <a href="{{ path('desinscription_event', {'id': event.id}) }}">
             <button class="">Désinscription !</button>
         </a>
-        </a>
+
         <a href="{{ path('update_event', {'id': event.id}) }}">
             <button class="">Modifier l'évènement !</button>
         </a>

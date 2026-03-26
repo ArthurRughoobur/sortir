@@ -46,17 +46,18 @@ final class EventController extends AbstractController
     public function createEvent(Request $request, EventRepository $eventRepository): Response
     {
 
-        $event = null;
-        $id = $request->attributes->get('id');
 
-        if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
-        }
+        $id = $request->attributes->get('id');
+        $event = null;
         if ($id !== null) {
             $event = $eventRepository->find($id);
             if (!$event) {
                 throw $this->createNotFoundException('Événement introuvable.');
             }
+        if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
+        }
+
         }
 
         return $this->render('event/createEvent.html.twig', [

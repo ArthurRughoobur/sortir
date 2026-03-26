@@ -39,6 +39,10 @@ final class EventFormComponent extends AbstractController
 
     #[LiveProp]
     public ?int $id = null;
+
+    #[LiveProp(writable: true)]
+    public ?string $cancelReason = null;
+
     public function __construct(
         private EntityManagerInterface $em,
         private FormFactoryInterface   $formFactory,
@@ -46,7 +50,7 @@ final class EventFormComponent extends AbstractController
         private Security               $security,
         private RequestStack           $requestStack,
         private UserRepository         $userRepository,
-        private EventRepository         $eventRepository,
+        private EventRepository        $eventRepository,
     )
     {
     }
@@ -56,13 +60,6 @@ final class EventFormComponent extends AbstractController
 
         $event = $this->initialFormData ?? new Event();
 
-
-//        if ($this->id !== null) {
-//            $event = $this->eventRepository->find($this->id);
-//            if($event->getUser() != $this->getUser()) {
-//                throw $this->createAccessDeniedException("Ce n'est pas ton évènement");
-//            }
-//                }
         $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();
         $this->latitude = $event->getAdress()?->getLatitude();
@@ -84,47 +81,98 @@ final class EventFormComponent extends AbstractController
     }
 
     #[LiveAction]
-    public function save():RedirectResponse
+    public function save(): RedirectResponse
     {
-        $this->submitForm();
-        $event = $this->getForm()->getData();
+        if ($this->id !== null) {
+            $event = $this->eventRepository->find($this->id);
+            $allowedStatuses = ['En création', 'Ouverte'];
+            if ($event && !in_array($event->getStatus()->getName(), $allowedStatuses)) {
+                $this->addFlash("error", "Vous ne pouvez pas Sauvegarder un événement avec le statut : " . $event->getStatus()->getName());
+                return $this->redirectToRoute('main_event');
+            }
+            $this->submitForm();
+            $event = $this->getForm()->getData();
+            $status = $this->statusRepository->findOneBy(['name' => 'En création']);
+            $user = $this->security->getUser();
+            if ($user) {
+                $event->setCampus($user->getCampus());
+                $event->setOrganizer($user);
+            }
+            $event->setStatus($status);
+            $this->em->persist($event);
+            $this->em->flush();
 
-        $status = $this->statusRepository->findOneBy(['name' => 'En création']);
-        $user = $this->security->getUser();
-        if ($user) {
-            $event->setCampus($user->getCampus());
-            $event->setOrganizer($user);
+            $this->addFlash('success', 'Événement sauvegardé !');
+            return $this->redirectToRoute('main_event');
+
         }
-        $event->setStatus($status);
-        $this->em->persist($event);
-        $this->em->flush();
-
-        $this->addFlash('success', 'Événement sauvegardé !');
-        return $this->redirectToRoute('main_event');
-
     }
 
 
     #[LiveAction]
     public function publish(): RedirectResponse
     {
-        $this->submitForm();
-        $event = $this->getForm()->getData();
-        $status = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
-        $user = $this->security->getUser();
+        if ($this->id !== null) {
+            $event = $this->eventRepository->find($this->id);
+            $allowedStatuses = ['En création', 'Ouverte'];
+            if ($event && !in_array($event->getStatus()->getName(), $allowedStatuses)) {
+                $this->addFlash("error", "Vous ne pouvez pas publier  un événement avec le statut : " . $event->getStatus()->getName());
+                return $this->redirectToRoute('main_event');
+            }
 
-        if ($user) {
-            $event->setCampus($user->getCampus());
-            $event->setOrganizer($user);
-            $event->addRegistred($user);
+            $this->submitForm();
+            $event = $this->getForm()->getData();
+            $status = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
+            $user = $this->security->getUser();
+
+            if ($user) {
+                $event->setCampus($user->getCampus());
+                $event->setOrganizer($user);
+                $event->addRegistred($user);
+            }
+            $event->setStatus($status);
+            $this->em->persist($event);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Événement publié !');
+            return $this->redirectToRoute('main_event');
+
         }
+    }
+
+    #[LiveAction]
+    public function cancel(): RedirectResponse
+    {
+        //Vérifie qu'il y a un motif d'annul
+        if (empty($this->cancelReason)) {
+            $this->addFlash("error", "Merci de donner un peu d'informations ! ");
+            if ($this->id !== null) {
+                return $this->redirectToRoute('update_event', ['id' => $this->id]);
+            } else {
+                return $this->redirectToRoute('main_event');
+            }
+        }
+
+        $event = $this->getForm()->getData();
+        if (!$event) {
+            $this->addFlash("error", "L'événement n'existe pas.");
+            return $this->redirectToRoute('main_event');
+        }
+        $allowedStatus = ['En création', 'Ouverte'];
+        if (!in_array($event->getStatus()->getName(), $allowedStatus)) {
+            $this->addFlash("error", "Vous ne pouvez pas annuler un événement avec le statut : " . $event->getStatus()->getName());
+            return $this->redirectToRoute('main_event');
+        }
+        $status = $this->statusRepository->findOneBy(['name' => 'Annulée']);
         $event->setStatus($status);
+        $event->setCanceledInfo($this->cancelReason);
         $this->em->persist($event);
         $this->em->flush();
 
-        $this->addFlash('success', 'Événement publié !');
+        $this->addFlash('success', 'Événement annulé !');
         return $this->redirectToRoute('main_event');
 
     }
+
 
 }

@@ -7,6 +7,7 @@ use App\Entity\Adress;
 use App\Entity\City;
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Repository\EventRepository;
 use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,20 +39,32 @@ final class EventFormComponent extends AbstractController
     #[LiveProp]
     public ?string $street = null;
 
+    #[LiveProp]
+    public ?int $id = null;
     public function __construct(
         private EntityManagerInterface $em,
         private FormFactoryInterface   $formFactory,
         private StatusRepository       $statusRepository,
         private Security               $security,
         private RequestStack           $requestStack,
-        private UserRepository           $userRepository,
+        private UserRepository         $userRepository,
+        private EventRepository         $eventRepository,
     )
     {
     }
 
     protected function instantiateForm(): FormInterface
     {
+
         $event = $this->initialFormData ?? new Event();
+
+
+        if ($this->id !== null) {
+            $event = $this->eventRepository->find($this->id);
+            if($event->getUser() != $this->getUser()) {
+                throw $this->createAccessDeniedException("Ce n'est pas ton évènement");
+            }
+                }
         $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();
         $this->latitude = $event->getAdress()?->getLatitude();
@@ -115,10 +128,5 @@ final class EventFormComponent extends AbstractController
         return $this->redirectToRoute('main_event');
 
     }
-    public function addFlash(string $type, string $message): void {
-        $request = $this->requestStack->getCurrentRequest();
-        if ($request && $request->hasSession()) {
-            $request->getSession()->getFlashBag()->add($type, $message);
-        }
-    }
+
 }

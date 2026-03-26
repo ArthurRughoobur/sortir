@@ -103,9 +103,10 @@ final class EventFormComponent extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'Événement sauvegardé !');
-            return $this->redirectToRoute('main_event');
+
 
         }
+        return $this->redirectToRoute('main_event');
     }
 
 
@@ -135,9 +136,10 @@ final class EventFormComponent extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'Événement publié !');
-            return $this->redirectToRoute('main_event');
+
 
         }
+        return $this->redirectToRoute('main_event');
     }
 
     #[LiveAction]

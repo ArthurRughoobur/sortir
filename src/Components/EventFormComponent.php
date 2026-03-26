@@ -2,27 +2,35 @@
 
 namespace App\Components;
 
+use AllowDynamicProperties;
+use App\Entity\Adress;
+use App\Entity\City;
 use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\StatusRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\Attribute\PreReRender;
+use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
+#[AllowDynamicProperties]
 #[AsLiveComponent('event_form')]
 final class EventFormComponent extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentWithFormTrait;
+    use ComponentToolsTrait;
 
     #[LiveProp]
     public ?Event $initialFormData = null;
@@ -35,6 +43,8 @@ final class EventFormComponent extends AbstractController
         private FormFactoryInterface   $formFactory,
         private StatusRepository       $statusRepository,
         private Security               $security,
+        private RequestStack           $requestStack,
+        private UserRepository           $userRepository,
     )
     {
     }
@@ -42,7 +52,11 @@ final class EventFormComponent extends AbstractController
     protected function instantiateForm(): FormInterface
     {
         $event = $this->initialFormData ?? new Event();
+        $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();
+        $this->latitude = $event->getAdress()?->getLatitude();
+        $this->longitude = $event->getAdress()?->getLongitude();
+
         return $this->formFactory->create(EventType::class, $event);
     }
 
@@ -50,8 +64,12 @@ final class EventFormComponent extends AbstractController
     #[PreReRender(priority: -10)]
     public function updateStreetAfterAutoSubmit(): void
     {
-        $event = $this->getForm()->getData();
+        $event = $this->getForm()->getData(); // form déjà soumis par le trait
+        $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();
+        $this->latitude = $event->getAdress()?->getLatitude();
+        $this->longitude = $event->getAdress()?->getLongitude();
+
     }
 
     #[LiveAction]
@@ -87,6 +105,7 @@ final class EventFormComponent extends AbstractController
         if ($user) {
             $event->setCampus($user->getCampus());
             $event->setOrganizer($user);
+            $event->addRegistred($user);
         }
         $event->setStatus($status);
         $this->em->persist($event);
@@ -95,5 +114,11 @@ final class EventFormComponent extends AbstractController
         $this->addFlash('success', 'Événement publié !');
         return $this->redirectToRoute('main_event');
 
+    }
+    public function addFlash(string $type, string $message): void {
+        $request = $this->requestStack->getCurrentRequest();
+        if ($request && $request->hasSession()) {
+            $request->getSession()->getFlashBag()->add($type, $message);
+        }
     }
 }

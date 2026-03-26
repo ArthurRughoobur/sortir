@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'Adresse !{% endblock %}
+
+{% block body %}
+    {% embed 'views/form/template-form.html.twig'  with { form : adressForm } %}
+        {% block formTitle %} Créer une Adresse !{% endblock %}
+        {% block buttonLabel %} Créer !{% endblock %}
+    {% endembed %}
+{% endblock %}

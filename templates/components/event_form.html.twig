@@ -1,4 +1,10 @@
 <div {{ attributes }}>
+    {# Affichage des flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
     {{ form_errors(form) }}
 
     {{ form_start(form, {
@@ -12,11 +18,24 @@
     <div class="">
         {{ form_row(form.adress) }}
     </div>
-
+    <div class="">
+        <a href="{{ path('create_adress') }}">+</a>
+        <label>Ville :</label>
+        <input type="text" value="{{ city }}" readonly class="form-control">
+    </div>
     <div class="">
         <label>Rue :</label>
         <input type="text" value="{{ street }}" readonly class="form-control">
     </div>
+    <div class="">
+        <label>Latitude :</label>
+        <input type="text" value="{{ latitude }}" readonly class="form-control">
+    </div>
+    <div class="">
+        <label>Longitude :</label>
+        <input type="text" value="{{ longitude }}" readonly class="form-control">
+    </div>
+
 
     {% for field in form.children %}
         {% if field.vars.name not in ['adress', 'save', 'publish'] %}
@@ -53,4 +72,5 @@
     </div>
 
     {{ form_end(form) }}
+
 </div>

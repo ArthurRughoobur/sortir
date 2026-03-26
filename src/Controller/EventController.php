@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Components\EventFormComponent;
 use App\Entity\Event;
+use App\Form\EventSearchType;
 use App\Form\EventType;
+use App\Form\Model\EventSearch;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,11 +17,17 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EventController extends AbstractController
 {
     #[Route('/', name: 'main_event')]
-    public function mainEvent(EventRepository $eventRepository): Response
+    public function mainEvent(EventRepository $eventRepository, Request $request): Response
     {
-        $events = $eventRepository->findEventList();
+        $eventSearch = new EventSearch();
+        $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
+        $eventFormSearch->handleRequest($request);
+
+        $events = $eventRepository->findEventList($eventSearch, $this->getUser());
+
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            'eventFormSearch' => $eventFormSearch->createView(),
         ]);
     }
 
@@ -33,8 +41,9 @@ final class EventController extends AbstractController
         ]);
     }
 
+
     #[Route('/create_event', name: 'create_event')]
-    public function createEvent(EventRepository $eventRepository): Response
+    public function createEvent(): Response
     {
 //        $component -> save();
 //        $component -> publish();

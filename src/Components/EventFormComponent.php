@@ -10,6 +10,7 @@ use App\Form\EventType;
 use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -25,7 +26,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AllowDynamicProperties]
 #[AsLiveComponent('event_form')]
-final class EventFormComponent
+final class EventFormComponent extends AbstractController
 {
     use DefaultActionTrait;
     use ComponentWithFormTrait;
@@ -59,7 +60,7 @@ final class EventFormComponent
         return $this->formFactory->create(EventType::class, $event);
     }
 
-    // priority < 0 => exécuté APRES le PreReRender du trait (priority par défaut)
+
     #[PreReRender(priority: -10)]
     public function updateStreetAfterAutoSubmit(): void
     {
@@ -72,7 +73,7 @@ final class EventFormComponent
     }
 
     #[LiveAction]
-    public function save(): void
+    public function save():RedirectResponse
     {
         $this->submitForm();
         $event = $this->getForm()->getData();
@@ -88,15 +89,14 @@ final class EventFormComponent
         $this->em->flush();
 
         $this->addFlash('success', 'Événement sauvegardé !');
+        return $this->redirectToRoute('main_event');
 
     }
 
 
     #[LiveAction]
-    public function publish(): void
+    public function publish(): RedirectResponse
     {
-
-
         $this->submitForm();
         $event = $this->getForm()->getData();
         $status = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
@@ -111,11 +111,8 @@ final class EventFormComponent
         $this->em->persist($event);
         $this->em->flush();
 
-//        $this->addFlash('success', '');
-        $this->dispatchBrowserEvent('toast',[
-            'type'=>'success',
-            'message'=>'Événement publié !'
-        ]);
+        $this->addFlash('success', 'Événement publié !');
+        return $this->redirectToRoute('main_event');
 
     }
     public function addFlash(string $type, string $message): void {

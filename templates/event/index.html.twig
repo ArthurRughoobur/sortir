@@ -3,8 +3,17 @@
 {% block title %}{% endblock %}
 
 {% block body %}
-    <section class="eventList">
 
+
+
+    <section class="filtreList">
+        <h2>Filtrer les sorties</h2>
+        {{ form_start(eventFormSearch) }}
+        {{ form_widget(eventFormSearch) }}
+        {{ form_end(eventFormSearch) }}
+    </section>
+
+    <section class="eventList">
         {% for event in events %}
             <a class="eventCard" href="{{ path('event_detail', {'id': event.id}) }}">
                 <span>Nom de la sortie : {{ event.name }}</span>
@@ -20,7 +29,6 @@
                 {% else %}
                     <span>❌ Pas inscrit</span>
                 {% endif %}
-
             </a>
         {% endfor %}
     </section>

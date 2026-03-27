@@ -18,32 +18,37 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Merci de saisir un non d'évènement ! ")]
+    #[Assert\NotBlank(message: "Merci de saisir un non d'évènement ! ")]
     #[Assert\Length(max: 255, maxMessage: "Max {{ limit }} characters !")]
     private ?string $name = null;
 
     #[ORM\Column]
-//    #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
-//    #[Assert\GreaterThanOrEqual('today')]
+    #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
+    #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTime $dateStart = null;
 
     #[ORM\Column]
-//    #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
+    #[Assert\NotBlank(message: "Merci de renseigner une durée d'évènement ! ")]
+    #[Assert\GreaterThan(value: 0, message: "Votre durée de l'évènement doit être supérieur à 0 !")]
+
     private ?int $duration = null;
 
     #[ORM\Column]
-//    #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
+    #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
     private ?\DateTime $deadline = null;
 
     #[ORM\Column]
-//    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
+    #[Assert\NotBlank(message: "Merci de saisir un nombre d'inscrits max !")]
+    #[Assert\GreaterThan(value: 1, message: "Votre nombre d'inscription doit être supérieur à 1 !")]
     private ?int $maxIscription = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message:"Merci de donner un peu d'informations ! ")]
+    #[Assert\NotBlank(message: "Merci de donner un peu d'informations ! ")]
     private ?string $eventInfo = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+//    #[Assert\NotBlank(message:"Merci de donner un peu d'informations sur votre annulation event ! ")]
+
     private ?string $canceledInfo = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]

@@ -40,10 +40,14 @@
 
 
 {% for field in form.children %}
-    {% if field.vars.name not in ['adress', 'save', 'publish','cancel','duration','campus'] %}
+    {% if field.vars.name not in ['adress', 'save', 'publish','cancel','duration'] %}
         {{ form_row(field) }}
     {% endif %}
 {% endfor %}
+
+    <span>
+     {{ form_row(form.duration) }} minutes
+    </span>
 
 <div class="">
     <button

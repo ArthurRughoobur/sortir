@@ -39,7 +39,7 @@ class EventType extends AbstractType
             ])
 
             ->add('duration', IntegerType::class, [
-                'label' => 'Durée en minutes :',
+                'label' => 'Durée : ',
                 'constraints' => [
                     new NotBlank(['message' => 'Les minutes sont requises']),
                 ],

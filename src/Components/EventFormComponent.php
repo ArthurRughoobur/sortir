@@ -119,7 +119,6 @@ final class EventFormComponent extends AbstractController
         return $this->redirectToRoute('main_event');
     }
 
-
     #[LiveAction]
     public function publish(): RedirectResponse
     {
@@ -184,6 +183,5 @@ final class EventFormComponent extends AbstractController
         return $this->redirectToRoute('main_event');
 
     }
-
 
 }

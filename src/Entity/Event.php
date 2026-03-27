@@ -46,6 +46,8 @@ class Event
     private ?string $eventInfo = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+//    #[Assert\NotBlank(message:"Merci de donner un peu d'informations sur votre annulation event ! ")]
+
     private ?string $canceledInfo = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]

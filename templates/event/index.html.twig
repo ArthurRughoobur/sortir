@@ -4,7 +4,10 @@
 
 {% block body %}
 
-
+<div>
+    <span>Date du jour : {{ 'now' | date ("d/m/Y") }}</span><br>
+    <span>Participant : {{ app.user.name }} {{ app.user.lastname |first }}.</span>
+</div>
 
     <section class="filtreList">
         <h2>Filtrer les sorties</h2>

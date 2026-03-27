@@ -1,10 +1,4 @@
 <div {{ attributes }}>
-{#     Affichage des flash messages#}
-{#    {% for label, messages in app.flashes %}#}
-{#        {% for message in messages %}#}
-{#            <div class="alert alert-{{ label }}">{{ message }}</div>#}
-{#        {% endfor %}#}
-{#    {% endfor %}#}
     {{ form_errors(form) }}
 
     {{ form_start(form, {
@@ -37,84 +31,94 @@
         <input type="text" value="{{ longitude }}" readonly class="form-control">
     </div>
 
+</div>
 
-    {% for field in form.children %}
-        {% if field.vars.name not in ['adress', 'save', 'publish','cancel'] %}
-            {{ form_row(field) }}
-        {% endif %}
-    {% endfor %}
+<div class="">
 
+</div>
+<div class="">
+    <label>Campus :</label>
+    <input type="text" value="{{ app.user.campus.name }}" readonly class="form-control">
+</div>
+
+
+{% for field in form.children %}
+    {% if field.vars.name not in ['adress', 'save', 'publish','cancel','duration','campus'] %}
+        {{ form_row(field) }}
+    {% endif %}
+{% endfor %}
+
+<div class="">
+    <button
+        type="submit"
+        name="save"
+        value="save"
+        class="btn btn-secondary"
+        data-action="live#action"
+        data-live-action-param="save"
+    >
+        Sauvegarder
+    </button>
+</div>
+<div class="">
+    <button
+        type="submit"
+        name="publish"
+        value="publish"
+        class="btn btn-primary"
+        data-action="live#action"
+        data-live-action-param="publish"
+    >
+        Publier la sortie
+    </button>
+</div>
+<div class="">
+    <button
+        type="button"
+        class="btn btn-secondary"
+        onclick="openCancel()"
+    >
+        Annuler la sortie
+    </button>
     <div class="">
-        <button
-            type="submit"
-            name="save"
-            value="save"
-            class="btn btn-secondary"
-            data-action="live#action"
-            data-live-action-param="save"
-        >
-            Sauvegarder
-        </button>
+        <a href="{{ path('main_event') }}">
+            <button class="btn btn-secondary">
+                Retour au menu
+            </button>
+        </a>
     </div>
-    <div class="">
-        <button
-            type="submit"
-            name="publish"
-            value="publish"
-            class="btn btn-primary"
-            data-action="live#action"
-            data-live-action-param="publish"
-        >
-            Publier la sortie
-        </button>
-    </div>
-    <div class="">
-        <button
-            type="button"
-            class="btn btn-secondary"
-            onclick="openCancel()"
-        >
-            Annuler la sortie
-        </button>
-        <div class="">
-            <a href="{{ path('main_event') }}">
-                <button class="btn btn-secondary">
-                    Retour au menu
-                </button>
-            </a>
+</div>
+
+{#            Popup motif annulation #}
+<div id="cancel" class="cancelPopUp" style="display:none;">
+    <div class="popUpContent">
+        <p>Voulez vous vraiment annuler l'évènement ?</p>
+        <p>Motif d'annulation obligatoire</p>
+        <label>
+            <textarea data-model="cancelReason" placeholder="Motif d'annulation (obligatoire)"></textarea>
+        </label>
+        <div>
+            <button type="button" class="btn btn-secondary" onclick="closeCancel()">Fermer</button>
+            <button type="button" class="btn btn-secondary" data-action="live#action"
+                    data-live-action-param="cancel">Confirmer
+            </button>
         </div>
     </div>
-
-    {#            Popup motif annulation #}
-    <div id="cancel" class="cancelPopUp" style="display:none;">
-        <div class="popUpContent">
-            <p>Voulez vous vraiment annuler l'évènement ?</p>
-            <p>Motif d'annulation obligatoire</p>
-            <label>
-                <textarea data-model="cancelReason" placeholder="Motif d'annulation (obligatoire)"></textarea>
-            </label>
-            <div>
-                <button type="button" class="btn btn-secondary" onclick="closeCancel()">Fermer</button>
-                <button type="button" class="btn btn-secondary" data-action="live#action"
-                        data-live-action-param="cancel">Confirmer
-                </button>
-            </div>
-        </div>
-    </div>
+</div>
 
 
-    <script>
-        function openCancel() {
-            document.getElementById('cancel').style.display = 'flex';
-        }
+<script>
+    function openCancel() {
+        document.getElementById('cancel').style.display = 'flex';
+    }
 
-        function closeCancel() {
-            document.getElementById('cancel').style.display = 'none';
+    function closeCancel() {
+        document.getElementById('cancel').style.display = 'none';
 
 
-        }
+    }
 
-    </script>
-    {{ form_end(form) }}
+</script>
+{{ form_end(form) }}
 
 </div>

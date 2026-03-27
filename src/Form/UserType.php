@@ -28,11 +28,6 @@ class UserType extends AbstractType
                 'label' => 'Pseudo : '
             ])
 
-//            ->add('password', passwordType::class, [
-//                'label1' => 'Mot de passe : ',
-//                'label2' => 'Vérification du mot de passe : ',
-//
-//            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent correspondre.',

@@ -185,10 +185,10 @@ class AppFixtures extends Fixture
             $event->setDateStart($dateStart);
             $event->setDeadline($deadline);
 
-            $duration = $faker->numberBetween(30, 180);
-            $event->setDuration($duration);
+            $durationInMinutes = $faker->numberBetween(30, 360);
+            $event->setDuration($durationInMinutes);
 
-            $dateEnd = (clone $dateStart)->modify('+' . $duration . ' minutes');
+            $dateEnd = (clone $dateStart)->modify('+' . $durationInMinutes . ' minutes');
 
             if (rand(1, 15) === 1) {
                 $event->setStatus($statusMap['Annulée']);

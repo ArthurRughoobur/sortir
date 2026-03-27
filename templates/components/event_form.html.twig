@@ -12,6 +12,7 @@
             'data-model': 'on(change)|*',
             'data-action': 'live#action:prevent',
             'onsubmit': 'return false;'
+
         }
     }) }}
 
@@ -45,7 +46,7 @@
 
     <div class="">
         <button
-            type="submit"
+            type="button"
             name="save"
             value="save"
             class="btn btn-secondary"
@@ -57,7 +58,7 @@
     </div>
     <div class="">
         <button
-            type="submit"
+            type="button"
             name="publish"
             value="publish"
             class="btn btn-primary"
@@ -101,18 +102,19 @@
         </div>
     </div>
 
+
+    <script>
+        function openCancel() {
+            document.getElementById('cancel').style.display = 'flex';
+        }
+
+        function closeCancel() {
+            document.getElementById('cancel').style.display = 'none';
+
+
+        }
+
+    </script>
+    {{ form_end(form) }}
+
 </div>
-<script>
-    function openCancel() {
-        document.getElementById('cancel').style.display = 'flex';
-    }
-
-    function closeCancel() {
-        document.getElementById('cancel').style.display = 'none';
-
-
-    }
-
-</script>
-{{ form_end(form) }}
-

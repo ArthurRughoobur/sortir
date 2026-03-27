@@ -18,29 +18,31 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Merci de saisir un non d'évènement ! ")]
+    #[Assert\NotBlank(message: "Merci de saisir un non d'évènement ! ")]
     #[Assert\Length(max: 255, maxMessage: "Max {{ limit }} characters !")]
     private ?string $name = null;
 
     #[ORM\Column]
-//    #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
-//    #[Assert\GreaterThanOrEqual('today')]
+    #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
+    #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTime $dateStart = null;
 
-    #[ORM\Column]
-//    #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
-    private ?int $duration = null;
+
+
+    #[ORM\Column(type: 'integer')]
+        #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
+    private int $duration;
 
     #[ORM\Column]
-//    #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
+    #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
     private ?\DateTime $deadline = null;
 
     #[ORM\Column]
-//    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
+    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
     private ?int $maxIscription = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message:"Merci de donner un peu d'informations ! ")]
+    #[Assert\NotBlank(message: "Merci de donner un peu d'informations ! ")]
     private ?string $eventInfo = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -104,15 +106,14 @@ class Event
         return $this;
     }
 
-    public function getDuration(): ?int
+    public function getDuration(): int
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration): static
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
-
         return $this;
     }
 
@@ -181,7 +182,7 @@ class Event
         return $this->status;
     }
 
-    public function setStatus(?Status $status): static
+    public function setStatus(?Status $status): self
     {
         $this->status = $status;
 
@@ -246,5 +247,12 @@ class Event
         $this->adress = $adress;
 
         return $this;
+    }
+    public function getDurationAsHoursAndMinutes(): string
+    {
+        $hours = floor($this->duration / 60);
+        $minutes = $this->duration % 60;
+
+        return sprintf('%dh%02d', $hours, $minutes);
     }
 }

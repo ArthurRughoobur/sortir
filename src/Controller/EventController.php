@@ -8,6 +8,7 @@ use App\Form\EventSearchType;
 use App\Form\EventType;
 use App\Form\Model\EventSearch;
 use App\Repository\EventRepository;
+use App\Service\UpdateEventStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +18,10 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EventController extends AbstractController
 {
     #[Route('/', name: 'main_event')]
-    public function mainEvent(EventRepository $eventRepository, Request $request): Response
+    public function mainEvent(EventRepository $eventRepository, Request $request, UpdateEventStatus $eventStatus): Response
     {
+        $eventStatus ->updatePastEvent();
+
         $eventSearch = new EventSearch();
         $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
         $eventFormSearch->handleRequest($request);

@@ -65,10 +65,6 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter('deadline', $eventSearch->getDeadline());
         }
 
-//        if ($eventSearch->getTerminee()) {
-//            $qb->andWhere('s.name = :status')
-//                ->setParameter('status', 'Terminée');
-//        }
 
         if ($user) {
             if ($eventSearch->getOrganizer()) {
@@ -115,6 +111,20 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findEventWithEndDate() {
+
+        return $this->createQueryBuilder('event')
+            ->join('event.status', 'status')
+            ->where('DATE_ADD(event.dateStart, event.duration, \'minute\') < :now')
+            ->andWhere('status.name NOT IN (:excludedStatusNames)')
+            ->setParameter('now', new \DateTime())
+            ->setParameter('excludedStatusNames', ['Terminée', 'Annulée', 'Historisée'])
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
 
 }

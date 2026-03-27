@@ -145,10 +145,5 @@ final class EventController extends AbstractController
     }
 
 
-    #[Route('/delete/{id}', name: 'delete_event', requirements: ['id' => '\d+'])]
-    public function deleteEvent
-    ()
-    {
 
-    }
 }

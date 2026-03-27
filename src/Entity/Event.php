@@ -27,18 +27,19 @@ class Event
     #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTime $dateStart = null;
 
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Merci de renseigner une durée d'évènement ! ")]
+    #[Assert\GreaterThan(value: 0, message: "Votre durée de l'évènement doit être supérieur à 0 !")]
 
-
-    #[ORM\Column(type: 'integer')]
-        #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
-    private int $duration;
+    private ?int $duration = null;
 
     #[ORM\Column]
     #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
     private ?\DateTime $deadline = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
+    #[Assert\NotBlank(message: "Merci de saisir un nombre d'inscrits max !")]
+    #[Assert\GreaterThan(value: 1, message: "Votre nombre d'inscription doit être supérieur à 1 !")]
     private ?int $maxIscription = null;
 
     #[ORM\Column(type: Types::TEXT)]

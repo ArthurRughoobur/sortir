@@ -3,25 +3,19 @@
 namespace App\Form;
 
 use App\Entity\Adress;
-use App\Entity\Campus;
 use App\Entity\Category;
 use App\Entity\Event;
-use App\Entity\Status;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class EventType extends AbstractType
@@ -43,10 +37,11 @@ class EventType extends AbstractType
                     new NotBlank(['message' => 'La date de sortie est requise']),
                 ],
             ])
+
             ->add('duration', IntegerType::class, [
-                'label' => "Durée : ",
+                'label' => 'Durée en minutes :',
                 'constraints' => [
-                    new NotBlank(['message' => 'La durée est requise']),
+                    new NotBlank(['message' => 'Les minutes sont requises']),
                 ],
             ])
             ->add('deadline', DateType::class, [

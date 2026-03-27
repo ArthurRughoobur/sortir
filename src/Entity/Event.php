@@ -27,19 +27,18 @@ class Event
     #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTime $dateStart = null;
 
-    #[ORM\Column]
-    #[Assert\NotBlank(message: "Merci de renseigner une durée d'évènement ! ")]
-    #[Assert\GreaterThan(value: 0, message: "Votre durée de l'évènement doit être supérieur à 0 !")]
 
-    private ?int $duration = null;
+
+    #[ORM\Column(type: 'integer')]
+        #[Assert\NotBlank(message:"Merci de renseigner une durée d'évènement ! ")]
+    private int $duration;
 
     #[ORM\Column]
     #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
     private ?\DateTime $deadline = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: "Merci de saisir un nombre d'inscrits max !")]
-    #[Assert\GreaterThan(value: 1, message: "Votre nombre d'inscription doit être supérieur à 1 !")]
+    #[Assert\NotBlank(message:"Merci de saisir un nombre d'inscrits max ! ")]
     private ?int $maxIscription = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -109,15 +108,14 @@ class Event
         return $this;
     }
 
-    public function getDuration(): ?int
+    public function getDuration(): int
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration): static
+    public function setDuration(int $duration): self
     {
         $this->duration = $duration;
-
         return $this;
     }
 
@@ -186,7 +184,7 @@ class Event
         return $this->status;
     }
 
-    public function setStatus(?Status $status): static
+    public function setStatus(?Status $status): self
     {
         $this->status = $status;
 
@@ -251,5 +249,12 @@ class Event
         $this->adress = $adress;
 
         return $this;
+    }
+    public function getDurationAsHoursAndMinutes(): string
+    {
+        $hours = floor($this->duration / 60);
+        $minutes = $this->duration % 60;
+
+        return sprintf('%dh%02d', $hours, $minutes);
     }
 }

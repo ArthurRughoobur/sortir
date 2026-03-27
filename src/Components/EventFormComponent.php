@@ -39,7 +39,14 @@ final class EventFormComponent extends AbstractController
 
     #[LiveProp]
     public ?int $id = null;
+    #[LiveProp]
+    public ?string $city = null;
 
+    #[LiveProp]
+    public ?float $latitude = null;
+
+    #[LiveProp]
+    public ?float $longitude = null;
     #[LiveProp(writable: true)]
     public ?string $cancelReason = null;
 
@@ -64,7 +71,6 @@ final class EventFormComponent extends AbstractController
         $this->street = $event->getAdress()?->getStreet();
         $this->latitude = $event->getAdress()?->getLatitude();
         $this->longitude = $event->getAdress()?->getLongitude();
-
         return $this->formFactory->create(EventType::class, $event);
     }
 
@@ -72,7 +78,7 @@ final class EventFormComponent extends AbstractController
     #[PreReRender(priority: -10)]
     public function updateStreetAfterAutoSubmit(): void
     {
-        $event = $this->getForm()->getData(); // form déjà soumis par le trait
+        $event = $this->getForm()->getData();
         $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();
         $this->latitude = $event->getAdress()?->getLatitude();
@@ -83,7 +89,17 @@ final class EventFormComponent extends AbstractController
     #[LiveAction]
     public function save(): RedirectResponse
     {
+        $event = $this->getForm()->getData();
+        $user = $this->security->getUser();
+        if ($user) {
+            $event->setCampus($user->getCampus());
+            $event->setOrganizer($user);
+        }
+
+        $event->setStatus( $this->statusRepository->findOneBy(['name' => 'En création']));
+
         $this->submitForm();
+
         if ($this->id !== null) {
             $event = $this->eventRepository->find($this->id);
             $allowedStatuses = ['En création', 'Ouverte'];
@@ -91,28 +107,32 @@ final class EventFormComponent extends AbstractController
                 $this->addFlash("error", "Vous ne pouvez pas Sauvegarder un événement avec le statut : " . $event->getStatus()->getName());
                 return $this->redirectToRoute('main_event');
             }
+        }
 
-            $event = $this->getForm()->getData();
-            $status = $this->statusRepository->findOneBy(['name' => 'En création']);
-            $user = $this->security->getUser();
-            if ($user) {
-                $event->setCampus($user->getCampus());
-                $event->setOrganizer($user);
-            }
-            $event->setStatus($status);
             $this->em->persist($event);
             $this->em->flush();
 
             $this->addFlash('success', 'Événement sauvegardé !');
 
-        }
+
+
         return $this->redirectToRoute('main_event');
     }
 
     #[LiveAction]
     public function publish(): RedirectResponse
     {
+        $event = $this->getForm()->getData();
+        $user = $this->security->getUser();
+        if ($user) {
+            $event->setCampus($user->getCampus());
+            $event->setOrganizer($user);
+            $event->addRegistred($user);
+        }
+        $event->setStatus( $this->statusRepository->findOneBy(['name' => 'Ouverte']));
+
         $this->submitForm();
+
         if ($this->id !== null) {
             $event = $this->eventRepository->find($this->id);
             $allowedStatuses = ['En création', 'Ouverte'];
@@ -120,23 +140,13 @@ final class EventFormComponent extends AbstractController
                 $this->addFlash("error", "Vous ne pouvez pas publier  un événement avec le statut : " . $event->getStatus()->getName());
                 return $this->redirectToRoute('main_event');
             }
-
-            $event = $this->getForm()->getData();
-            $status = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
-            $user = $this->security->getUser();
-
-            if ($user) {
-                $event->setCampus($user->getCampus());
-                $event->setOrganizer($user);
-                $event->addRegistred($user);
-            }
-            $event->setStatus($status);
+        }
             $this->em->persist($event);
             $this->em->flush();
-
             $this->addFlash('success', 'Événement publié !');
 
-        }
+
+
         return $this->redirectToRoute('main_event');
     }
 

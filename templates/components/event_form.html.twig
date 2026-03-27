@@ -12,6 +12,7 @@
             'data-model': 'on(change)|*',
             'data-action': 'live#action:prevent',
             'onsubmit': 'return false;'
+
         }
     }) }}
 
@@ -102,17 +103,18 @@
     </div>
 
 
-<script>
-    function openCancel() {
-        document.getElementById('cancel').style.display = 'flex';
-    }
+    <script>
+        function openCancel() {
+            document.getElementById('cancel').style.display = 'flex';
+        }
 
-    function closeCancel() {
-        document.getElementById('cancel').style.display = 'none';
+        function closeCancel() {
+            document.getElementById('cancel').style.display = 'none';
 
 
-    }
+        }
 
-</script>
-{{ form_end(form) }}
+    </script>
+    {{ form_end(form) }}
+
 </div>

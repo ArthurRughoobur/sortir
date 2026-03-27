@@ -18,9 +18,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class EventController extends AbstractController
 {
     #[Route('/', name: 'main_event')]
-    public function mainEvent(EventRepository $eventRepository, Request $request, UpdateEventStatus $eventStatus): Response
+    public function mainEvent(
+        EventRepository   $eventRepository,
+        Request           $request,
+        UpdateEventStatus $eventStatus,
+        UpdateEventStatus $eventStatusMaxInscription): Response
     {
-        $eventStatus ->updatePastEvent();
+        $eventStatus->updatePastEvent();
+        $eventStatusMaxInscription->updateStatusForMaxInscription();
 
         $eventSearch = new EventSearch();
         $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
@@ -57,9 +62,9 @@ final class EventController extends AbstractController
             if (!$event) {
                 throw $this->createNotFoundException('Événement introuvable.');
             }
-        if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
-        }
+            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
+                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
+            }
 
         }
 
@@ -143,7 +148,6 @@ final class EventController extends AbstractController
         $this->addFlash('success', 'Vous été bien désinscrit.');
         return $this->redirectToRoute('event_detail', ['id' => $id]);
     }
-
 
 
 }

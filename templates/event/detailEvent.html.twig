@@ -35,10 +35,12 @@
         <a href="{{ path('desinscription_event', {'id': event.id}) }}">
             <button class="">Désinscription !</button>
         </a>
+        {% if app.user.username == event.organizer.username %}
+            <a href="{{ path('update_event', {'id': event.id}) }}">
+                <button class="">Modifier l'évènement !</button>
+            </a>
+        {% endif %}
 
-        <a href="{{ path('update_event', {'id': event.id}) }}">
-            <button class="">Modifier l'évènement !</button>
-        </a>
     </article>
 
 {% endblock %}

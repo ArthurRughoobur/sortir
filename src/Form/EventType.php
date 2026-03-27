@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -48,7 +49,7 @@ class EventType extends AbstractType
                     new NotBlank(['message' => 'La durée est requise']),
                 ],
             ])
-            ->add('deadline', DateTimeType::class, [
+            ->add('deadline', DateType::class, [
                 'label' => "Date limite d'inscription : ",
                 'constraints' => [
                     new NotBlank(['message' => 'La date limite est requise']),

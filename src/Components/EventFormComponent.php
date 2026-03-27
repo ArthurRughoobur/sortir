@@ -83,6 +83,7 @@ final class EventFormComponent extends AbstractController
     #[LiveAction]
     public function save(): RedirectResponse
     {
+        $this->submitForm();
         if ($this->id !== null) {
             $event = $this->eventRepository->find($this->id);
             $allowedStatuses = ['En création', 'Ouverte'];
@@ -90,7 +91,7 @@ final class EventFormComponent extends AbstractController
                 $this->addFlash("error", "Vous ne pouvez pas Sauvegarder un événement avec le statut : " . $event->getStatus()->getName());
                 return $this->redirectToRoute('main_event');
             }
-            $this->submitForm();
+
             $event = $this->getForm()->getData();
             $status = $this->statusRepository->findOneBy(['name' => 'En création']);
             $user = $this->security->getUser();
@@ -104,15 +105,14 @@ final class EventFormComponent extends AbstractController
 
             $this->addFlash('success', 'Événement sauvegardé !');
 
-
         }
         return $this->redirectToRoute('main_event');
     }
 
-
     #[LiveAction]
     public function publish(): RedirectResponse
     {
+        $this->submitForm();
         if ($this->id !== null) {
             $event = $this->eventRepository->find($this->id);
             $allowedStatuses = ['En création', 'Ouverte'];
@@ -121,7 +121,6 @@ final class EventFormComponent extends AbstractController
                 return $this->redirectToRoute('main_event');
             }
 
-            $this->submitForm();
             $event = $this->getForm()->getData();
             $status = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
             $user = $this->security->getUser();
@@ -136,7 +135,6 @@ final class EventFormComponent extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'Événement publié !');
-
 
         }
         return $this->redirectToRoute('main_event');
@@ -175,6 +173,5 @@ final class EventFormComponent extends AbstractController
         return $this->redirectToRoute('main_event');
 
     }
-
 
 }

@@ -1,0 +1,6 @@
+{% if is_granted("ROLE_ADMIN") %}
+<form method="post" action="{{ path('app_campus_delete', {'id': campus.id}) }}" onsubmit="return confirm('Voulez vous-vraiment supprimer ceCampus?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ campus.id) }}">
+    <button class="btn">Supprimer</button>
+</form>
+{% endif %}

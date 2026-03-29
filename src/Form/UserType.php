@@ -6,6 +6,7 @@ use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -20,19 +21,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
-{
+{    public function __construct(private Security $security) {}
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Pseudo : '
             ])
-
-//            ->add('password', passwordType::class, [
-//                'label1' => 'Mot de passe : ',
-//                'label2' => 'Vérification du mot de passe : ',
-//
-//            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
@@ -50,12 +45,11 @@ class UserType extends AbstractType
                 'label' => 'Prenom : '
             ])
             ->add('phone', TextType::class, [
-                'label'=> 'Numéro de téléphone : '
+                'label' => 'Numéro de téléphone : '
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email : '
             ])
-
             ->add('student', ChoiceType::class, [
                 'choices' => [
                     'Elève' => true,
@@ -74,6 +68,19 @@ class UserType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ]);
+
+            if ($this->security->isGranted('ROLE_ADMIN')) {
+                $builder->add('roles', ChoiceType::class, [
+                    'choices' => [
+                        'Admin' => 'ROLE_ADMIN',
+                        'Utilisateur' => 'ROLE_USER',
+                    ],
+                    'multiple' => true,
+                    'expanded' => true,
+
+                ]);
+            }
+
 
 
     }

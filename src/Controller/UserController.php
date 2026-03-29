@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Utils\FileUploader;
@@ -64,5 +65,37 @@ final class UserController extends AbstractController
                 'userById' => $userById,
             ]
         );
+    }
+
+    #[Route("/create_user", name: 'create_user')]
+    public function createUser(
+        Request                     $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface      $entityManager,
+
+
+    ): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('password')->getData();
+
+            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            $user->setActive(true);
+            if ($user->getPhoto() === null) {
+                $user->setPhoto("portrait.png");
+            }
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Profil crée avec succès !');
+            return $this->redirectToRoute('main_event');
+        }
+        return $this->render('user/create.html.twig', [
+            'form' => $form,
+        ]);
+
     }
 }

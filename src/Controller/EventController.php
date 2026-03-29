@@ -18,10 +18,11 @@ final class EventController extends AbstractController
 {
     #[Route('/', name: 'main_event')]
     public function mainEvent(
-        EventRepository   $eventRepository,
-        Request           $request,
+        EventRepository $eventRepository,
+        Request $request,
         UpdateEventStatus $eventStatus,
-        UpdateEventStatus $eventStatusMaxInscription): Response
+        UpdateEventStatus $eventStatusMaxInscription
+    ): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -32,8 +33,11 @@ final class EventController extends AbstractController
         $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
         $eventFormSearch->handleRequest($request);
 
-        /** @var User $user */
         $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('Vous devez être connecté.');
+        }
 
         $events = $eventRepository->findEventList($eventSearch, $user);
 
@@ -65,10 +69,14 @@ final class EventController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
         $id = $request->attributes->get('id');
         $event = null;
+        $user = $this->getUser();
         if ($id !== null) {
             $event = $eventRepository->find($id);
             if (!$event) {
                 throw $this->createNotFoundException('Événement introuvable.');
+            }
+            if (!$user instanceof User) {
+                throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
             }
 //            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
 //                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
@@ -118,18 +126,18 @@ final class EventController extends AbstractController
         EntityManagerInterface $entityManager,
     ): Response
     {
-        $event = $eventRepository->find($id);
+        $event = $eventRepository->findEventById($id);
         $user = $this->getUser();
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
         if (!$user instanceof User) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
         }
         $event->addRegistred($user);
         $entityManager->persist($event);
         $entityManager->flush();
-        $this->addFlash('success', 'Vous été bien inscrit.');
+        $this->addFlash('success', 'Vous êtes bien inscrit.');
         return $this->redirectToRoute('event_detail', ['id' => $id]);
 
     }
@@ -154,7 +162,7 @@ final class EventController extends AbstractController
         $event->removeRegistred($user);
         $entityManager->persist($event);
         $entityManager->flush();
-        $this->addFlash('success', 'Vous été bien désinscrit.');
+        $this->addFlash('success', 'Vous êtes bien désinscrit.');
         return $this->redirectToRoute('event_detail', ['id' => $id]);
     }
 

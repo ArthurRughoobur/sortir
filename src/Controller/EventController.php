@@ -34,10 +34,18 @@ final class EventController extends AbstractController
         $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
         $eventFormSearch->handleRequest($request);
 
-        $events = $eventRepository->findEventList($eventSearch, $this->getUser());
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $events = $eventRepository->findEventList($eventSearch, $user);
+
+        $campusEvents = array_values(array_filter($events, function ($event) use ($user) {
+            return $event->getCampus() === $user->getCampus();
+        }));
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            'campusEvents' => $campusEvents,
             'eventFormSearch' => $eventFormSearch->createView(),
         ]);
     }

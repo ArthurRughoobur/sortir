@@ -34,6 +34,9 @@ final class EventFormComponent extends AbstractController
     #[LiveProp]
     public ?Event $initialFormData = null;
 
+    #[LiveProp(fieldName: 'eventData')]
+    public ?Event $event = null;
+
     #[LiveProp]
     public ?string $street = null;
 
@@ -96,7 +99,7 @@ final class EventFormComponent extends AbstractController
             $event->setOrganizer($user);
         }
 
-        $event->setStatus( $this->statusRepository->findOneBy(['name' => 'En création']));
+        $event->setStatus($this->statusRepository->findOneBy(['name' => 'En création']));
 
         $this->submitForm();
 
@@ -109,11 +112,10 @@ final class EventFormComponent extends AbstractController
             }
         }
 
-            $this->em->persist($event);
-            $this->em->flush();
+        $this->em->persist($event);
+        $this->em->flush();
 
-            $this->addFlash('success', 'Événement sauvegardé !');
-
+        $this->addFlash('success', 'Événement sauvegardé !');
 
 
         return $this->redirectToRoute('main_event');
@@ -129,7 +131,7 @@ final class EventFormComponent extends AbstractController
             $event->setOrganizer($user);
             $event->addRegistred($user);
         }
-        $event->setStatus( $this->statusRepository->findOneBy(['name' => 'Ouverte']));
+        $event->setStatus($this->statusRepository->findOneBy(['name' => 'Ouverte']));
 
         $this->submitForm();
 
@@ -141,10 +143,9 @@ final class EventFormComponent extends AbstractController
                 return $this->redirectToRoute('main_event');
             }
         }
-            $this->em->persist($event);
-            $this->em->flush();
-            $this->addFlash('success', 'Événement publié !');
-
+        $this->em->persist($event);
+        $this->em->flush();
+        $this->addFlash('success', 'Événement publié !');
 
 
         return $this->redirectToRoute('main_event');

@@ -5,7 +5,8 @@ body {
     line-height: 1.6;
     text-rendering: optimizeLegibility;
 }
-a{
+
+a {
     text-decoration: none;
 }
 
@@ -43,7 +44,6 @@ a{
     border-color 0.25s ease,
     background 0.25s ease;
 }
-
 .eventCard:hover,
 .eventCard:focus-visible {
     transform: translateY(-6px);
@@ -54,4 +54,46 @@ a{
 .eventCard:focus-visible {
     outline: 2px solid black;
     outline-offset: 4px;
+}
+
+.mobile-message {
+    display: none;
+}
+
+.desktop-event-form {
+    display: block;
+}
+
+
+@media screen and (max-width: 767px) {
+    .mobile-message {
+        display: block;
+        padding: 1rem;
+        margin: 1rem 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+    }
+
+    .desktop-event-form {
+        display: none;
+    }
+
+    .search-campus{
+        display: none;
+    }
+
+    .btn-create-event {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .desktop-events {
+        display: none;
+    }
+
+    .mobile-events {
+        display: block;
+    }
 }

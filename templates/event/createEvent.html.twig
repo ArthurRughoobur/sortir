@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
+
 {% block body %}
+<div class="mobile-message">
+    La création de sortie n'est pas disponible sur petit écran.
+</div>
+
+<div class="desktop-event-form">
     <h1>
         {% if event is not null %}
             Modifier un évènement
@@ -10,8 +16,8 @@
     </h1>
     {{ component('event_form', {
         'initialFormData': event ?? null,
+        'event': event ?? null,
         'id': event.id ?? null
     }) }}
-
 
 {% endblock %}

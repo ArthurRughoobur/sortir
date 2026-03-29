@@ -95,12 +95,14 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
         $campus = $manager->getRepository(Campus::class)->findAll();
+
         $usersData = [
             ['username' => 'Admin', 'roles' => ['ROLE_ADMIN']],
             ['username' => 'Arthur', 'roles' => ['ROLE_USER']],
             ['username' => 'Adrien', 'roles' => ['ROLE_USER']],
         ];
 
+        // Users fixes
         foreach ($usersData as $data) {
             $user = new User();
             $user->setUsername($data['username']);
@@ -112,12 +114,27 @@ class AppFixtures extends Fixture
             $user->setEmail($faker->unique()->safeEmail());
             $user->setActive(true);
             $user->setStudent($data['username'] !== 'Admin');
-            $user->setPhoto("portrait.png");
+            $user->setPhoto('portrait.png');
             $user->setCampus($faker->randomElement($campus));
             $manager->persist($user);
-
         }
 
+
+        for ($i = 0; $i < 30; $i++) {
+            $user = new User();
+            $user->setUsername($faker->unique()->userName());
+            $user->setRoles(['ROLE_USER']);
+            $user->setPassword($this->passwordHasher->hashPassword($user, '123456'));
+            $user->setName($faker->firstName());
+            $user->setLastname($faker->lastName());
+            $user->setPhone($faker->phoneNumber());
+            $user->setEmail($faker->unique()->safeEmail());
+            $user->setActive(true);
+            $user->setStudent(true);
+            $user->setPhoto('portrait.png');
+            $user->setCampus($faker->randomElement($campus));
+            $manager->persist($user);
+        }
     }
 
     public function addAdresse(ObjectManager $manager): void
@@ -161,7 +178,7 @@ class AppFixtures extends Fixture
             $statusMap[$status->getName()] = $status;
         }
 
-        $sortie = [
+        $sorties = [
             'Rando forêt', 'Rando montagne', 'Balade nature', 'Randonnée bord de mer', 'Rando parc naturel',
             'Escalade en salle', 'Escalade en falaise', 'Bloc indoor', 'Via ferrata', 'Escalade débutant',
             'McDo', 'Burger King', 'Restaurant italien', 'Restaurant chinois', 'Restaurant gastronomique',
@@ -175,71 +192,119 @@ class AppFixtures extends Fixture
         ];
 
         $now = new \DateTime();
+        $eventsPerUser = 10;
+        $registrationsPerUser = 5;
 
-        foreach ($sortie as $name) {
-            $event = new Event();
-            $dateStart = $faker->dateTimeBetween('-1 month', '+2 months');
-            $deadline = (clone $dateStart)->modify('-' . rand(1, 5) . ' days');
+        // On garde seulement les utilisateurs non admin
+        $normalUsers = array_values(array_filter($users, function ($user) {
+            return !in_array('ROLE_ADMIN', $user->getRoles(), true)
+                && $user->getUsername() !== 'Admin';
+        }));
 
-            $event->setName($name);
-            $event->setDateStart($dateStart);
-            $event->setDeadline($deadline);
+        $allEvents = [];
 
-            $durationInMinutes = $faker->numberBetween(30, 360);
-            $event->setDuration($durationInMinutes);
+        // 1) Chaque utilisateur non admin crée 5 events
+        foreach ($normalUsers as $user) {
+            for ($i = 1; $i <= $eventsPerUser; $i++) {
+                $event = new Event();
 
-            $dateEnd = (clone $dateStart)->modify('+' . $durationInMinutes . ' minutes');
+                $baseName = $faker->randomElement($sorties);
+                $eventName = $baseName . ' #' . $i . ' - ' . $user->getUsername();
 
-            if (rand(1, 15) === 1) {
-                $event->setStatus($statusMap['Annulée']);
-            } elseif ($now < $dateStart) {
-                if ($deadline < $now) {
-                    $event->setStatus($statusMap['Clôturée']);
+                $dateStart = $faker->dateTimeBetween('-1 month', '+2 months');
+                $deadline = (clone $dateStart)->modify('-' . rand(1, 5) . ' days');
+                $durationInMinutes = $faker->numberBetween(30, 360);
+                $dateEnd = (clone $dateStart)->modify('+' . $durationInMinutes . ' minutes');
+
+                $event->setName($eventName);
+                $event->setDateStart($dateStart);
+                $event->setDeadline($deadline);
+                $event->setDuration($durationInMinutes);
+
+                if (rand(1, 15) === 1) {
+                    $event->setStatus($statusMap['Annulée']);
+                } elseif ($now < $dateStart) {
+                    if ($deadline < $now) {
+                        $event->setStatus($statusMap['Clôturée']);
+                    } else {
+                        $event->setStatus($faker->randomElement([
+                            $statusMap['En création'],
+                            $statusMap['Ouverte'],
+                        ]));
+                    }
+                } elseif ($now >= $dateStart && $now <= $dateEnd) {
+                    $event->setStatus($statusMap['En cours']);
                 } else {
                     $event->setStatus($faker->randomElement([
-                        $statusMap['En création'],
-                        $statusMap['Ouverte']
+                        $statusMap['Terminée'],
+                        $statusMap['Historisée'],
                     ]));
                 }
-            } elseif ($now >= $dateStart && $now <= $dateEnd) {
-                $event->setStatus($statusMap['En cours']);
-            } else {
-                $event->setStatus($faker->randomElement([
-                    $statusMap['Terminée'],
-                    $statusMap['Historisée']
-                ]));
+
+                $event->setMaxIscription($faker->numberBetween(6, 20));
+                $event->setEventInfo($faker->realText(255));
+                $event->setCategory($faker->randomElement($categories));
+                $event->setAdress($faker->randomElement($adresses));
+                $event->setCampus($faker->randomElement($campus));
+                $event->setOrganizer($user);
+
+                // L'organisateur est automatiquement inscrit
+                $event->addRegistred($user);
+
+                $manager->persist($event);
+                $allEvents[] = $event;
+            }
+        }
+
+        // 2) Chaque utilisateur est inscrit à au moins 5 events qui ne sont pas les siens
+        foreach ($normalUsers as $user) {
+            $otherEvents = array_values(array_filter($allEvents, function ($event) use ($user) {
+                return $event->getOrganizer() !== $user;
+            }));
+
+            if (count($otherEvents) === 0) {
+                continue;
             }
 
-            $event->setMaxIscription($faker->numberBetween(5, 15));
-            $event->setEventInfo($faker->realText( 255));
-            $event->setCategory($faker->randomElement($categories));
-            $event->setAdress($faker->randomElement($adresses));
-            $event->setCampus($faker->randomElement($campus));
+            $eventsToJoin = $faker->randomElements(
+                $otherEvents,
+                min($registrationsPerUser, count($otherEvents))
+            );
 
-            $availableOrganizers = array_values(array_filter($users, function ($user) {
-                return !in_array('ROLE_ADMIN', $user->getRoles(), true)
-                    && $user->getUsername() !== 'Admin';
+            foreach ($eventsToJoin as $event) {
+                if (!$event->getRegistred()->contains($user)
+                    && $event->getRegistred()->count() < $event->getMaxIscription()) {
+                    $event->addRegistred($user);
+                }
+            }
+        }
+
+        // 3) On ajoute encore quelques inscrits aléatoires pour enrichir les events
+        foreach ($allEvents as $event) {
+            $availableParticipants = array_values(array_filter($normalUsers, function ($user) use ($event) {
+                return $user !== $event->getOrganizer()
+                    && !$event->getRegistred()->contains($user);
             }));
 
-            $selectedOrganizer = $faker->randomElement($availableOrganizers);
-            $event->setOrganizer($selectedOrganizer);
+            if (count($availableParticipants) === 0) {
+                continue;
+            }
 
-            $availableParticipants = array_values(array_filter($users, function ($user) use ($selectedOrganizer) {
-                return $user !== $selectedOrganizer && !in_array('ROLE_ADMIN', $user->getRoles());
-            }));
+            $remainingSpots = $event->getMaxIscription() - $event->getRegistred()->count();
 
-            if (count($availableParticipants) > 0) {
-                $participants = $faker->randomElements(
-                    $availableParticipants,
-                    rand(1, min(5, count($availableParticipants)))
-                );
+            if ($remainingSpots <= 0) {
+                continue;
+            }
 
-                foreach ($participants as $participant) {
+            $extraCount = rand(0, min(5, $remainingSpots, count($availableParticipants)));
+
+            if ($extraCount > 0) {
+                $extraParticipants = $faker->randomElements($availableParticipants, $extraCount);
+
+                foreach ($extraParticipants as $participant) {
                     $event->addRegistred($participant);
                 }
             }
-
-            $manager->persist($event);
         }
     }
 

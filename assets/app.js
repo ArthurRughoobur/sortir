@@ -9,6 +9,8 @@ import './styles/normalise.css';
 import './styles/app.css';
 import './styles/navBar.css';
 import './styles/filterEvent.css';
+import './styles/detailEvent.css';
+import './styles/blocListEvent.css';
 import './styles/flash.css';
 import './styles/mentions.css';
 import './styles/about.css';

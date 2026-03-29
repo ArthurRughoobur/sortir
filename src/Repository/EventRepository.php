@@ -21,6 +21,7 @@ class EventRepository extends ServiceEntityRepository
     public function findEventList(EventSearch $eventSearch, User $user): array
     {
         $qb = $this->createQueryBuilder('e')
+            ->distinct()
             ->leftJoin('e.registred', 'r')
             ->addSelect('r')
             ->leftJoin('e.organizer', 'o')
@@ -37,7 +38,7 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter('status', 'Terminée');
         } else {
             $qb->andWhere('s.name IN (:statuses)')
-                ->setParameter('statuses', ['Ouverte', 'En cours']);
+                ->setParameter('statuses', ['Ouverte', 'En cours', 'Clôturée']);
         }
 
         if ($eventSearch->getCampus()) {
@@ -65,20 +66,27 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter('deadline', $eventSearch->getDeadline());
         }
 
-
         if ($user) {
-            if ($eventSearch->getOrganizer()) {
-                $qb->andWhere('e.organizer = :user')
-                    ->setParameter('user', $user);
+            $isOrganizer = $eventSearch->getOrganizer();
+            $isRegistered = $eventSearch->getRegistered();
+            $isNotRegistered = $eventSearch->getNotRegistered();
+
+            $conditions = [];
+
+            if ($isOrganizer) {
+                $conditions[] = 'e.organizer = :user';
             }
 
-            if ($eventSearch->getRegistered()) {
-                $qb->andWhere(':user MEMBER OF e.registred')
-                    ->setParameter('user', $user);
+            if ($isRegistered) {
+                $conditions[] = ':user MEMBER OF e.registred';
             }
 
-            if ($eventSearch->getNotRegistered()) {
-                $qb->andWhere(':user NOT MEMBER OF e.registred')
+            if ($isNotRegistered) {
+                $conditions[] = ':user NOT MEMBER OF e.registred';
+            }
+
+            if (!empty($conditions)) {
+                $qb->andWhere('(' . implode(' OR ', $conditions) . ')')
                     ->setParameter('user', $user);
             }
         }
@@ -86,7 +94,6 @@ class EventRepository extends ServiceEntityRepository
         return $qb->orderBy('e.dateStart', 'ASC')
             ->getQuery()
             ->getResult();
-
     }
 
     public function findEventById($id): ?Event
@@ -124,6 +131,31 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findOpenEventsAtCapacity(): array
+    {
+        return $this->createQueryBuilder('event')
+            ->join('event.status', 'status')
+            ->leftJoin('event.registred', 'registred')
+            ->where('status.name = :status')
+            ->setParameter('status', 'Ouverte')
+            ->groupBy('event.id')
+            ->having('COUNT(registred) >= event.maxIscription')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findClosedEventsBelowCapacity(): array
+    {
+        return $this->createQueryBuilder('event')
+            ->join('event.status', 'status')
+            ->leftJoin('event.registred', 'registred')
+            ->where('status.name = :status')
+            ->setParameter('status', 'Clôturée')
+            ->groupBy('event.id')
+            ->having('COUNT(registred) < event.maxIscription')
+            ->getQuery()
+            ->getResult();
+    }
 public function finishedToHistorized() {
         return $this->createQueryBuilder('event')
             ->join('event.status', 'status')

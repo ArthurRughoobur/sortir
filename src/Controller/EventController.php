@@ -2,11 +2,8 @@
 
 namespace App\Controller;
 
-use App\Components\EventFormComponent;
-use App\Entity\Event;
 use App\Entity\User;
 use App\Form\EventSearchType;
-use App\Form\EventType;
 use App\Form\Model\EventSearch;
 use App\Repository\EventRepository;
 use App\Security\Voter\EventVoter;
@@ -126,7 +123,7 @@ final class EventController extends AbstractController
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
-        if (!$user) {
+        if (!$user instanceof User) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
         }
         $event->addRegistred($user);
@@ -151,7 +148,7 @@ final class EventController extends AbstractController
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
-        if (!$user) {
+        if (!$user instanceof User) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
         }
         $event->removeRegistred($user);

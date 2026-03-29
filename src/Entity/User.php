@@ -13,8 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
-#[ORM\UniqueConstraint(name: 'UNIQ_EMAIL', fields: ['email'])]
+//#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+//#[ORM\UniqueConstraint(name: 'UNIQ_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['username'], message: 'Ce pseudo est déjà utilisé.')]
 #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: "Merci de rentrer un pseudo !")]
 
     private ?string $username = null;
@@ -51,10 +51,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\notBlank(message: "Merci de saisir un téléphone !")]
+    #[Assert\NotBlank(message: "Merci de saisir un téléphone !")]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 191, unique: true)]
     #[Assert\Email(message: "Merci de saisir un email !")]
     private ?string $email = null;
 

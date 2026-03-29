@@ -27,7 +27,7 @@ final class EventController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $eventStatus->updatePastEvent();
-        $eventStatusMaxInscription->updateStatusForMaxInscription();
+        $eventStatusMaxInscription->syncEventStatusesWithCapacity();
 
         $eventSearch = new EventSearch();
         $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
@@ -53,8 +53,10 @@ final class EventController extends AbstractController
     }
 
     #[Route('/detail/{id}', name: 'event_detail', requirements: ['id' => '\d+'])]
-    public function detailEvent(int $id, EventRepository $eventRepository): Response
+    public function detailEvent(int $id, EventRepository $eventRepository,UpdateEventStatus $eventStatusMaxInscription): Response
     {
+        $eventStatusMaxInscription->syncEventStatusesWithCapacity();
+
         $event = $eventRepository->findEventById($id);
 
         return $this->render('event/detailEvent.html.twig', [

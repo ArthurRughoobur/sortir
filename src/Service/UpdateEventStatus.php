@@ -29,10 +29,26 @@ class UpdateEventStatus
         $this->entityManager->flush();
     }
 
-    public function updateStatusForMaxInscription(): void
+    public function syncEventStatusesWithCapacity(): void
     {
+        $openStatus = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
+        $closedStatus = $this->statusRepository->findOneBy(['name' => 'Clôturée']);
 
+        if (!$openStatus || !$closedStatus) {
+            throw new \LogicException('Les statuts "Ouverte" et "Clôturée" doivent exister en base.');
+        }
 
+        $eventsToClose = $this->eventRepository->findOpenEventsAtCapacity();
+        foreach ($eventsToClose as $event) {
+            $event->setStatus($closedStatus);
+        }
+
+        $eventsToReopen = $this->eventRepository->findClosedEventsBelowCapacity();
+        foreach ($eventsToReopen as $event) {
+            $event->setStatus($openStatus);
+        }
+
+        $this->entityManager->flush();
     }
 
 

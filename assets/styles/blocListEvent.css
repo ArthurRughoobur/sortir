@@ -1,0 +1,81 @@
+.eventList {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+    font-size: 0.95rem;
+}
+
+.eventCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 180px;
+    padding: 1.25rem;
+    border: 1px solid;
+    border-radius: 18px;
+    backdrop-filter: blur(3px);
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+.eventCard:hover,
+.eventCard:focus-visible {
+    transform: translateY(-6px);
+    border-color: black;
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
+}
+
+.eventCard:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 4px;
+}
+
+.desktop-events {
+    display: grid;
+}
+
+.mobile-events {
+    display: none;
+}
+.mobile-message{
+    display: none;
+}
+
+@media screen and (max-width: 767px) {
+    .mobile-message {
+        display: block;
+        padding: 1rem;
+        margin: 1rem 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+    }
+
+    .desktop-event-form {
+        display: none;
+    }
+
+    .search-campus{
+        display: none;
+    }
+
+    .btn-create-event {
+        display: none;
+    }
+
+    .desktop-events {
+        display: none;
+    }
+
+    .mobile-events {
+        display: grid;
+    }
+    .mobile-message{
+    display: flex;
+    }
+}

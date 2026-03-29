@@ -1,56 +1,118 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Détail de la sortie{% endblock %}
+
 {% block body %}
-    <article>
+    <section class="event-page">
+        <article class="event-card">
 
-        <span>Nom de la sortie : {{ event.name }}</span>
-        <span>Catégorie de la sortie : {{ event.category.name }}</span>
-        <span>Date et heure de la sortie : {{ event.dateStart|date("d/m/Y H:m") }}</span>
-        <span>Date limite d'inscription : {{ event.deadline | date("d/m/Y") }}</span>
-        <span>inscrits/places : {{ event.registred.count }}/{{ event.maxIscription }}</span>
-        <span>Etat : {{ event.status.name }}</span>
-        <span>Inscrit : {{ event.organizer.name }}</span>
-        <span>Campus : {{ event.campus.name }}</span>
-        <span>Lieu : {{ event.adress.city.name }}</span>
-        <span>Rue : {{ event.adress.street }}</span>
-        <span>Code Postal : {{ event.adress.city.zipCode }}</span>
-        <span>Latitude : {{ event.adress.latitude }}</span>
-        <span>Longitude : {{ event.adress.longitude }}</span>
-        <span>Description et infos : {{ event.eventInfo }}</span>
-        <span>Détail annulation : {{ event.canceledInfo }}</span>
+            <header class="event-header">
+                <h1 class="event-title">{{ event.name }}</h1>
+                <span class="event-status">{{ event.status.name }}</span>
+            </header>
 
+            <div class="event-grid">
+                <div class="event-item">
+                    <span class="label">Catégorie</span>
+                    <span class="value">{{ event.category.name }}</span>
+                </div>
 
-        <ul>
-            {% for user in event.registred %}
-                <a href="{{ path('user_detail_id', {'id': user.id}) }}">
-                    <li>{{ user.name }} {{ user.lastname }}</li>
-                </a>
-            {% else %}
-                <li>Aucun participant</li>
-            {% endfor %}
-        </ul>
+                <div class="event-item">
+                    <span class="label">Date et heure</span>
+                    <span class="value">{{ event.dateStart|date("d/m/Y H:i") }}</span>
+                </div>
 
-        {% if app.user in event.registred %}
-            <a href="{{ path('desinscription_event', {'id': event.id}) }}">
-                <button class="">Désinscription !</button>
-            </a>
-            {% else %}
-                <a href="{{ path('inscription_event', {'id': event.id}) }}">
-                    <button class="">Inscription !</button>
-                </a>
-        {% endif %}
+                <div class="event-item">
+                    <span class="label">Date limite d'inscription</span>
+                    <span class="value">{{ event.deadline|date("d/m/Y") }}</span>
+                </div>
 
-        {% if is_granted('EVENT_EDIT', event) %}
-            <a href="{{ path('update_event', {'id': event.id}) }}">
-                <button class="">Modifier l'évènement !</button>
-            </a>
-        {% endif %}
+                <div class="event-item">
+                    <span class="label">Inscrits / Places</span>
+                    <span class="value">{{ event.registred.count }}/{{ event.maxIscription }}</span>
+                </div>
 
-    </article>
+                <div class="event-item">
+                    <span class="label">Organisateur</span>
+                    <span class="value">{{ event.organizer.name }}</span>
+                </div>
 
+                <div class="event-item">
+                    <span class="label">Campus</span>
+                    <span class="value">{{ event.campus.name }}</span>
+                </div>
+
+                <div class="event-item">
+                    <span class="label">Lieu</span>
+                    <span class="value">{{ event.adress.city.name }}</span>
+                </div>
+
+                <div class="event-item">
+                    <span class="label">Rue</span>
+                    <span class="value">{{ event.adress.street }}</span>
+                </div>
+
+                <div class="event-item">
+                    <span class="label">Code postal</span>
+                    <span class="value">{{ event.adress.city.zipCode }}</span>
+                </div>
+
+                <div class="event-item">
+                    <span class="label">Latitude</span>
+                    <span class="value">{{ event.adress.latitude }}</span>
+                </div>
+
+                <div class="event-item">
+                    <span class="label">Longitude</span>
+                    <span class="value">{{ event.adress.longitude }}</span>
+                </div>
+            </div>
+
+            <div class="event-description-block">
+                <h2>Description</h2>
+                <p>{{ event.eventInfo }}</p>
+            </div>
+
+            {% if event.canceledInfo %}
+                <div class="event-cancel-block">
+                    <h2>Détail annulation</h2>
+                    <p>{{ event.canceledInfo }}</p>
+                </div>
+            {% endif %}
+
+            <div class="participants-block">
+                <h2>Participants</h2>
+                <ul class="participants-list">
+                    {% for user in event.registred %}
+                        <li>
+                            <a href="{{ path('user_detail_id', {'id': user.id}) }}">
+                                {{ user.name }} {{ user.lastname }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>Aucun participant</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="event-actions">
+                {% if app.user in event.registred %}
+                    <a class="btnEventDetail" href="{{ path('desinscription_event', {'id': event.id}) }}">
+                        Désinscription
+                    </a>
+                {% else %}
+                    <a class="btnEventDetail " href="{{ path('inscription_event', {'id': event.id}) }}">
+                        Inscription
+                    </a>
+                {% endif %}
+
+                {% if is_granted('EVENT_EDIT', event) %}
+                    <a class="btnEventDetail" href="{{ path('update_event', {'id': event.id}) }}">
+                        Modifier l'évènement
+                    </a>
+                {% endif %}
+            </div>
+
+        </article>
+    </section>
 {% endblock %}
-
-{% block title %}
-
-{% endblock %}
-

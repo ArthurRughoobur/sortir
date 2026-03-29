@@ -20,10 +20,16 @@ class UpdateEventStatus
     public function updatePastEvent(): void
     {
         $terminatedStatus = $this->statusRepository->findOneBy(['name' => 'Terminée']);
+        $historicizedStatus = $this->statusRepository->findOneBy(['name'=> 'Historisée']);
+        $finishedEvents = $this->eventRepository->findEventWithEndDate();
+        $historizedEvents = $this->eventRepository->finishedToHistorized();
 
-        $events = $this->eventRepository->findEventWithEndDate();
-        foreach ($events as $event) {
+        foreach ($finishedEvents as $event) {
             $event->setStatus($terminatedStatus);
+            $this->entityManager->persist($event);
+        }
+        foreach ($historizedEvents as $event) {
+            $event->setStatus($historicizedStatus);
             $this->entityManager->persist($event);
         }
         $this->entityManager->flush();

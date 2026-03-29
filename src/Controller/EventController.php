@@ -134,6 +134,9 @@ final class EventController extends AbstractController
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
         }
+        if ($event->getRegistred()->contains($user)) {
+            throw $this->createAccessDeniedException('Vous êtes déjà inscrit à cet événement.');
+        }
         $event->addRegistred($user);
         $entityManager->persist($event);
         $entityManager->flush();
@@ -158,6 +161,9 @@ final class EventController extends AbstractController
         }
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
+        }
+        if (!$event->getRegistred()->contains($user)) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas inscrit à cet événement.');
         }
         $event->removeRegistred($user);
         $entityManager->persist($event);

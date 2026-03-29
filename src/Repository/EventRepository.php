@@ -124,7 +124,16 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
+public function finishedToHistorized() {
+        return $this->createQueryBuilder('event')
+            ->join('event.status', 'status')
+            ->where('DATE_ADD(event.dateStart, event.duration, \'minute\') < (:oneMonthAgo)')
+            ->andWhere('status.name NOT IN (:excludedStatuses)')
+            ->setParameter('excludedStatuses', ['Historisée'])
+            ->setParameter('oneMonthAgo', new \DateTime('-30 days'))
+            ->getQuery()
+            ->getResult();
+}
 
 
 }

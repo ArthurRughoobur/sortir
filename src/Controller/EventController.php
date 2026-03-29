@@ -8,6 +8,7 @@ use App\Form\EventSearchType;
 use App\Form\EventType;
 use App\Form\Model\EventSearch;
 use App\Repository\EventRepository;
+use App\Security\Voter\EventVoter;
 use App\Service\UpdateEventStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +25,8 @@ final class EventController extends AbstractController
         UpdateEventStatus $eventStatus,
         UpdateEventStatus $eventStatusMaxInscription): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $eventStatus->updatePastEvent();
         $eventStatusMaxInscription->updateStatusForMaxInscription();
 
@@ -53,8 +56,7 @@ final class EventController extends AbstractController
     #[Route('/update_event/{id}', name: 'update_event', requirements: ['id' => '\d+'])]
     public function createEvent(Request $request, EventRepository $eventRepository): Response
     {
-
-
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $id = $request->attributes->get('id');
         $event = null;
         if ($id !== null) {
@@ -62,9 +64,10 @@ final class EventController extends AbstractController
             if (!$event) {
                 throw $this->createNotFoundException('Événement introuvable.');
             }
-            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
-                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
-            }
+//            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
+//                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
+//            }
+            $this->denyAccessUnlessGranted(EventVoter::EDIT, $event);
 
         }
 

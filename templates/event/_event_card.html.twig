@@ -1,0 +1,15 @@
+<a class="eventCard" href="{{ path('event_detail', {'id': event.id}) }}">
+    <span>Nom de la sortie : {{ event.name }}</span>
+    <span>Catégorie : {{ event.category.name }}</span>
+    <span>Date : {{ event.dateStart|date("d/m/Y H:i") }}</span>
+    <span>Clôture : {{ event.deadline|date("d/m/Y") }}</span>
+    <span>Inscrits / Places : {{ event.registred.count }} / {{ event.maxIscription }}</span>
+    <span>Statut : {{ event.status.name }}</span>
+    <span>Organisateur : {{ event.organizer.name }} {{ event.organizer.lastname }}</span>
+
+    {% if app.user in event.registred %}
+        <span>✔️ Inscrit</span>
+    {% else %}
+        <span>❌ Pas inscrit</span>
+    {% endif %}
+</a>

@@ -7,11 +7,13 @@
             {% if is_granted("ROLE_ADMIN") %}
                 <li><a href="{{ path('main_event') }}">Villes</a></li>
                 <li><a href="{{ path('main_event') }}">Campus</a></li>
+                <li><a href="{{ path('create_user') }}">Création d'utilisateur</a></li>
             {% endif %}
             <li><a href="{{ path('app_logout') }}">Se Déconnecter</a></li>
             <li class="btn-create-event"><a href="{{ path('create_event') }}">Créer un évènement</a></li>
             <li><a href="{{ path('update', {'id': app.user.id}) }}">Mon Profil</a>
             </li>
+
         {% else %}
             <li><a href="{{ path('app_login') }}">Login</a></li>
         {% endif %}

@@ -32,6 +32,7 @@ class UpdateEventStatus
             $event->setStatus($historicizedStatus);
             $this->entityManager->persist($event);
         }
+      
         $this->entityManager->flush();
     }
 

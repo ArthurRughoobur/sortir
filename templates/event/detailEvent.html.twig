@@ -29,13 +29,18 @@
                 <li>Aucun participant</li>
             {% endfor %}
         </ul>
-        <a href="{{ path('inscription_event', {'id': event.id}) }}">
-            <button class="">Inscription !</button>
-        </a>
-        <a href="{{ path('desinscription_event', {'id': event.id}) }}">
-            <button class="">Désinscription !</button>
-        </a>
-        {% if app.user.username == event.organizer.username %}
+
+        {% if app.user in event.registred %}
+            <a href="{{ path('desinscription_event', {'id': event.id}) }}">
+                <button class="">Désinscription !</button>
+            </a>
+            {% else %}
+                <a href="{{ path('inscription_event', {'id': event.id}) }}">
+                    <button class="">Inscription !</button>
+                </a>
+        {% endif %}
+
+        {% if is_granted('EVENT_EDIT', event) %}
             <a href="{{ path('update_event', {'id': event.id}) }}">
                 <button class="">Modifier l'évènement !</button>
             </a>

@@ -4,35 +4,40 @@
 
 {% block body %}
 
-<div>
-    <span>Date du jour : {{ 'now' | date ("d/m/Y") }}</span><br>
-    <span>Participant : {{ app.user.name }} {{ app.user.lastname |first }}.</span>
-</div>
+    <div>
+        <span>Date du jour : {{ 'now' | date ("d/m/Y") }}</span><br>
+        <span>Participant : {{ app.user.name }} {{ app.user.lastname|first }}.</span>
+    </div>
 
     <section class="filtreList">
         <h2>Filtrer les sorties</h2>
         {{ form_start(eventFormSearch) }}
-        {{ form_widget(eventFormSearch) }}
+        <span class="search-campus">
+                   {{ form_row(eventFormSearch.campus) }}
+       </span>
+        {{ form_row(eventFormSearch.category) }}
+        {{ form_row(eventFormSearch.name) }}
+        {{ form_row(eventFormSearch.dateStart) }}
+        {{ form_row(eventFormSearch.deadline) }}
+        {{ form_row(eventFormSearch.organizer) }}
+        {{ form_row(eventFormSearch.registered) }}
+        {{ form_row(eventFormSearch.notRegistered) }}
+        {{ form_row(eventFormSearch.terminee) }}
+        {{ form_row(eventFormSearch.search) }}
         {{ form_end(eventFormSearch) }}
     </section>
 
-    <section class="eventList">
+    <section class="eventList desktop-events">
         {% for event in events %}
-            <a class="eventCard" href="{{ path('event_detail', {'id': event.id}) }}">
-                <span>Nom de la sortie : {{ event.name }}</span>
-                <span>Catégorie de la sortie : {{ event.category.name }}</span>
-                <span>Date de la sortie : {{ event.dateStart|date("d/m/Y H:i") }}</span>
-                <span>Clôture : {{ event.deadline | date("d/m/Y") }}</span>
-                <span>Inscrits / Places : {{ event.registred.count }} / {{ event.maxIscription }}</span>
-                <span>Statut : {{ event.status.name }}</span>
-                <span>Organisateur : {{ event.organizer.name }} {{ event.organizer.lastname }}</span>
+            {% include 'event/_event_card.html.twig' with { event: event } %}
+        {% endfor %}
+    </section>
 
-                {% if app.user in event.registred %}
-                    <span>✔️ Inscrit</span>
-                {% else %}
-                    <span>❌ Pas inscrit</span>
-                {% endif %}
-            </a>
+    <section class="eventList mobile-events">
+        {% for event in campusEvents %}
+            {% include 'event/_event_card.html.twig' with { event: event } %}
+        {% else %}
+            <p>Aucune sortie sur votre campus</p>
         {% endfor %}
     </section>
 {% endblock %}

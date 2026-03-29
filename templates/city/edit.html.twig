@@ -4,10 +4,12 @@
 
 {% block body %}
     <h1>Edit City</h1>
+    {% if is_granted("ROLE_ADMIN") %}
+        {{ include('city/_form.html.twig', {'button_label': 'Update'}) }}
+    {% endif %}
 
-    {{ include('city/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_city_index') }}">back to list</a>
+    <a href="{{ path('app_city_index') }}">
+        <button>Retour aux villes</button></a>
 
     {{ include('city/_delete_form.html.twig') }}
 {% endblock %}

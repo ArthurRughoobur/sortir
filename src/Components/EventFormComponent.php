@@ -34,8 +34,8 @@ final class EventFormComponent extends AbstractController
     #[LiveProp]
     public ?Event $initialFormData = null;
 
-    #[LiveProp(fieldName: 'eventData')]
-    public ?Event $event = null;
+//    #[LiveProp(fieldName: 'eventData')]
+//    public ?Event $event = null;
 
     #[LiveProp]
     public ?string $street = null;

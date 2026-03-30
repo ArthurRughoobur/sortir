@@ -8,19 +8,28 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 
 /**
  * Service centralisant les règles métier d'autorisation des événements.
+ *
+ * Cette classe contient toute la logique métier liée aux permissions.
+ * Elle est utilisée par les Voters pour prendre des décisions d'accès.
+ *
+ * Avantage : séparation claire entre sécurité Symfony et logique métier.
  */
 final class EventPermissionChecker
 {
     /**
      * Vérifie si l'utilisateur peut créer un événement.
      *
-     * @param mixed $user L'utilisateur courant
-     * @param Vote|null $vote Permet d'ajouter une raison à la décision
+     * Règle :
+     * - l'utilisateur doit être connecté
      *
-     * @return bool
+     * @param mixed $user L'utilisateur courant (peut être null ou autre type)
+     * @param Vote|null $vote Permet d'ajouter une explication à la décision
+     *
+     * @return bool True si autorisé, sinon false
      */
     public function canCreate(mixed $user, ?Vote $vote = null): bool
     {
+        // Vérifie que l'utilisateur est bien authentifié
         if (!$user instanceof User) {
             $vote?->addReason('Création refusée : utilisateur non connecté');
             return false;
@@ -33,14 +42,18 @@ final class EventPermissionChecker
     /**
      * Vérifie si un événement peut être consulté.
      *
+     * Règle actuelle :
+     * - tous les événements sont visibles
+     *
      * @param Event $event L'événement concerné
      * @param mixed $user L'utilisateur courant
-     * @param Vote|null $vote Permet d'ajouter une raison à la décision
+     * @param Vote|null $vote Permet d'ajouter une raison
      *
      * @return bool
      */
     public function canView(Event $event, mixed $user, ?Vote $vote = null): bool
     {
+        // Pour l'instant, aucun contrôle : accès libre
         $vote?->addReason('Consultation autorisée');
         return true;
     }
@@ -48,10 +61,10 @@ final class EventPermissionChecker
     /**
      * Vérifie si l'utilisateur peut modifier un événement.
      *
-     * Règles proposées :
+     * Règles :
      * - utilisateur connecté obligatoire
      * - seul l'organisateur peut modifier
-     * - modification refusée si l'événement est déjà passé
+     * - modification refusée si l'événement est déjà commencé ou passé
      *
      * @param Event $event L'événement concerné
      * @param mixed $user L'utilisateur courant
@@ -61,16 +74,19 @@ final class EventPermissionChecker
      */
     public function canEdit(Event $event, mixed $user, ?Vote $vote = null): bool
     {
+        // Vérifie que l'utilisateur est connecté
         if (!$user instanceof User) {
             $vote?->addReason('Modification refusée : utilisateur non connecté');
             return false;
         }
 
+        // Vérifie que l'utilisateur est l'organisateur de l'événement
         if (!$this->isOrganizer($event, $user)) {
             $vote?->addReason('Modification refusée : utilisateur non organisateur');
             return false;
         }
 
+        // Vérifie que l'événement n'a pas déjà commencé
         $dateStart = $event->getDateStart();
         if ($dateStart !== null && $dateStart < new \DateTime()) {
             $vote?->addReason('Modification refusée : événement déjà commencé ou passé');
@@ -84,10 +100,10 @@ final class EventPermissionChecker
     /**
      * Vérifie si l'utilisateur peut annuler un événement.
      *
-     * Règles proposées :
+     * Règles :
      * - utilisateur connecté obligatoire
      * - seul l'organisateur peut annuler
-     * - refus si l'événement est déjà passé
+     * - refus si l'événement est déjà commencé ou passé
      *
      * @param Event $event L'événement concerné
      * @param mixed $user L'utilisateur courant
@@ -97,16 +113,19 @@ final class EventPermissionChecker
      */
     public function canCancel(Event $event, mixed $user, ?Vote $vote = null): bool
     {
+        // Vérifie que l'utilisateur est connecté
         if (!$user instanceof User) {
             $vote?->addReason('Annulation refusée : utilisateur non connecté');
             return false;
         }
 
+        // Vérifie que l'utilisateur est l'organisateur
         if (!$this->isOrganizer($event, $user)) {
             $vote?->addReason('Annulation refusée : utilisateur non organisateur');
             return false;
         }
 
+        // Vérifie que l'événement n'est pas déjà passé
         $dateStart = $event->getDateStart();
         if ($dateStart !== null && $dateStart < new \DateTime()) {
             $vote?->addReason('Annulation refusée : événement déjà commencé ou passé');
@@ -120,12 +139,12 @@ final class EventPermissionChecker
     /**
      * Vérifie si l'utilisateur peut s'inscrire à un événement.
      *
-     * Règles proposées :
+     * Règles :
      * - utilisateur connecté obligatoire
-     * - impossible si la date limite est dépassée
-     * - impossible si l'utilisateur est déjà inscrit
-     * - impossible si l'utilisateur est l'organisateur
-     * - impossible si l'événement est complet
+     * - date limite non dépassée
+     * - utilisateur non déjà inscrit
+     * - utilisateur ≠ organisateur
+     * - événement non complet
      *
      * @param Event $event L'événement concerné
      * @param mixed $user L'utilisateur courant
@@ -135,27 +154,32 @@ final class EventPermissionChecker
      */
     public function canRegister(Event $event, mixed $user, ?Vote $vote = null): bool
     {
+        // Vérifie que l'utilisateur est connecté
         if (!$user instanceof User) {
             $vote?->addReason('Inscription refusée : utilisateur non connecté');
             return false;
         }
 
+        // Vérifie la date limite d'inscription
         $deadline = $event->getDeadline();
         if ($deadline !== null && $deadline < new \DateTime()) {
             $vote?->addReason('Inscription refusée : date limite dépassée');
             return false;
         }
 
+        // Empêche l'organisateur de s'inscrire
         if ($this->isOrganizer($event, $user)) {
             $vote?->addReason('Inscription refusée : l’organisateur ne peut pas s’inscrire');
             return false;
         }
 
+        // Vérifie si l'utilisateur est déjà inscrit
         if ($event->getRegistred()->contains($user)) {
             $vote?->addReason('Inscription refusée : utilisateur déjà inscrit');
             return false;
         }
 
+        // Vérifie si l'événement est complet
         $maxInscription = $event->getMaxIscription();
         if (
             $maxInscription !== null
@@ -172,10 +196,10 @@ final class EventPermissionChecker
     /**
      * Vérifie si l'utilisateur peut se désinscrire d'un événement.
      *
-     * Règles proposées :
+     * Règles :
      * - utilisateur connecté obligatoire
-     * - l'utilisateur doit être déjà inscrit
-     * - désinscription refusée si l'événement a commencé
+     * - utilisateur déjà inscrit
+     * - événement non commencé
      *
      * @param Event $event L'événement concerné
      * @param mixed $user L'utilisateur courant
@@ -185,16 +209,19 @@ final class EventPermissionChecker
      */
     public function canUnregister(Event $event, mixed $user, ?Vote $vote = null): bool
     {
+        // Vérifie que l'utilisateur est connecté
         if (!$user instanceof User) {
             $vote?->addReason('Désinscription refusée : utilisateur non connecté');
             return false;
         }
 
+        // Vérifie que l'utilisateur est bien inscrit
         if (!$event->getRegistred()->contains($user)) {
             $vote?->addReason('Désinscription refusée : utilisateur non inscrit');
             return false;
         }
 
+        // Empêche la désinscription après le début de l'événement
         $dateStart = $event->getDateStart();
         if ($dateStart !== null && $dateStart < new \DateTime()) {
             $vote?->addReason('Désinscription refusée : événement déjà commencé ou passé');
@@ -206,17 +233,19 @@ final class EventPermissionChecker
     }
 
     /**
-     * Vérifie si l'utilisateur courant est l'organisateur de l'événement.
+     * Vérifie si un utilisateur est l'organisateur de l'événement.
      *
      * @param Event $event L'événement concerné
      * @param User $user L'utilisateur courant
      *
-     * @return bool
+     * @return bool True si l'utilisateur est l'organisateur
      */
     private function isOrganizer(Event $event, User $user): bool
     {
+        // Récupère l'organisateur de l'événement
         $organizer = $event->getOrganizer();
 
+        // Compare les identifiants pour éviter les problèmes de référence d'objet
         return $organizer !== null && $organizer->getId() === $user->getId();
     }
 }

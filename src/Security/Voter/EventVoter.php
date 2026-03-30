@@ -4,7 +4,6 @@ namespace App\Security\Voter;
 
 use App\Entity\Event;
 use App\Security\Permission\EventPermissionChecker;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -12,9 +11,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Voter chargé de gérer les autorisations liées aux événements.
  *
- * Cette classe délègue la logique métier de vérification des permissions
- * à {@see EventPermissionChecker}, tout en intégrant le mécanisme
- * de vote de sécurité de Symfony.
+ * Cette classe s'intègre au système de sécurité de Symfony afin de déterminer
+ * si un utilisateur peut effectuer une action sur un événement.
+ *
+ * La logique métier détaillée n'est pas écrite directement ici :
+ * elle est déléguée au service {@see EventPermissionChecker}.
+ *
+ * Ce voter joue donc principalement un rôle de "pont" entre
+ * le mécanisme de vote Symfony et les règles métier applicatives.
  */
 final class EventVoter extends Voter
 {
@@ -25,6 +29,9 @@ final class EventVoter extends Voter
 
     /**
      * Permission permettant de créer un événement.
+     *
+     * Cette permission ne nécessite pas d'objet {@see Event} en sujet,
+     * car on vérifie un droit global de création.
      */
     public const CREATE = 'EVENT_CREATE';
 
@@ -49,22 +56,25 @@ final class EventVoter extends Voter
     public const UNREGISTER = 'EVENT_UNREGISTER';
 
     /**
-     * @param Security $security Service de sécurité Symfony.
-     * @param EventPermissionChecker $permissionChecker Service chargé de centraliser
-     *                                                 la logique métier des permissions
+     * Initialise le voter avec les services nécessaires.
+     *
+     * @param EventPermissionChecker $permissionChecker Service centralisant
+     *                                                 les règles métier de permissions
      *                                                 sur les événements.
      */
     public function __construct(
-        private readonly Security $security,
         private readonly EventPermissionChecker $permissionChecker,
     ) {
     }
 
     /**
-     * Indique si ce voter prend en charge l'attribut et le sujet donnés.
+     * Détermine si ce voter sait traiter l'attribut et le sujet reçus.
      *
-     * La permission de création ne nécessite pas de sujet.
-     * Les autres permissions s'appliquent uniquement à une instance de {@see Event}.
+     * Symfony appelle cette méthode avant {@see voteOnAttribute()} afin de savoir
+     * si ce voter est concerné par la demande d'autorisation.
+     *
+     * - La permission {@see self::CREATE} ne nécessite pas de sujet.
+     * - Toutes les autres permissions nécessitent un sujet de type {@see Event}.
      *
      * @param string $attribute L'attribut de sécurité demandé.
      * @param mixed $subject Le sujet sur lequel porte la vérification.
@@ -73,10 +83,14 @@ final class EventVoter extends Voter
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
+        // Le droit de création est global : il ne dépend pas d'un événement précis.
         if ($attribute === self::CREATE) {
             return true;
         }
 
+        // Pour toutes les autres actions, on vérifie :
+        // 1. que l'attribut fait partie de ceux gérés par ce voter
+        // 2. que le sujet est bien une instance de Event
         return in_array($attribute, [
                 self::VIEW,
                 self::EDIT,
@@ -87,14 +101,16 @@ final class EventVoter extends Voter
     }
 
     /**
-     * Effectue le vote pour un attribut donné sur un sujet donné.
+     * Prend la décision d'autorisation pour un attribut donné.
      *
-     * Si l'utilisateur possède le rôle administrateur, l'accès est automatiquement accordé.
-     * Sinon, la décision est déléguée au service {@see EventPermissionChecker}.
+     * Cette méthode est appelée uniquement si {@see supports()} a retourné true.
+     *
+     * La décision est ensuite déléguée à {@see EventPermissionChecker},
+     * qui contient la logique métier spécifique à chaque action.
      *
      * @param string $attribute L'attribut de sécurité à évaluer.
      * @param mixed $subject Le sujet concerné par le vote.
-     * @param TokenInterface $token Le token d'authentification courant.
+     * @param TokenInterface $token Le token d'authentification de l'utilisateur courant.
      * @param Vote|null $vote Objet optionnel permettant d'ajouter des raisons au vote.
      *
      * @return bool Retourne true si l'accès est autorisé, sinon false.
@@ -105,16 +121,16 @@ final class EventVoter extends Voter
         TokenInterface $token,
         ?Vote $vote = null
     ): bool {
+        // Récupère l'utilisateur actuellement authentifié depuis le token de sécurité.
         $user = $token->getUser();
 
-//        if ($this->security->isGranted('ROLE_ADMIN')) {
-//            $vote?->addReason('Accès autorisé : administrateur');
-//            return true;
-//        }
-
+        // Oriente la décision selon l'attribut demandé.
+        // Chaque vérification métier est externalisée dans EventPermissionChecker.
         return match ($attribute) {
+            // La création ne dépend pas d'un objet Event existant.
             self::CREATE => $this->permissionChecker->canCreate($user, $vote),
 
+            // Vérifie d'abord que le sujet est bien un Event avant d'appliquer la règle métier.
             self::VIEW => $subject instanceof Event
                 && $this->permissionChecker->canView($subject, $user, $vote),
 
@@ -130,6 +146,7 @@ final class EventVoter extends Voter
             self::UNREGISTER => $subject instanceof Event
                 && $this->permissionChecker->canUnregister($subject, $user, $vote),
 
+            // Sécurité supplémentaire : tout attribut non prévu est refusé.
             default => false,
         };
     }

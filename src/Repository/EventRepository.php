@@ -43,9 +43,9 @@ class EventRepository extends ServiceEntityRepository
      * - la date de début minimale
      * - la date limite maximale
      * - le lien entre l'utilisateur et l'événement :
-     *      - organisateur
-     *      - inscrit
-     *      - non inscrit
+     *   - organisateur
+     *   - inscrit
+     *   - non inscrit
      *
      * Si l'option "terminée" est activée, seuls les événements terminés sont renvoyés.
      * Sinon, seuls les événements avec les statuts "Ouverte", "En cours" et "Clôturée"
@@ -58,8 +58,10 @@ class EventRepository extends ServiceEntityRepository
      */
     public function findEventList(EventSearch $eventSearch, User $user): array
     {
+        // Initialise le QueryBuilder principal sur l'entité Event
         $qb = $this->createQueryBuilder('e')
             ->distinct()
+            // Charge les relations utiles pour éviter certains accès supplémentaires en base
             ->leftJoin('e.registred', 'r')
             ->addSelect('r')
             ->leftJoin('e.organizer', 'o')
@@ -71,7 +73,9 @@ class EventRepository extends ServiceEntityRepository
             ->leftJoin('e.status', 's')
             ->addSelect('s');
 
-        // Filtre sur le statut des événements
+        // Filtre sur le statut des événements :
+        // soit uniquement les événements terminés,
+        // soit les événements encore "actifs" ou consultables
         if ($eventSearch->getTerminee()) {
             $qb->andWhere('s.name = :status')
                 ->setParameter('status', 'Terminée');
@@ -80,19 +84,19 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter('statuses', ['Ouverte', 'En cours', 'Clôturée']);
         }
 
-        // Filtre sur le campus
+        // Filtre sur le campus sélectionné
         if ($eventSearch->getCampus()) {
             $qb->andWhere('e.campus = :campus')
                 ->setParameter('campus', $eventSearch->getCampus());
         }
 
-        // Filtre sur la catégorie
+        // Filtre sur la catégorie sélectionnée
         if ($eventSearch->getCategory()) {
             $qb->andWhere('e.category = :category')
                 ->setParameter('category', $eventSearch->getCategory());
         }
 
-        // Filtre sur le nom de l'événement
+        // Filtre sur le nom de l'événement avec recherche partielle
         if ($eventSearch->getName()) {
             $qb->andWhere('e.name LIKE :name')
                 ->setParameter('name', '%' . $eventSearch->getName() . '%');
@@ -105,37 +109,46 @@ class EventRepository extends ServiceEntityRepository
         }
 
         // Filtre sur la date maximale de début
+        // Attention : ici le nom "deadline" côté paramètre peut prêter à confusion
+        // car on compare en réalité e.dateStart
         if ($eventSearch->getDeadline()) {
             $qb->andWhere('e.dateStart <= :deadline')
                 ->setParameter('deadline', $eventSearch->getDeadline());
         }
 
-        // Filtres liés à l'utilisateur connecté
+        // Ajoute les filtres liés à l'utilisateur connecté
         if ($user) {
             $isOrganizer = $eventSearch->getOrganizer();
             $isRegistered = $eventSearch->getRegistered();
             $isNotRegistered = $eventSearch->getNotRegistered();
 
+            // On stocke les conditions pour les combiner ensuite avec OR
             $conditions = [];
 
+            // L'utilisateur est organisateur de l'événement
             if ($isOrganizer) {
                 $conditions[] = 'e.organizer = :user';
             }
 
+            // L'utilisateur est inscrit à l'événement
             if ($isRegistered) {
                 $conditions[] = ':user MEMBER OF e.registred';
             }
 
+            // L'utilisateur n'est pas inscrit à l'événement
             if ($isNotRegistered) {
                 $conditions[] = ':user NOT MEMBER OF e.registred';
             }
 
+            // Si au moins un filtre utilisateur est actif,
+            // on regroupe les conditions dans une clause OR
             if (!empty($conditions)) {
                 $qb->andWhere('(' . implode(' OR ', $conditions) . ')')
                     ->setParameter('user', $user);
             }
         }
 
+        // Trie les événements par date de début croissante
         return $qb->orderBy('e.dateStart', 'ASC')
             ->getQuery()
             ->getResult();
@@ -157,9 +170,10 @@ class EventRepository extends ServiceEntityRepository
      *
      * @return Event|null L'événement trouvé ou null s'il n'existe pas
      */
-    public function findEventById($id): ?Event
+    public function findEventById(int $id): ?Event
     {
         return $this->createQueryBuilder('e')
+            // Charge les relations nécessaires pour avoir un événement détaillé
             ->leftJoin('e.registred', 'r')
             ->addSelect('r')
             ->leftJoin('e.organizer', 'o')
@@ -172,8 +186,9 @@ class EventRepository extends ServiceEntityRepository
             ->addSelect('ca')
             ->leftJoin('e.adress', 'a')
             ->addSelect('a')
-            ->leftjoin('a.city', 'ci')
+            ->leftJoin('a.city', 'ci')
             ->addSelect('ci')
+            // Filtre sur l'identifiant de l'événement demandé
             ->andWhere('e.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
@@ -196,7 +211,9 @@ class EventRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('event')
             ->join('event.status', 'status')
+            // Calcule la fin de l'événement avec DATE_ADD(dateStart, duration, 'minute')
             ->where('DATE_ADD(event.dateStart, event.duration, \'minute\') < :now')
+            // Exclut les événements déjà traités côté workflow
             ->andWhere('status.name NOT IN (:excludedStatusNames)')
             ->setParameter('now', new \DateTime())
             ->setParameter('excludedStatusNames', ['Terminée', 'Annulée', 'Historisée'])
@@ -217,9 +234,12 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('event')
             ->join('event.status', 'status')
             ->leftJoin('event.registred', 'registred')
+            // Ne cible que les événements actuellement ouverts
             ->where('status.name = :status')
             ->setParameter('status', 'Ouverte')
+            // Groupement nécessaire pour compter les inscrits
             ->groupBy('event.id')
+            // Garde les événements ayant atteint ou dépassé la limite
             ->having('COUNT(registred) >= event.maxIscription')
             ->getQuery()
             ->getResult();
@@ -239,9 +259,12 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('event')
             ->join('event.status', 'status')
             ->leftJoin('event.registred', 'registred')
+            // Ne cible que les événements clôturés
             ->where('status.name = :status')
             ->setParameter('status', 'Clôturée')
+            // Groupement nécessaire pour comparer le nombre d'inscrits à la capacité
             ->groupBy('event.id')
+            // Sélectionne ceux qui ont de nouveau de la place
             ->having('COUNT(registred) < event.maxIscription')
             ->getQuery()
             ->getResult();
@@ -260,7 +283,9 @@ class EventRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('event')
             ->join('event.status', 'status')
+            // Sélectionne les événements terminés depuis plus de 30 jours
             ->where('DATE_ADD(event.dateStart, event.duration, \'minute\') < (:oneMonthAgo)')
+            // Exclut ceux déjà historisés
             ->andWhere('status.name NOT IN (:excludedStatuses)')
             ->setParameter('excludedStatuses', ['Historisée'])
             ->setParameter('oneMonthAgo', new \DateTime('-30 days'))

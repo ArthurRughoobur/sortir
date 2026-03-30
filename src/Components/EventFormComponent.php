@@ -85,6 +85,7 @@ final class EventFormComponent extends AbstractController
         $this->street = $event->getAdress()?->getStreet();
         $this->latitude = $event->getAdress()?->getLatitude();
         $this->longitude = $event->getAdress()?->getLongitude();
+
         return $this->formFactory->create(EventType::class, $event);
     }
 

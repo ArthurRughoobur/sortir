@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Security\Voter\UserVoter;
 use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,7 @@ final class UserController extends AbstractController
 {
     #[Route('/user/{id}', name: 'update', methods: ['POST', 'GET'])]
     public function updateUser(
+        User                        $user,
         int                         $id,
         UserRepository              $userRepository,
         UserPasswordHasherInterface $userPasswordHasher,
@@ -27,7 +29,8 @@ final class UserController extends AbstractController
         FileUploader                $fileUploader,
     ): Response
     {
-        $user = $userRepository->find($id);
+        $this->denyAccessUnlessGranted(UserVoter::EDIT, $user);
+
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
 
@@ -61,6 +64,9 @@ final class UserController extends AbstractController
         UserRepository $userRepository,
     ): Response
     {
+        // Vérifie que l'utilisateur possède le rôle requis
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $userById = $userRepository->find($id);
         return $this->render('user/userDetailById.html.twig', [
                 'userById' => $userById,
@@ -77,6 +83,9 @@ final class UserController extends AbstractController
 
     ): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
+        }
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);

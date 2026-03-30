@@ -17,9 +17,9 @@ class AdressType extends AbstractType
     {
         $builder
             ->add('name',TextType::class, [
-                'label' => 'Nom : ' ])
+                'label' => 'Nom du lieu: ' ])
             ->add('street', TextType::class, [
-                'label' => 'Rue : '
+                'label' => 'N° et nom de la Rue : '
             ])
             ->add('latitude', NumberType::class, [
                 'label' => 'Latitude : '

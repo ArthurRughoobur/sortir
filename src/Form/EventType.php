@@ -74,7 +74,7 @@ class EventType extends AbstractType
                 'class' => Adress::class,
                 'choice_label' => 'name',
                 'label' => 'Lieu :',
-                'placeholder' => 'Choisir une adresse',
+                'placeholder' => 'Choisissez un lieu',
                 'constraints' => [
                     new NotBlank(['message' => 'L\'adresse est requise']),
                 ],

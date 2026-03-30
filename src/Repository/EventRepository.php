@@ -172,7 +172,7 @@ class EventRepository extends ServiceEntityRepository
             ->addSelect('ca')
             ->leftJoin('e.adress', 'a')
             ->addSelect('a')
-            ->leftJoin('a.city', 'ci')
+            ->leftjoin('a.city', 'ci')
             ->addSelect('ci')
             ->andWhere('e.id = :id')
             ->setParameter('id', $id)

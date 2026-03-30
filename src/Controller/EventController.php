@@ -116,6 +116,7 @@ final class EventController extends AbstractController
 
         // Récupération de l'événement
         $event = $eventRepository->findEventById($id);
+        $this->denyAccessUnlessGranted(EventVoter::VIEW, $event);
 
         // Vérifie que l'événement existe
         if (!$event) {

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Adress;
 use App\Entity\Category;
+use App\Entity\City;
 use App\Entity\Event;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -16,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class EventType extends AbstractType
@@ -37,7 +39,6 @@ class EventType extends AbstractType
                     new NotBlank(['message' => 'La date de sortie est requise']),
                 ],
             ])
-
             ->add('duration', IntegerType::class, [
                 'label' => 'Durée : ',
                 'constraints' => [
@@ -70,21 +71,42 @@ class EventType extends AbstractType
                     new NotBlank(['message' => 'La catégorie est requise']),
                 ],
             ])
-            ->add('adress', EntityType::class, [
-                'class' => Adress::class,
+            ->add('city', EntityType::class, [
+                'class' => City::class,
+                'mapped' => false,
                 'choice_label' => 'name',
-                'label' => 'Lieu :',
-                'placeholder' => 'Choisissez un lieu',
-                'constraints' => [
-                    new NotBlank(['message' => 'L\'adresse est requise']),
-                ],
-            ]);
+                'placeholder' => 'Choisir une ville',
+                'label' => 'Ville : ',
+                'data' => $options['selectedCity']
+            ])
+            ->addDependent('adress', 'city', static function (DependentField $dependentField, ?City $city) {
+                if (!$city) {
+                    $dependentField->add(EntityType::class, [
+                        'class'       => Adress::class,
+                        'placeholder' => 'Choisissez d\'abord une ville',
+                        'choices'     => [],
+                        'label'       => 'Lieu : ',
+                        'disabled'    => true,
+                    ]);
+                    return; // ✅ stop ici, pas d'appel à getAdresses()
+                }
+                $dependentField->add(EntityType::class, [
+                    'class' => Adress::class,
+                    'placeholder' => 'Choisir un lieu',
+                    'choices' => $city->getAdresses(),
+                    'choice_label' => static fn(Adress $adress): string => $adress->getName(),
+                    'label' => 'Lieu : ',
+                ]);
+            });
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Event::class,
-        ]);
-    }
+
+public
+function configureOptions(OptionsResolver $resolver): void
+{
+    $resolver->setDefaults([
+        'data_class' => Event::class,
+        'selectedCity' => null,
+    ]);
+}
 }

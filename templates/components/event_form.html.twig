@@ -9,15 +9,12 @@
 
         }
     }) }}
-
     <div class="">
-        {{ form_row(form.adress) }}
+        {{ form_row(form.city) }}
     </div>
     <div class="">
+        {{ form_row(form.adress) }}
         <a href="{{ path('create_adress') }}">➕</a>
-        <label>Ville :
-            <input type="text" value="{{ city }}" readonly class="form-control">
-        </label>
     </div>
     <div class="">
         <label>Rue :
@@ -43,7 +40,7 @@
 
 
     {% for field in form.children %}
-        {% if field.vars.name not in ['adress', 'save', 'publish','cancel','duration'] %}
+        {% if field.vars.name not in ['adress', 'save', 'publish','cancel','duration','city'] %}
             {{ form_row(field) }}
         {% endif %}
     {% endfor %}

@@ -4,7 +4,6 @@ namespace App\Security\Voter;
 
 use App\Entity\Event;
 use App\Security\Permission\EventPermissionChecker;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -65,7 +64,6 @@ final class EventVoter extends Voter
      *                                                 sur les événements.
      */
     public function __construct(
-        private readonly Security $security,
         private readonly EventPermissionChecker $permissionChecker,
     ) {
     }

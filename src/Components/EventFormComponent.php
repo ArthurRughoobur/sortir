@@ -5,6 +5,8 @@ namespace App\Components;
 use AllowDynamicProperties;
 use App\Entity\Event;
 use App\Form\EventType;
+use App\Repository\AdressRepository;
+use App\Repository\CityRepository;
 use App\Repository\EventRepository;
 use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
@@ -67,6 +69,8 @@ final class EventFormComponent extends AbstractController
         private RequestStack           $requestStack,
         private UserRepository         $userRepository,
         private EventRepository        $eventRepository,
+        private CityRepository         $cityRepository,
+        private AdressRepository       $adressRepository,
     )
     {
     }

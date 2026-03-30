@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+<h1>Utilisateurs</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id : </th>
+        <th>Pseudonyme : </th>
+        <th>Role : </th>
+        <th>Nom : </th>
+        <th>Prenom : </th>
+        <th>Téléphone : </th>
+        <th>Email : </th>
+        <th>Actif : </th>
+        <th>Étudiant : </th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.roles|join (', ') }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.lastname }}</td>
+        <td>{{ user.phone }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.active ? 'Oui' : 'Non' }}</td>
+        <td>{{ user.student ? 'Oui' : 'Non' }}</td>
+        <td>
+            {% if is_granted("ROLE_ADMIN") %}
+            <a href="{{ path('user_detail_id',{'id': user.id}) }}">
+                <button>Détail</button>
+            </a>
+            <a href="{{ path('deactivate_user',{'id': user.id}) }}">
+                <button>Désactiver</button></a>
+                <a href="{{ path('activate_user',{'id': user.id}) }}">
+                    <button>Activer</button></a>
+            <a href="{{ path('delete_user',{'id': user.id}) }}">
+                <button>Supprimer</button></a>
+            {% endif %}
+        </td>
+    </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">Pas de donées</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    {% if is_granted("ROLE_ADMIN") %}
+        <a href="{{ path('create_user') }}">
+            <button>Créer un nouvel utilisateur</button></a>
+    {% endif %}
+{% endblock %}

@@ -40,8 +40,8 @@ final class EventFormComponent extends AbstractController
     //Synchronisent automatiquement les données entre le client et le serveur.
     public ?Event $initialFormData = null;
 
-    #[LiveProp(fieldName: 'eventData')]
-    public ?Event $event = null;
+//    #[LiveProp(fieldName: 'eventData')]
+//    public ?Event $event = null;
 
     #[LiveProp]
     public ?string $street = null;

@@ -80,7 +80,7 @@
 
     </div>
 
-    {% if event is not null and is_granted('EVENT_DELETE', event) %}
+{#    {% if event is not null and is_granted('EVENT_DELETE', event) %}#}
     <div class="">
         <button
             type="button"
@@ -89,7 +89,7 @@
         >
             Annuler la sortie
         </button>
-        {% endif %}
+{#        {% endif %}#}
 
         <div class="">
             <a href="{{ path('main_event') }}">

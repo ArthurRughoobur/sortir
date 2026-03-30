@@ -74,7 +74,7 @@ final class UserController extends AbstractController
         );
     }
 
-    #[Route("/create_user", name: 'create_user')]
+    #[Route("/create_user", name: 'create_user', methods: ['POST', 'GET'])]
     public function createUser(
         Request                     $request,
         UserPasswordHasherInterface $userPasswordHasher,
@@ -107,5 +107,72 @@ final class UserController extends AbstractController
             'form' => $form,
         ]);
 
+    }
+
+    #[Route("/deactivate_user/{id}", name: 'deactivate_user', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function deactivateUser(
+        int                    $id,
+        UserRepository         $userRepository,
+        EntityManagerInterface $entityManager,
+
+
+    ): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
+        }
+
+        $user = $userRepository->find($id);
+        $user->setActive(false);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $this->addFlash('success', 'Utilisateur désactivé !');
+        return $this->redirectToRoute('user_list');
+    }
+    #[Route("/activate_user/{id}", name: 'activate_user', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function activateUser(
+        int                    $id,
+        UserRepository         $userRepository,
+        EntityManagerInterface $entityManager,
+
+
+    ): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
+        }
+
+        $user = $userRepository->find($id);
+        $user->setActive(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $this->addFlash('success', 'Utilisateur activé !');
+        return $this->redirectToRoute('user_list');
+    }
+
+    #[Route("/user_list", name: 'user_list', methods: ['GET'])]
+    public function userList(UserRepository $userRepository): Response
+    {
+        return $this->render('user/list.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
+
+    #[Route("/delete_user/{id}", name: 'delete_user',requirements: ['id'=> '\d+'], methods: ['POST','GET'])]
+    public function deleteUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
+        }
+        $user = $userRepository->find($id);
+
+        if(!$user) {
+            throw $this->createNotFoundException('Utilisateur introuvable');
+        }
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+        $this->addFlash('success',"Utilisateur supprimé avec succès !");
+        return $this->redirectToRoute('user_list');
     }
 }

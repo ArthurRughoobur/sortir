@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -25,7 +26,7 @@ class Event
     #[ORM\Column]
     #[Assert\GreaterThan(propertyPath: "deadline", message: "La date de début ne peut être avant la date de fin d'inscription ! ")]
     #[Assert\GreaterThanOrEqual('today')]
-    private ?\DateTime $dateStart = null;
+    private ?DateTime $dateStart = null;
 
     #[ORM\Column]
     #[Assert\NotBlank(message: "Merci de renseigner une durée d'évènement ! ")]
@@ -35,7 +36,7 @@ class Event
 
     #[ORM\Column]
     #[Assert\LessThan(propertyPath: "dateStart", message: "La date de fin d'inscription doit être antérieur à la du début de l'évènement ! ")]
-    private ?\DateTime $deadline = null;
+    private ?DateTime $deadline = null;
 
     #[ORM\Column]
     #[Assert\NotBlank(message: "Merci de saisir un nombre d'inscrits max !")]
@@ -47,7 +48,7 @@ class Event
     private ?string $eventInfo = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-//    #[Assert\NotBlank(message:"Merci de donner un peu d'informations sur votre annulation event ! ")]
+//    #[Assert\NotBlank (message : "Merci de donner un peu d'informations sur votre annulation event ! ")]
 
     private ?string $canceledInfo = null;
 
@@ -97,12 +98,12 @@ class Event
         return $this;
     }
 
-    public function getDateStart(): ?\DateTime
+    public function getDateStart(): ?DateTime
     {
         return $this->dateStart;
     }
 
-    public function setDateStart(?\DateTime $dateStart): static
+    public function setDateStart(?DateTime $dateStart): static
     {
         $this->dateStart = $dateStart;
 
@@ -120,12 +121,12 @@ class Event
         return $this;
     }
 
-    public function getDeadline(): ?\DateTime
+    public function getDeadline(): ?DateTime
     {
         return $this->deadline;
     }
 
-    public function setDeadline(?\DateTime $deadline): static
+    public function setDeadline(?DateTime $deadline): static
     {
         $this->deadline = $deadline;
 

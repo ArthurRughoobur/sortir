@@ -120,7 +120,7 @@ class AppFixtures extends Fixture
         }
 
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $user = new User();
             $user->setUsername($faker->unique()->userName());
             $user->setRoles(['ROLE_USER']);
@@ -192,8 +192,8 @@ class AppFixtures extends Fixture
         ];
 
         $now = new \DateTime();
-        $eventsPerUser = 10;
-        $registrationsPerUser = 5;
+        $eventsPerUser = 3;
+        $registrationsPerUser = 3;
 
         // On garde seulement les utilisateurs non admin
         $normalUsers = array_values(array_filter($users, function ($user) {

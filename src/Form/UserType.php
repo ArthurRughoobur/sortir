@@ -75,7 +75,8 @@ class UserType extends AbstractType
                         'Admin' => 'ROLE_ADMIN',
                         'Utilisateur' => 'ROLE_USER',
                     ],
-                    'multiple' => true,
+                    'mapped' => false,
+                    'multiple' => false,
                     'expanded' => true,
 
                 ]);

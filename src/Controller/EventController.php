@@ -80,10 +80,10 @@ final class EventController extends AbstractController
             if (!$user instanceof User) {
                 throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
             }
-//            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
-//                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
-//            }
-            $this->denyAccessUnlessGranted(EventVoter::EDIT, $event);
+            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
+                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
+            }
+//            $this->denyAccessUnlessGranted(EventVoter::EDIT, $event);
 
         }
 

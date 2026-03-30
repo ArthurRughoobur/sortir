@@ -22,16 +22,22 @@ use Symfony\UX\LiveComponent\Attribute\PreReRender;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-
+//Permet d'utiliser des propriétés dynamiques
 #[AllowDynamicProperties]
+//Définit ce composant comme un LiveComponent Symfony avec le nom event_form
+// Permet une interaction dynamique entre le client et le serveur sans recharger la page.
 #[AsLiveComponent('event_form')]
 final class EventFormComponent extends AbstractController
 {
     use DefaultActionTrait;
+    //Fournit une méthode par défaut pour le rendu du composant.
     use ComponentWithFormTrait;
+    // Ajoute des fonctionnalités pour gérer un formulaire dans le composant.
     use ComponentToolsTrait;
-
+    // Fournit des outils utiles pour les LiveComponents (ex: gestion des requêtes).
     #[LiveProp]
+    //Définit une propriété comme "LiveProp", c'est-à-dire qu'elle peut être mise à jour dynamiquement côté client et synchronisée avec le serveur.
+    //Synchronisent automatiquement les données entre le client et le serveur.
     public ?Event $initialFormData = null;
 
     #[LiveProp(fieldName: 'eventData')]
@@ -66,8 +72,9 @@ final class EventFormComponent extends AbstractController
     }
 
     protected function instantiateForm(): FormInterface
+    // Méthode appelée automatiquement par ComponentWithFormTrait pour créer le formulaire.
     {
-
+        //Si initialFormData est défini, on l'utilise pour pré-remplir le formulaire (cas d'une édition).
         $event = $this->initialFormData ?? new Event();
 
         $this->city = $event->getAdress()?->getCity()->getName();
@@ -79,8 +86,11 @@ final class EventFormComponent extends AbstractController
 
 
     #[PreReRender(priority: -10)]
+    //PreRender: Cette méthode est exécutée avant chaque rendu du composant.
+    //priority -10 : Définit l'ordre d'exécution
     public function updateStreetAfterAutoSubmit(): void
     {
+        //Met à jour les LivePropspartir des données du formulaire, utile pour la réactivité côté client
         $event = $this->getForm()->getData();
         $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();
@@ -90,8 +100,17 @@ final class EventFormComponent extends AbstractController
     }
 
     #[LiveAction]
+    //Définit une action exécutable depuis le client (via un bouton).
+
     public function save(): RedirectResponse
     {
+        //Récupère les données du formulaire.
+        //Associe l'utilisateur connecté comme organisateur et définit le campus.
+        //Définit le statut "En création".
+        //Vérifie que l'événement peut être sauvegardé (statut autorisé).
+        //Persiste et sauvegarde l'événement en base de données.
+        //Redirige vers la liste des événements avec un message de succès.
+
         $event = $this->getForm()->getData();
         $user = $this->security->getUser();
         if ($user) {

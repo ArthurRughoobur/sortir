@@ -78,7 +78,7 @@ final class EventFormComponent extends AbstractController
     protected function instantiateForm(): FormInterface
     // Méthode appelée automatiquement par ComponentWithFormTrait pour créer le formulaire.
     {
-        //Si initialFormData est défini, on l'utilise pour pré-remplir le formulaire (cas d'une édition).
+        //Si initialFormData est défini, on l'utilise pour préremplir le formulaire (cas d'une édition).
         $event = $this->initialFormData ?? new Event();
 
         $this->city = $event->getAdress()?->getCity()->getName();
@@ -86,7 +86,11 @@ final class EventFormComponent extends AbstractController
         $this->latitude = $event->getAdress()?->getLatitude();
         $this->longitude = $event->getAdress()?->getLongitude();
 
-        return $this->formFactory->create(EventType::class, $event);
+        $city = $event->getAdress()?->getCity();
+
+        return $this->formFactory->create(EventType::class, $event, [
+                'selectedCity' => $city,
+            ]);
     }
 
 
@@ -95,7 +99,7 @@ final class EventFormComponent extends AbstractController
     //priority -10 : Définit l'ordre d'exécution
     public function updateStreetAfterAutoSubmit(): void
     {
-        //Met à jour les LivePropspartir des données du formulaire, utile pour la réactivité côté client
+        //Met à jour les LiveProps à partir des données du formulaire, utile pour la réactivité côté client
         $event = $this->getForm()->getData();
         $this->city = $event->getAdress()?->getCity()->getName();
         $this->street = $event->getAdress()?->getStreet();

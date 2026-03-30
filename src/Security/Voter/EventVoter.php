@@ -58,7 +58,6 @@ final class EventVoter extends Voter
     /**
      * Initialise le voter avec les services nécessaires.
      *
-     * @param Security $security Service de sécurité Symfony.
      * @param EventPermissionChecker $permissionChecker Service centralisant
      *                                                 les règles métier de permissions
      *                                                 sur les événements.

@@ -97,13 +97,13 @@
 
             <div class="event-actions">
                 {% if app.user in event.registred %}
-                    <a class="btnEventDetail" href="{{ path('desinscription_event', {'id': event.id}) }}">
-                        Désinscription
-                    </a>
-                {% else %}
-                    <a class="btnEventDetail " href="{{ path('inscription_event', {'id': event.id}) }}">
-                        Inscription
-                    </a>
+                    <form method="post" action="{{ path('desinscription_event', {id: event.id}) }}">
+                        <button type="submit" class="btnEventDetail">Se désinscrire</button>
+                    </form>
+                {% elseif event.registred.count < event.maxIscription %}
+                    <form method="post" action="{{ path('inscription_event', {id: event.id}) }}">
+                        <button type="submit" class="btnEventDetail ">S'inscrire</button>
+                    </form>
                 {% endif %}
 
                 {% if is_granted('EVENT_EDIT', event) %}

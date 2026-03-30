@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Entity\User;
 use App\Form\EventSearchType;
 use App\Form\Model\EventSearch;
@@ -33,15 +34,15 @@ final class EventController extends AbstractController
      * @param Request $request Requête HTTP contenant les données du formulaire
      * @param UpdateEventStatus $eventStatus Service de mise à jour des événements passés
      *
+     * @return Response Réponse HTTP contenant la page des événements
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * Si l'utilisateur n'est pas authentifié
      *
-     * @return Response Réponse HTTP contenant la page des événements
      */
     #[Route('/', name: 'main_event')]
     public function mainEvent(
-        EventRepository $eventRepository,
-        Request $request,
+        EventRepository   $eventRepository,
+        Request           $request,
         UpdateEventStatus $eventStatus,
     ): Response
     {
@@ -102,11 +103,14 @@ final class EventController extends AbstractController
      */
     #[Route('/detail/{id}', name: 'event_detail', requirements: ['id' => '\d+'])]
     public function detailEvent(
-        int $id,
-        EventRepository $eventRepository,
-        UpdateEventStatus $eventStatusMaxInscription
+        int               $id,
+        EventRepository   $eventRepository,
+        UpdateEventStatus $eventStatusMaxInscription,
+        Event             $event
     ): Response
     {
+        $this->denyAccessUnlessGranted(EventVoter::VIEW, $event);
+
         // Mise à jour des statuts des événements selon leur capacité
         $eventStatusMaxInscription->syncEventStatusesWithCapacity();
 
@@ -126,26 +130,31 @@ final class EventController extends AbstractController
 
     #[Route('/create_event', name: 'create_event')]
     #[Route('/update_event/{id}', name: 'update_event', requirements: ['id' => '\d+'])]
-    public function createEvent(Request $request, EventRepository $eventRepository): Response
+    public function createEvent(
+        Request         $request,
+        EventRepository $eventRepository,
+    ): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
         $id = $request->attributes->get('id');
-        $event = null;
-        $user = $this->getUser();
         if ($id !== null) {
             $event = $eventRepository->find($id);
+
             if (!$event) {
                 throw $this->createNotFoundException('Événement introuvable.');
             }
-            if (!$user instanceof User) {
-                throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
-            }
+
+            $this->denyAccessUnlessGranted(EventVoter::EDIT, $event);
+        } else {
+            $this->denyAccessUnlessGranted(EventVoter::CREATE);
+            $event = new Event();
+            $event->setOrganizer($this->getUser());
+        }
 //            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
 //                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
 //            }
 //            $this->denyAccessUnlessGranted(EventVoter::EDIT, $event);
 
-        }
+
 
         return $this->render('event/createEvent.html.twig', [
             'event' => $event,
@@ -181,57 +190,48 @@ final class EventController extends AbstractController
     }
 
     /**
-     * Permet à un utilisateur de s'inscrire à un événement.
+     * Inscrit un utilisateur à un événement.
      *
      * Cette méthode :
-     * - Récupère l'événement via son identifiant
+     * - Vérifie les droits d'inscription via le voter
+     * - Récupère l'événement à partir de son identifiant
      * - Vérifie que l'événement existe
-     * - Vérifie que l'utilisateur est authentifié
-     * - Vérifie que l'utilisateur n'est pas déjà inscrit à l'événement
+     * - Récupère l'utilisateur actuellement authentifié
      * - Ajoute l'utilisateur à la liste des inscrits
-     * - Enregistre les modifications en base de données
-     * - Ajoute un message de confirmation
+     * - Persiste les modifications en base de données
+     * - Ajoute un message flash de confirmation
      * - Redirige vers la page de détail de l'événement
      *
      * @param int $id Identifiant de l'événement
-     * @param EventRepository $eventRepository Repository pour accéder aux événements
-     * @param EntityManagerInterface $entityManager Gestionnaire d'entités pour la persistance
+     * @param EventRepository $eventRepository Accès aux données des événements
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités
+     * @param Event $event Entité injectée (utilisée pour le contrôle d'accès)
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * Si l'événement n'existe pas
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException Si l'événement n'existe pas
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException Si l'utilisateur n'est pas autorisé à s'inscrire
      *
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * Si l'utilisateur n'est pas connecté ou déjà inscrit
-     *
-     * @return Response Redirection vers la page détail de l'événement
+     * @return Response Redirection vers la page de détail de l'événement
      */
-    #[Route('/inscription/{id}', name: 'inscription_event', requirements: ['id' => '\d+'])]
+    #[Route('/inscription/{id}', name: 'inscription_event', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function inscriptionEvent(
-        int $id,
-        EventRepository $eventRepository,
+        int                    $id,
+        EventRepository        $eventRepository,
         EntityManagerInterface $entityManager,
+        Event                  $event,
     ): Response
     {
+        $this->denyAccessUnlessGranted(EventVoter::REGISTER, $event);
+
         // Récupération de l'événement
         $event = $eventRepository->findEventById($id);
-
-        // Récupération de l'utilisateur connecté
-        $user = $this->getUser();
 
         // Vérifie que l'événement existe
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
-
-        // Vérifie que l'utilisateur est connecté
-        if (!$user instanceof User) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
-        }
-
-        // Vérifie que l'utilisateur n'est pas déjà inscrit
-        if ($event->getRegistred()->contains($user)) {
-            throw $this->createAccessDeniedException('Vous êtes déjà inscrit à cet événement.');
-        }
+        // Récupération de l'utilisateur connecté
+        /** @var User $user */
+        $user = $this->getUser();
 
         // Ajoute l'utilisateur à la liste des inscrits
         $event->addRegistred($user);
@@ -249,57 +249,49 @@ final class EventController extends AbstractController
 
 
     /**
-     * Permet à un utilisateur de se désinscrire d'un événement.
+     * Désinscrit un utilisateur d'un événement.
      *
      * Cette méthode :
-     * - Récupère l'événement via son identifiant
+     * - Vérifie les droits de désinscription via le voter
+     * - Récupère l'événement à partir de son identifiant
      * - Vérifie que l'événement existe
-     * - Vérifie que l'utilisateur est authentifié
-     * - Vérifie que l'utilisateur est bien inscrit à l'événement
+     * - Récupère l'utilisateur actuellement authentifié
      * - Retire l'utilisateur de la liste des inscrits
-     * - Enregistre les modifications en base de données
-     * - Ajoute un message de confirmation
+     * - Persiste les modifications en base de données
+     * - Ajoute un message flash de confirmation
      * - Redirige vers la page de détail de l'événement
      *
      * @param int $id Identifiant de l'événement
-     * @param EventRepository $eventRepository Repository pour accéder aux événements
-     * @param EntityManagerInterface $entityManager Gestionnaire d'entités pour la persistance
+     * @param EventRepository $eventRepository Accès aux données des événements
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités
+     * @param Event $event Entité injectée (utilisée pour le contrôle d'accès)
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * Si l'événement n'existe pas
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException Si l'événement n'existe pas
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException Si l'utilisateur n'est pas autorisé à se désinscrire
      *
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * Si l'utilisateur n'est pas connecté ou non inscrit à l'événement
-     *
-     * @return Response Redirection vers la page détail de l'événement
+     * @return Response Redirection vers la page de détail de l'événement
      */
-    #[Route('/desinscription/{id}', name: 'desinscription_event', requirements: ['id' => '\d+'])]
+    #[Route('/desinscription/{id}', name: 'desinscription_event', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function desinscriptionEvent(
-        int $id,
-        EventRepository $eventRepository,
+        int                    $id,
+        EventRepository        $eventRepository,
         EntityManagerInterface $entityManager,
+        Event                  $event
     ): Response
     {
+        $this->denyAccessUnlessGranted(EventVoter::UNREGISTER, $event);
+
         // Récupération de l'événement
         $event = $eventRepository->findEventById($id);
-
-        // Récupération de l'utilisateur connecté
-        $user = $this->getUser();
 
         // Vérifie que l'événement existe
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
 
-        // Vérifie que l'utilisateur est connecté
-        if (!$user instanceof User) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour vous inscrire.');
-        }
-
-        // Vérifie que l'utilisateur est bien inscrit à l'événement
-        if (!$event->getRegistred()->contains($user)) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas inscrit à cet événement.');
-        }
+        // Récupération de l'utilisateur connecté
+        /** @var User $user */
+        $user = $this->getUser();
 
         // Retire l'utilisateur de la liste des inscrits
         $event->removeRegistred($user);
@@ -314,6 +306,5 @@ final class EventController extends AbstractController
         // Redirection vers le détail de l'événement
         return $this->redirectToRoute('event_detail', ['id' => $id]);
     }
-
 
 }

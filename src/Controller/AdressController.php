@@ -18,6 +18,8 @@ final class AdressController extends AbstractController
         EntityManagerInterface $entityManager,
     ): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $adress = new Adress();
         $adressForm = $this->createForm(AdressType::class, $adress);
 

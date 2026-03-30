@@ -34,8 +34,8 @@ final class EventFormComponent extends AbstractController
     #[LiveProp]
     public ?Event $initialFormData = null;
 
-//    #[LiveProp(fieldName: 'eventData')]
-//    public ?Event $event = null;
+    #[LiveProp(fieldName: 'eventData')]
+    public ?Event $event = null;
 
     #[LiveProp]
     public ?string $street = null;
@@ -74,6 +74,7 @@ final class EventFormComponent extends AbstractController
         $this->street = $event->getAdress()?->getStreet();
         $this->latitude = $event->getAdress()?->getLatitude();
         $this->longitude = $event->getAdress()?->getLongitude();
+
         return $this->formFactory->create(EventType::class, $event);
     }
 

@@ -2,6 +2,8 @@
 
 
 {% block body %}
+
+
 <div class="mobile-message">
     La création de sortie n'est pas disponible sur petit écran.
 </div>
@@ -16,7 +18,6 @@
     </h1>
     {{ component('event_form', {
         'initialFormData': event ?? null,
-        'event': event ?? null,
         'id': event.id ?? null
     }) }}
 </div>

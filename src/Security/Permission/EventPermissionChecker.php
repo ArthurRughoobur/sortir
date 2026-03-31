@@ -62,8 +62,8 @@ final class EventPermissionChecker
      * Vérifie si l'utilisateur peut modifier un événement.
      *
      * Règles :
-     * - utilisateur connecté obligatoire
-     * - seul l'organisateur peut modifier
+     * - l'utilisateur doit être connecté
+     * - l'utilisateur doit être soit administrateur, soit organisateur de l'événement
      * - modification refusée si l'événement est déjà commencé ou passé
      *
      * @param Event $event L'événement concerné
@@ -88,14 +88,14 @@ final class EventPermissionChecker
 
         // Refuse l'action si l'utilisateur n'est ni administrateur ni organisateur
         if (!$isAdmin && !$isOrganizer) {
-            $vote?->addReason('Modification refusée : utilisateur non organisateur');
+            $vote?->addReason('Annulation refusée : ni administrateur ni organisateur');
             return false;
         }
 
         // Vérifie que l'événement n'a pas déjà commencé
         $dateStart = $event->getDateStart();
         if ($dateStart !== null && $dateStart < new \DateTime()) {
-            $vote?->addReason('Annulation refusée : ni administrateur ni organisateur');
+            $vote?->addReason('Modification refusée : événement déjà commencé ou passé');
             return false;
         }
 
@@ -116,7 +116,7 @@ final class EventPermissionChecker
      * - l'annulation est refusée si l'événement a déjà commencé ou est passé
      *
      * @param Event $event L'événement concerné par la demande d'annulation.
-     * @param mixed $user L'utilisateur courant. Peut être un objet User ou une autre valeur si non authentifié.
+     * @param mixed $user L'utilisateur courant. Peut-être un objet User ou une autre valeur si non authentifié.
      * @param Vote|null $vote Objet optionnel permettant d'ajouter une raison à la décision.
      *
      * @return bool Retourne true si l'annulation est autorisée, sinon false.

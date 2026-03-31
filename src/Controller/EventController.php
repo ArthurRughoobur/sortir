@@ -24,7 +24,6 @@ use Symfony\Component\Routing\Attribute\Route;
  * - création / modification
  * - inscription / désinscription
  */
-
 final class EventController extends AbstractController
 {
     /**
@@ -51,10 +50,10 @@ final class EventController extends AbstractController
         EventRepository   $eventRepository,
         Request           $request,
         UpdateEventStatus $eventStatus,
-    ): Response {
+    ): Response
+    {
 
         $eventStatus->syncAllEventStatuses();
-
 
 
         $user = $this->getUser();
@@ -102,8 +101,7 @@ final class EventController extends AbstractController
         Event             $event
     ): Response
     {
-        // Vérifie une première fois l'accès sur l'entité injectée par Symfony
-        $this->denyAccessUnlessGranted(EventVoter::VIEW, $event);
+
 
         // Met à jour les statuts des événements selon leur capacité
         $eventStatusMaxInscription->syncAllEventStatuses();
@@ -115,7 +113,8 @@ final class EventController extends AbstractController
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
-
+        // Vérifie une première fois l'accès sur l'entité injectée par Symfony
+        $this->denyAccessUnlessGranted(EventVoter::VIEW, $event);
         // Retourne la vue de détail
         return $this->render('event/detailEvent.html.twig', [
             'event' => $event,
@@ -208,8 +207,7 @@ final class EventController extends AbstractController
         Event                  $event,
     ): Response
     {
-        // Vérifie le droit d'inscription sur l'événement injecté
-        $this->denyAccessUnlessGranted(EventVoter::REGISTER, $event);
+
 
         // Recharge l'événement avec ses relations complètes
         $event = $eventRepository->findEventById($id);
@@ -218,7 +216,8 @@ final class EventController extends AbstractController
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
-
+        // Vérifie le droit d'inscription sur l'événement injecté
+        $this->denyAccessUnlessGranted(EventVoter::REGISTER, $event);
         // Récupère l'utilisateur connecté
         /** @var User $user */
         $user = $this->getUser();
@@ -268,8 +267,7 @@ final class EventController extends AbstractController
         Event                  $event
     ): Response
     {
-        // Vérifie le droit de désinscription sur l'événement injecté
-        $this->denyAccessUnlessGranted(EventVoter::UNREGISTER, $event);
+
 
         // Recharge l'événement complet via le repository
         $event = $eventRepository->findEventById($id);
@@ -278,7 +276,8 @@ final class EventController extends AbstractController
         if (!$event) {
             throw $this->createNotFoundException('Événement introuvable.');
         }
-
+        // Vérifie le droit de désinscription sur l'événement injecté
+        $this->denyAccessUnlessGranted(EventVoter::UNREGISTER, $event);
         // Récupère l'utilisateur connecté
         /** @var User $user */
         $user = $this->getUser();

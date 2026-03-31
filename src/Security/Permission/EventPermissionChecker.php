@@ -100,39 +100,52 @@ final class EventPermissionChecker
     /**
      * Vérifie si l'utilisateur peut annuler un événement.
      *
-     * Règles :
-     * - utilisateur connecté obligatoire
-     * - seul l'organisateur peut annuler
-     * - refus si l'événement est déjà commencé ou passé
+     * Règles métier appliquées :
+     * - l'utilisateur doit être connecté
+     * - l'utilisateur doit être soit administrateur, soit organisateur de l'événement
+     * - l'annulation est refusée si l'événement a déjà commencé ou est passé
      *
-     * @param Event $event L'événement concerné
-     * @param mixed $user L'utilisateur courant
-     * @param Vote|null $vote Permet d'ajouter une raison
+     * @param Event $event L'événement concerné par la demande d'annulation.
+     * @param mixed $user L'utilisateur courant. Peut être un objet User ou une autre valeur si non authentifié.
+     * @param Vote|null $vote Objet optionnel permettant d'ajouter une raison à la décision.
      *
-     * @return bool
+     * @return bool Retourne true si l'annulation est autorisée, sinon false.
      */
     public function canCancel(Event $event, mixed $user, ?Vote $vote = null): bool
     {
-        // Vérifie que l'utilisateur est connecté
+        // Vérifie que l'utilisateur est bien connecté et correspond à une entité User
         if (!$user instanceof User) {
             $vote?->addReason('Annulation refusée : utilisateur non connecté');
             return false;
         }
 
-        // Vérifie que l'utilisateur est l'organisateur
-        if (!$this->isOrganizer($event, $user)) {
-            $vote?->addReason('Annulation refusée : utilisateur non organisateur');
+        // Vérifie si l'utilisateur possède le rôle administrateur
+        $isAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true);
+
+        // Vérifie si l'utilisateur est l'organisateur de l'événement
+        $isOrganizer = $this->isOrganizer($event, $user);
+
+        // Refuse l'action si l'utilisateur n'est ni administrateur ni organisateur
+        if (!$isAdmin && !$isOrganizer) {
+            $vote?->addReason('Annulation refusée : ni administrateur ni organisateur');
             return false;
         }
 
-        // Vérifie que l'événement n'est pas déjà passé
+        // Récupère la date de début de l'événement pour empêcher l'annulation après son démarrage
         $dateStart = $event->getDateStart();
         if ($dateStart !== null && $dateStart < new \DateTime()) {
             $vote?->addReason('Annulation refusée : événement déjà commencé ou passé');
             return false;
         }
 
-        $vote?->addReason('Annulation autorisée : utilisateur organisateur');
+        // Ajoute une raison différente selon que l'autorisation vient du rôle admin
+        // ou du fait que l'utilisateur est l'organisateur
+        $vote?->addReason(
+            $isAdmin
+                ? 'Annulation autorisée : administrateur'
+                : 'Annulation autorisée : utilisateur organisateur'
+        );
+
         return true;
     }
 

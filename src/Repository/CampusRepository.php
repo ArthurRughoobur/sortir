@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Campus;
+use App\Form\Model\CampusSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,14 @@ class CampusRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findCampusList(CampusSearch $campusSearch)
+    {
+        $qb = $this->createQueryBuilder('c')
+
+            // Filtre sur le nom de l'événement avec recherche partielle
+            ->andWhere('c.name LIKE :name')
+            ->setParameter('name', '%' . $campusSearch->getName() . '%');
+        return $qb->getQuery()->getResult();
+
+    }
 }

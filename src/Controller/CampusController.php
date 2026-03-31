@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
+use App\Form\CampusSearchType;
 use App\Form\CampusType;
+use App\Form\Model\CampusSearch;
 use App\Repository\CampusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,12 +17,17 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 #[Route('/admin/campus')]
 final class CampusController extends AbstractController
 {
-    #[Route('index',name: 'app_campus_index', methods: ['GET'])]
-    public function index(CampusRepository $campusRepository): Response
-    {
+   
+  
+        $campusSearch = new CampusSearch();
+        $formCampusSearch = $this->createForm(CampusSearchType::class, $campusSearch);
+        $formCampusSearch->handleRequest($request);
+
+        $campusList = $campusRepository->findCampusList($formCampusSearch->getData());
 
         return $this->render('campus/index.html.twig', [
-            'campuses' => $campusRepository->findAll(),
+            'formCampusSearch' => $formCampusSearch->createView(),
+            'campusList' => $campusList,
         ]);
     }
 

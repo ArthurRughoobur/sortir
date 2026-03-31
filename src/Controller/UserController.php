@@ -73,9 +73,6 @@ final class UserController extends AbstractController
         UserRepository $userRepository,
     ): Response
     {
-        // Vérifie que l'utilisateur possède le rôle requis
-        $this->denyAccessUnlessGranted('ROLE_USER');
-
         $userById = $userRepository->find($id);
         return $this->render('user/userDetailById.html.twig', [
                 'userById' => $userById,
@@ -83,7 +80,7 @@ final class UserController extends AbstractController
         );
     }
 
-    #[Route("/create_user", name: 'create_user', methods: ['POST', 'GET'])]
+    #[Route("/admin/create_user", name: 'create_user', methods: ['POST', 'GET'])]
     public function createUser(
         Request                     $request,
         UserPasswordHasherInterface $userPasswordHasher,
@@ -92,9 +89,7 @@ final class UserController extends AbstractController
 
     ): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
-        }
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -118,7 +113,7 @@ final class UserController extends AbstractController
 
     }
 
-    #[Route("/deactivate_user/{id}", name: 'deactivate_user', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route("/admin/deactivate_user/{id}", name: 'deactivate_user', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function deactivateUser(
         int                    $id,
         UserRepository         $userRepository,
@@ -127,10 +122,6 @@ final class UserController extends AbstractController
 
     ): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
-        }
-
         $user = $userRepository->find($id);
         $user->setActive(false);
         $entityManager->persist($user);
@@ -139,7 +130,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('user_list');
     }
 
-    #[Route("/activate_user/{id}", name: 'activate_user', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route("/admin/activate_user/{id}", name: 'activate_user', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function activateUser(
         int                    $id,
         UserRepository         $userRepository,
@@ -148,10 +139,6 @@ final class UserController extends AbstractController
 
     ): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
-        }
-
         $user = $userRepository->find($id);
         $user->setActive(true);
         $entityManager->persist($user);
@@ -160,7 +147,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('user_list');
     }
 
-    #[Route("/user_list", name: 'user_list', methods: ['GET'])]
+    #[Route("/admin/user_list", name: 'user_list', methods: ['GET'])]
     public function userList(UserRepository $userRepository): Response
     {
         return $this->render('user/list.html.twig', [
@@ -168,12 +155,10 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route("/delete_user/{id}", name: 'delete_user', requirements: ['id' => '\d+'], methods: ['POST', 'GET'])]
+    #[Route("/admin/delete_user/{id}", name: 'delete_user', requirements: ['id' => '\d+'], methods: ['POST', 'GET'])]
     public function deleteUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
-        }
+
         $user = $userRepository->find($id);
 
         if (!$user) {
@@ -186,13 +171,11 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('user_list');
     }
 
-    #[Route("/create_users_csv", name: 'create_users_csv', methods: ['POST', 'GET'])]
+    #[Route("/admin/create_users_csv", name: 'create_users_csv', methods: ['POST', 'GET'])]
     public function createUsersCsv(Request $request, UserRepository $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher,
     ): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
-        }
+
         $form = $this->createFormBuilder()
             ->add('submitFile', FileType::class, [])
             ->getForm();

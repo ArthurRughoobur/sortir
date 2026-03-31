@@ -47,6 +47,12 @@ final class UserController extends AbstractController
             $plainPassword = $userForm->get('password')->getData();
             if ($plainPassword) {
                 $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            } elseif ($plainPassword === null) {
+                /**
+                 * @var User $user
+                 */
+                $user = $this->getUser();
+                $user->setPassword($user->getPassword());
             }
             $entityManager->persist($user);
             $entityManager->flush();
@@ -226,38 +232,5 @@ final class UserController extends AbstractController
         ]);
 
     }
-//    #[Route("/create_user", name: 'create_user', methods: ['POST', 'GET'])]
-//    public function createUser(
-//        Request                     $request,
-//        UserPasswordHasherInterface $userPasswordHasher,
-//        EntityManagerInterface      $entityManager,
-//
-//
-//    ): Response
-//    {
-//        if (!$this->isGranted('ROLE_ADMIN')) {
-//            throw new AccessDeniedException('Accès refusé : vous devez être admin.');
-//        }
-//        $user = new User();
-//        $form = $this->createForm(UserType::class, $user);
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $plainPassword = $form->get('password')->getData();
-//
-//            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-//            $user->setActive(true);
-//            if ($user->getPhoto() === null) {
-//                $user->setPhoto("portrait.png");
-//            }
-//
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//            $this->addFlash('success', 'Profil crée avec succès !');
-//            return $this->redirectToRoute('main_event');
-//        }
-//        return $this->render('user/create.html.twig', [
-//            'form' => $form,
-//        ]);
-//
-//    }
+
 }

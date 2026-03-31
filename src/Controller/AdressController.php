@@ -12,13 +12,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AdressController extends AbstractController
 {
-    #[Route('/create_adress', name: 'create_adress', methods: ['POST','GET'])]
+    #[Route('/user/create_adress', name: 'create_adress', methods: ['POST','GET'])]
     public function createAdress(
         Request $request,
         EntityManagerInterface $entityManager,
     ): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
 
         $adress = new Adress();
         $adressForm = $this->createForm(AdressType::class, $adress);

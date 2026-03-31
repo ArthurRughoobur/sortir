@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Attribute\Route;
  * - création / modification
  * - inscription / désinscription
  */
+
 final class EventController extends AbstractController
 {
     /**
@@ -50,9 +51,7 @@ final class EventController extends AbstractController
         EventRepository   $eventRepository,
         Request           $request,
         UpdateEventStatus $eventStatus,
-    ): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+    ): Response {
 
         $eventStatus->syncAllEventStatuses();
 
@@ -176,39 +175,6 @@ final class EventController extends AbstractController
             'event' => $event,
         ]);
 
-        /*
-         * Bloc de traitement futur du formulaire :
-         * - création du formulaire
-         * - sauvegarde en brouillon
-         * - publication
-         * - annulation
-         */
-//        $component -> save();
-//        $component -> publish();
-
-//        $event = new Event();
-//        $eventForm = $this->createForm(EventType::class, $event);
-//
-//        $eventForm->handleRequest($request);
-//        if ($eventForm->isSubmitted() && $eventForm->isValid()) {
-//            if ($eventForm->getClickedButton() && 'save' === $eventForm->getClickedButton()->getName()) {
-//                $event->setStatus("En création");
-//                $this->addFlash('success', ['Evènement '. $event->getName().'sauvegardé !']);
-//            }
-//            if ($eventForm->getClickedButton() && 'publish' === $eventForm->getClickedButton()->getName()) {
-//                $event->setStatus("Ouverte");
-//                $this->addFlash('success', ['Evènement '. $event->getName().'crée !']);
-//            }
-//            if ($eventForm->getClickedButton() && 'cancel' === $eventForm->getClickedButton()->getName()) {
-//                $this->addFlash('success', ['Evènement '. $event->getName().'annulé !']);
-//                return $this->redirectToRoute('main_event');
-//
-//            }
-//            $entityManager->persist($event);
-//            $entityManager->flush();
-
-//            return $this->redirectToRoute('main_event');
-//        }
     }
 
     /**

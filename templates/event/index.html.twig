@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}On s'fait ça !{% endblock %}
 
 {% block body %}
+    <SECTION class="index-section">
+        <div>
+            <span>Date du jour : {{ 'now' | date ("d/m/Y") }}</span><br>
+            <span>Participant : {{ app.user.name }} {{ app.user.lastname|first }}.</span>
+        </div>
 
-    <div>
-        <span>Date du jour : {{ 'now' | date ("d/m/Y") }}</span><br>
-        <span>Participant : {{ app.user.name }} {{ app.user.lastname|first }}.</span>
-    </div>
-
-    <section class="filtreList">
-        <h2>Filtrer les sorties</h2>
-        {{ form_start(eventFormSearch) }}
-        <span class="search-campus">
+        <h3 class="accroche">DES SORTIES SIMPLES, PROCHES, ÉTUDIANTES</h3>
+        <h1 class="titre1">Trouve quoi faire</h1>
+        <h2 class="titre2">entre deux cours.</h2>
+        <section class="filtreList">
+            <h2>Filtrer les sorties</h2>
+            {{ form_start(eventFormSearch) }}
+            <span class="search-campus">
                    {{ form_row(eventFormSearch.campus) }}
        </span>
         {{ form_row(eventFormSearch.category) }}
@@ -37,10 +40,4 @@
 
 {% endblock %}
 
-{% block extraJs %}
-    <script>
-
-
-    </script>
-{% endblock %}
 

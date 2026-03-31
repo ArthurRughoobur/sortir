@@ -9,15 +9,15 @@
                     <li><a href="{{ path('app_city_index') }}">Villes</a></li>
                     <li><a href="{{ path('app_campus_index') }}">Campus</a></li>
                     <li><a href="{{ path('create_user') }}">Création d'utilisateur</a></li>
+                    <li><a href="{{ path('create_users_csv') }}">Ajout utilisateur CSV</a></li>
                     <li><a href="{{ path('user_list') }}">Liste d'utilisateurs</a></li>
 
 
 
             {% endif %}
             <li><a href="{{ path('app_logout') }}">Se Déconnecter</a></li>
-            <li class="btn-create-event"><a href="{{ path('create_event') }}">Créer un évènement</a></li>
-            <li><a href="{{ path('update', {'id': app.user.id}) }}">Mon Profil</a>
-            </li>
+            <li><a href="{{ path('update', {'id': app.user.id}) }}">Mon Profil</a></li>
+            <li ><a class="btn-create-event" href="{{ path('create_event') }}">Créer un évènement</a></li>
 
         {% else %}
             <li><a href="{{ path('app_login') }}">Login</a></li>

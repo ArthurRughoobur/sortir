@@ -22,28 +22,29 @@ class EventSearchType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
-                'label' => 'Choisissez un campus: ',
+                'label' => false,
                 'placeholder' => 'Choisissez un campus',
                 'required' => false,
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'label' => 'Choisissez une catégorie: ',
+                'label' => false,
                 'placeholder' => 'Choisissez une catégorie',
                 'required' => false,
             ])
             ->add('name', TextType::class, [
-                'label' => 'Le nom de la sortie contient: ',
+                'label' => false,
+                'attr' => ['placeholder'=>'Recherchez une sortie...'],
                 'required' => false,
             ])
             ->add('dateStart', DateType::class, [
-                'label' => 'Entre: ',
+                'label' => 'Date de début : ',
                 'required' => false,
                 'widget' => 'single_text',
             ])
             ->add('deadline', DateType::class, [
-                'label' => 'Et ',
+                'label' => 'Date de fin : ',
                 'required' => false,
                 'widget' => 'single_text',
             ])

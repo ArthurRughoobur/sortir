@@ -9,17 +9,20 @@
             <span>Participant : {{ app.user.name }} {{ app.user.lastname|first }}.</span>
         </div>
 
-        <h3 class="accroche">DES SORTIES SIMPLES, PROCHES, ÉTUDIANTES</h3>
+        <h3 class="accroche"> -[]- DES SORTIES SIMPLES, PROCHES, ÉTUDIANTES</h3>
         <h1 class="titre1">Trouve quoi faire</h1>
         <h2 class="titre2">entre deux cours.</h2>
+
+
         <section class="filtreList">
-            <h2>Filtrer les sorties</h2>
             {{ form_start(eventFormSearch) }}
-            <span class="search-campus">
-                   {{ form_row(eventFormSearch.campus) }}
-       </span>
-            {{ form_row(eventFormSearch.category) }}
             {{ form_row(eventFormSearch.name) }}
+{#            <span class="search-campus">#}
+                   {{ form_row(eventFormSearch.campus) }}
+{#       </span>#}
+            <div>
+            {{ form_row(eventFormSearch.category) }}
+
             {{ form_row(eventFormSearch.dateStart) }}
             {{ form_row(eventFormSearch.deadline) }}
             {{ form_row(eventFormSearch.organizer) }}
@@ -28,6 +31,7 @@
             {{ form_row(eventFormSearch.terminee) }}
             {{ form_row(eventFormSearch.search) }}
             {{ form_end(eventFormSearch) }}
+            </div>
         </section>
 
         <section class="eventList desktop-events">

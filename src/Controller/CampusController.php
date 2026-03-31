@@ -17,8 +17,14 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 #[Route('/admin/campus')]
 final class CampusController extends AbstractController
 {
-   
-  
+    #[Route(name: 'app_campus_index', methods: ['GET'])]
+    public function index(
+        CampusRepository $campusRepository,
+        Request $request,
+    ): Response
+    {
+
+
         $campusSearch = new CampusSearch();
         $formCampusSearch = $this->createForm(CampusSearchType::class, $campusSearch);
         $formCampusSearch->handleRequest($request);

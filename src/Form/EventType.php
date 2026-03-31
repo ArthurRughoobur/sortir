@@ -88,7 +88,7 @@ class EventType extends AbstractType
                         'label'       => 'Lieu : ',
                         'disabled'    => true,
                     ]);
-                    return; // ✅ stop ici, pas d'appel à getAdresses()
+                    return;
                 }
                 $dependentField->add(EntityType::class, [
                     'class' => Adress::class,

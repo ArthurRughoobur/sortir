@@ -185,16 +185,6 @@ final class EventController extends AbstractController
             $event->setOrganizer($this->getUser());
         }
 
-        /*
-         * Ancienne logique conservée en commentaire :
-         * - vérification manuelle de l'organisateur
-         * - futures actions de sauvegarde / publication
-         * Elle pourra être supprimée si elle n'est plus utile.
-         */
-//            if ($id !== null && $event->getOrganizer() !== $this->getUser()) {
-//                throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet événement.');
-//            }
-//            $this->denyAccessUnlessGranted(EventVoter::EDIT, $event);
 
         return $this->render('event/createEvent.html.twig', [
             'event' => $event,

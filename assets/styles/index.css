@@ -1,0 +1,30 @@
+.index-section {
+    margin-right: 15rem;
+    margin-left: 15rem;
+
+}
+.accroche {
+    width: fit-content ;
+    background: white;
+    border-radius: 30px;
+    padding: 5px;
+    margin-left: 3rem;
+    font-style: italic ;
+    font-weight: lighter;
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+}
+.titre1{
+    padding-bottom: 0;
+    margin-bottom: 0;
+    font-size: 3.5rem;
+    height: 3.5rem;
+}
+.titre2 {
+    padding-top: 0;
+    margin-top: 0;
+    font-size: 3.5rem;
+    color: grey;
+    height: 3.5rem;
+
+}

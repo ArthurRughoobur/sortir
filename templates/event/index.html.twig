@@ -35,13 +35,6 @@
         {% endfor %}
     </section>
 
-    <section class="eventList mobile-events">
-        {% for event in campusEvents %}
-            {% include 'event/_event_card.html.twig' with { event: event } %}
-        {% else %}
-            <p>Aucune sortie trouvée</p>
-        {% endfor %}
-    </section>
 {% endblock %}
 
 {% block extraJs %}

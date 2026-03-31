@@ -22,9 +22,8 @@ class EventSearchType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
-                'label' => 'Choisissez un campus: ',
-                'placeholder' => 'Choisissez un campus',
                 'required' => false,
+                'placeholder' => 'Tous les campus',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

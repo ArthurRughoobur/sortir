@@ -48,7 +48,7 @@
     <span>
      {{ form_row(form.duration) }} minutes
     </span>
-    {% if id is not null and is_granted('EVENT_EDIT', initialFormData) %}
+    {% if id is not null and is_granted('EVENT_EDIT', initialFormData) and is_granted('ROLE_ADMIN') == false %}
     <div class="">
         <button
             type="submit"
@@ -63,7 +63,7 @@
     </div>
     {% endif %}
 
-    {% if id is not null and is_granted('EVENT_EDIT', initialFormData) %}
+    {% if id is not null and is_granted('EVENT_EDIT', initialFormData) and is_granted('ROLE_ADMIN') == false %}
     <div class="">
         <button
             type="submit"

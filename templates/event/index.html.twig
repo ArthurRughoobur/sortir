@@ -1,53 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}On s'fait ça !{% endblock %}
 
 {% block body %}
+    <SECTION class="index-section">
+        <div>
+            <span>Date du jour : {{ 'now' | date ("d/m/Y") }}</span><br>
+            <span>Participant : {{ app.user.name }} {{ app.user.lastname|first }}.</span>
+        </div>
 
-    <div>
-        <span>Date du jour : {{ 'now' | date ("d/m/Y") }}</span><br>
-        <span>Participant : {{ app.user.name }} {{ app.user.lastname|first }}.</span>
-    </div>
-
-    <section class="filtreList">
-        <h2>Filtrer les sorties</h2>
-        {{ form_start(eventFormSearch) }}
-        <span class="search-campus">
+        <h3 class="accroche">DES SORTIES SIMPLES, PROCHES, ÉTUDIANTES</h3>
+        <h1 class="titre1">Trouve quoi faire</h1>
+        <h2 class="titre2">entre deux cours.</h2>
+        <section class="filtreList">
+            <h2>Filtrer les sorties</h2>
+            {{ form_start(eventFormSearch) }}
+            <span class="search-campus">
                    {{ form_row(eventFormSearch.campus) }}
        </span>
-        {{ form_row(eventFormSearch.category) }}
-        {{ form_row(eventFormSearch.name) }}
-        {{ form_row(eventFormSearch.dateStart) }}
-        {{ form_row(eventFormSearch.deadline) }}
-        {{ form_row(eventFormSearch.organizer) }}
-        {{ form_row(eventFormSearch.registered) }}
-        {{ form_row(eventFormSearch.notRegistered) }}
-        {{ form_row(eventFormSearch.terminee) }}
-        {{ form_row(eventFormSearch.search) }}
-        {{ form_end(eventFormSearch) }}
-    </section>
+            {{ form_row(eventFormSearch.category) }}
+            {{ form_row(eventFormSearch.name) }}
+            {{ form_row(eventFormSearch.dateStart) }}
+            {{ form_row(eventFormSearch.deadline) }}
+            {{ form_row(eventFormSearch.organizer) }}
+            {{ form_row(eventFormSearch.registered) }}
+            {{ form_row(eventFormSearch.notRegistered) }}
+            {{ form_row(eventFormSearch.terminee) }}
+            {{ form_row(eventFormSearch.search) }}
+            {{ form_end(eventFormSearch) }}
+        </section>
 
-    <section class="eventList desktop-events">
-        {% for event in events %}
-            {% include 'event/_event_card.html.twig' with { event: event } %}
-        {% else %}
-            <p>Aucune sortie trouvée</p>
-        {% endfor %}
-    </section>
+        <section class="eventList desktop-events">
+            {% for event in events %}
+                {% include 'event/_event_card.html.twig' with { event: event } %}
+            {% else %}
+                <p>Aucune sortie trouvée</p>
+            {% endfor %}
+        </section>
 
-    <section class="eventList mobile-events">
-        {% for event in campusEvents %}
-            {% include 'event/_event_card.html.twig' with { event: event } %}
-        {% else %}
-            <p>Aucune sortie trouvée</p>
-        {% endfor %}
-    </section>
+        <section class="eventList mobile-events">
+            {% for event in campusEvents %}
+                {% include 'event/_event_card.html.twig' with { event: event } %}
+            {% else %}
+                <p>Aucune sortie trouvée</p>
+            {% endfor %}
+        </section>
+    </SECTION>
 {% endblock %}
 
-{% block extraJs %}
-    <script>
-
-
-    </script>
-{% endblock %}
 

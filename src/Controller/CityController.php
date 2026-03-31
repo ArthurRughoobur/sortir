@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\City;
+use App\Form\CitySearchType;
 use App\Form\CityType;
+use App\Form\Model\CitySearch;
 use App\Repository\CityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,13 +18,23 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 final class CityController extends AbstractController
 {
     #[Route(name: 'app_city_index', methods: ['GET'])]
-    public function index(CityRepository $cityRepository): Response
+    public function index(
+        CityRepository $cityRepository,
+        Request $request,
+    ): Response
     {
+        $citySearch = new CitySearch();
+        $formCitySearch = $this->createForm(CitySearchType::class, $citySearch);
+        $formCitySearch->handleRequest($request);
+
+        $cityList = $cityRepository->findCityList($formCitySearch->getData());
+
         if (!$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException('Accès refusé : vous devez être admin.');
         }
         return $this->render('city/index.html.twig', [
-            'cities' => $cityRepository->findAll(),
+            'formCitySearch' => $formCitySearch->createView(),
+            'cityList' => $cityList,
         ]);
     }
 

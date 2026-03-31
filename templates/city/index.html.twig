@@ -5,6 +5,13 @@
 {% block body %}
     <h1>Villes</h1>
 
+    <section>
+        <h2>Filter les villes</h2>
+        {{ form_start(formCitySearch) }}
+        {{ form_row(formCitySearch.name) }}
+        {{ form_end(formCitySearch) }}
+    </section>
+
     <table class="table">
         <thead>
             <tr>
@@ -15,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for city in cities %}
+        {% for city in cityList %}
             <tr>
                 <td>{{ city.id }}</td>
                 <td>{{ city.name }}</td>

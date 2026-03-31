@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% embed 'views/form/template-form.html.twig' with {form : form2} %}
+        {% block formTitle %} Importer des utilisateurs : {% endblock %}
+        {% block buttonLabel %} Créer !{% endblock %}
+    {% endembed %}
+
+{% endblock %}

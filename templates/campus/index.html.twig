@@ -5,6 +5,13 @@
 {% block body %}
     <h1>Les Campus</h1>
 
+    <section>
+        <h2>Filter les campus</h2>
+        {{ form_start(formCampusSearch) }}
+        {{ form_row(formCampusSearch.name) }}
+        {{ form_end(formCampusSearch) }}
+    </section>
+
     <table class="table">
         <thead>
             <tr>
@@ -14,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for campus in campuses %}
+        {% for campus in campusList %}
             <tr>
                 <td>{{ campus.id }}</td>
                 <td>{{ campus.name }}</td>

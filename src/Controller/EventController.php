@@ -129,9 +129,6 @@ final class EventController extends AbstractController
             throw $this->createNotFoundException('Événement introuvable.');
         }
 
-        // Vérifie le droit de consultation sur l'événement complet
-        $this->denyAccessUnlessGranted(EventVoter::VIEW, $event);
-
         // Retourne la vue de détail
         return $this->render('event/detailEvent.html.twig', [
             'event' => $event,

@@ -81,7 +81,7 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter('status', 'Terminée');
         } else {
             $qb->andWhere('s.name IN (:statuses)')
-                ->setParameter('statuses', ['Ouverte', 'En cours', 'Clôturée']);
+                ->setParameter('statuses', ['En création','Ouverte', 'En cours', 'Clôturée']);
         }
 
         // Filtre sur le campus sélectionné

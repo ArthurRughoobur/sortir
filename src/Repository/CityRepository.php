@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\City;
+use App\Form\Model\CampusSearch;
+use App\Form\Model\CitySearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +42,15 @@ class CityRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findCityList(CitySearch $citySearch)
+    {
+        $qb = $this->createQueryBuilder('c')
+
+            // Filtre sur le nom de l'événement avec recherche partielle
+            ->andWhere('c.name LIKE :name')
+            ->setParameter('name', '%' . $citySearch->getName() . '%');
+        return $qb->getQuery()->getResult();
+
+    }
 }

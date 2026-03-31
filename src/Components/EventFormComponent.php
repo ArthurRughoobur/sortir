@@ -197,7 +197,7 @@ final class EventFormComponent extends AbstractController
             $this->addFlash("error", "L'événement n'existe pas.");
             return $this->redirectToRoute('main_event');
         }
-        $allowedStatus = ['En création', 'Ouverte'];
+        $allowedStatus = ['En création', 'Ouverte', 'Clôturée'];
         if (!in_array($event->getStatus()->getName(), $allowedStatus)) {
             $this->addFlash("error", "Vous ne pouvez pas annuler un événement avec le statut : " . $event->getStatus()->getName());
             return $this->redirectToRoute('main_event');

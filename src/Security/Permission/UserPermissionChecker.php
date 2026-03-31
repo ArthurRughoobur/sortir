@@ -19,17 +19,25 @@ class UserPermissionChecker
      * Règle actuelle :
      * - un utilisateur peut uniquement modifier son propre profil
      *
-     * @param User $currentUser L'utilisateur actuellement connecté
+     * @param User $user L'utilisateur actuellement connecté
      * @param User $targetUser L'utilisateur cible de l'action
      * @param Vote|null $vote Permet d'ajouter une raison à la décision
      *
      * @return bool True si autorisé, sinon false
      */
-    public function canEdit(User $currentUser, User $targetUser, ?Vote $vote = null): bool
+    public function canEdit(User $user,User $targetUser, ?Vote $vote = null ): bool
     {
+
+        $isAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true);
+        $isUser = $targetUser->getId() === $user->getId();
+
         // Vérifie si l'utilisateur tente de modifier son propre profil
-        if ($targetUser->getId() === $currentUser->getId()) {
+        if ($isUser) {
             $vote?->addReason('L’utilisateur modifie son propre profil');
+            return true;
+        }
+        if($isAdmin){
+            $vote?->addReason('L\'admin modifie un utilisateur');
             return true;
         }
 

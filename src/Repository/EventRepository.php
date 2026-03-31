@@ -85,7 +85,7 @@ class EventRepository extends ServiceEntityRepository
         }
 
         // Filtre sur le campus sélectionné
-        if ($eventSearch->getCampus()) {
+        if ($eventSearch->getCampus() !== null) {
             $qb->andWhere('e.campus = :campus')
                 ->setParameter('campus', $eventSearch->getCampus());
         }
@@ -221,75 +221,15 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * Récupère les événements ouverts ayant atteint ou dépassé leur capacité maximale.
-     *
-     * Cette méthode permet d'identifier les événements devant passer
-     * automatiquement au statut "Clôturée".
-     *
-     * @return Event[] Liste des événements ouverts complets
-     */
-    public function findOpenEventsAtCapacity(): array
+    public function findAllForStatusUpdate(): array
     {
         return $this->createQueryBuilder('event')
             ->join('event.status', 'status')
+            ->addSelect('status')
             ->leftJoin('event.registred', 'registred')
-            // Ne cible que les événements actuellement ouverts
-            ->where('status.name = :status')
-            ->setParameter('status', 'Ouverte')
-            // Groupement nécessaire pour compter les inscrits
-            ->groupBy('event.id')
-            // Garde les événements ayant atteint ou dépassé la limite
-            ->having('COUNT(registred) >= event.maxIscription')
+            ->addSelect('registred')
             ->getQuery()
             ->getResult();
     }
 
-    /**
-     * Récupère les événements clôturés dont le nombre d'inscrits
-     * est redescendu sous la capacité maximale.
-     *
-     * Cette méthode permet d'identifier les événements pouvant être
-     * automatiquement rouverts.
-     *
-     * @return Event[] Liste des événements clôturés mais non complets
-     */
-    public function findClosedEventsBelowCapacity(): array
-    {
-        return $this->createQueryBuilder('event')
-            ->join('event.status', 'status')
-            ->leftJoin('event.registred', 'registred')
-            // Ne cible que les événements clôturés
-            ->where('status.name = :status')
-            ->setParameter('status', 'Clôturée')
-            // Groupement nécessaire pour comparer le nombre d'inscrits à la capacité
-            ->groupBy('event.id')
-            // Sélectionne ceux qui ont de nouveau de la place
-            ->having('COUNT(registred) < event.maxIscription')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Récupère les événements terminés depuis plus de 30 jours
-     * et qui ne sont pas encore historisés.
-     *
-     * Cette méthode permet d'identifier les événements devant être
-     * passés au statut "Historisée".
-     *
-     * @return Event[] Liste des événements à historiser
-     */
-    public function finishedToHistorized(): array
-    {
-        return $this->createQueryBuilder('event')
-            ->join('event.status', 'status')
-            // Sélectionne les événements terminés depuis plus de 30 jours
-            ->where('DATE_ADD(event.dateStart, event.duration, \'minute\') < (:oneMonthAgo)')
-            // Exclut ceux déjà historisés
-            ->andWhere('status.name NOT IN (:excludedStatuses)')
-            ->setParameter('excludedStatuses', ['Historisée'])
-            ->setParameter('oneMonthAgo', new \DateTime('-30 days'))
-            ->getQuery()
-            ->getResult();
-    }
 }

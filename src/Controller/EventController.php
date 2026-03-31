@@ -48,42 +48,29 @@ final class EventController extends AbstractController
      */
     #[Route('/', name: 'main_event')]
     public function mainEvent(
-        EventRepository $eventRepository,
-        Request $request,
+        EventRepository   $eventRepository,
+        Request           $request,
         UpdateEventStatus $eventStatus,
     ): Response {
 
-        // Met à jour les événements passés (ex. changement automatique de statut)
-        $eventStatus->updatePastEvent();
+        $eventStatus->syncAllEventStatuses();
 
-        // Synchronise les statuts en fonction de la capacité des événements
-        $eventStatus->syncEventStatusesWithCapacity();
 
-        // Initialise l'objet de recherche utilisé par le formulaire
-        $eventSearch = new EventSearch();
-        $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
-        $eventFormSearch->handleRequest($request);
 
-        // Récupère l'utilisateur actuellement connecté
         $user = $this->getUser();
-
-        // Sécurité supplémentaire pour garantir que l'utilisateur est bien une entité User
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException('Vous devez être connecté.');
         }
 
-        // Récupère la liste des événements selon les filtres saisis
+        $eventSearch = new EventSearch();
+        $eventSearch->setCampus($user->getCampus());
+        $eventFormSearch = $this->createForm(EventSearchType::class, $eventSearch);
+        $eventFormSearch->handleRequest($request);
+
         $events = $eventRepository->findEventList($eventSearch, $user);
 
-        // Construit une sous-liste des événements du même campus que l'utilisateur
-        $campusEvents = array_values(array_filter($events, function ($event) use ($user) {
-            return $event->getCampus() === $user->getCampus();
-        }));
-
-        // Retourne la vue avec les données nécessaires à l'affichage
         return $this->render('event/index.html.twig', [
             'events' => $events,
-            'campusEvents' => $campusEvents,
             'eventFormSearch' => $eventFormSearch->createView(),
         ]);
     }
@@ -109,16 +96,17 @@ final class EventController extends AbstractController
      */
     #[Route('/detail/{id}', name: 'event_detail', requirements: ['id' => '\d+'])]
     public function detailEvent(
-        int $id,
-        EventRepository $eventRepository,
+        int               $id,
+        EventRepository   $eventRepository,
         UpdateEventStatus $eventStatusMaxInscription,
-        Event $event
-    ): Response {
+        Event             $event
+    ): Response
+    {
         // Vérifie une première fois l'accès sur l'entité injectée par Symfony
         $this->denyAccessUnlessGranted(EventVoter::VIEW, $event);
 
         // Met à jour les statuts des événements selon leur capacité
-        $eventStatusMaxInscription->syncEventStatusesWithCapacity();
+        $eventStatusMaxInscription->syncAllEventStatuses();
 
         // Recharge l'événement avec ses relations utiles via le repository personnalisé
         $event = $eventRepository->findEventById($id);
@@ -153,9 +141,10 @@ final class EventController extends AbstractController
     #[Route('/create_event', name: 'create_event')]
     #[Route('/update_event/{id}', name: 'update_event', requirements: ['id' => '\d+'])]
     public function createEvent(
-        Request $request,
+        Request         $request,
         EventRepository $eventRepository,
-    ): Response {
+    ): Response
+    {
         // Récupère l'identifiant d'événement présent dans la route, s'il existe
         $id = $request->attributes->get('id');
 
@@ -213,11 +202,12 @@ final class EventController extends AbstractController
      */
     #[Route('/inscription/{id}', name: 'inscription_event', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function inscriptionEvent(
-        int $id,
-        EventRepository $eventRepository,
+        int                    $id,
+        EventRepository        $eventRepository,
         EntityManagerInterface $entityManager,
-        Event $event,
-    ): Response {
+        Event                  $event,
+    ): Response
+    {
         // Vérifie le droit d'inscription sur l'événement injecté
         $this->denyAccessUnlessGranted(EventVoter::REGISTER, $event);
 
@@ -272,11 +262,12 @@ final class EventController extends AbstractController
      */
     #[Route('/desinscription/{id}', name: 'desinscription_event', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function desinscriptionEvent(
-        int $id,
-        EventRepository $eventRepository,
+        int                    $id,
+        EventRepository        $eventRepository,
         EntityManagerInterface $entityManager,
-        Event $event
-    ): Response {
+        Event                  $event
+    ): Response
+    {
         // Vérifie le droit de désinscription sur l'événement injecté
         $this->denyAccessUnlessGranted(EventVoter::UNREGISTER, $event);
 

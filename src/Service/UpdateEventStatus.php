@@ -6,7 +6,7 @@ use App\Repository\EventRepository;
 use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UpdateEventStatus
+readonly class UpdateEventStatus
 {
 
     public function __construct(
@@ -17,64 +17,85 @@ class UpdateEventStatus
     {
     }
 
-    public function updatePastEvent(): void
+    public function syncAllEventStatuses(): void
     {
-        $terminatedStatus = $this->statusRepository->findOneBy(['name' => 'Terminée']);
-        $historicizedStatus = $this->statusRepository->findOneBy(['name'=> 'Historisée']);
-        $finishedEvents = $this->eventRepository->findEventWithEndDate();
-        $historizedEvents = $this->eventRepository->finishedToHistorized();
+        $statuses = $this->getStatuses();
 
-        foreach ($finishedEvents as $event) {
-            $event->setStatus($terminatedStatus);
-            $this->entityManager->persist($event);
-        }
-        foreach ($historizedEvents as $event) {
-            $event->setStatus($historicizedStatus);
-            $this->entityManager->persist($event);
+        $events = $this->eventRepository->findAllForStatusUpdate();
+
+        $now = new \DateTimeImmutable();
+        $oneMonthAgo = $now->modify('-30 days');
+
+        foreach ($events as $event) {
+            $endDate = (clone $event->getDateStart())->modify('+' . $event->getDuration() . ' minutes');
+            $currentStatus = $event->getStatus()?->getName();
+            $registeredCount = $event->getRegistred()->count();
+            $maxInscription = $event->getMaxIscription();
+            $deadline = $event->getDeadline();
+
+            // 1. Historisation prioritaire
+            if (
+                $endDate < $oneMonthAgo &&
+                $currentStatus !== 'Historisée'
+            ) {
+                $event->setStatus($statuses['Historisée']);
+                continue;
+            }
+
+            // 2. Événement terminé
+            if (
+                $endDate < $now &&
+                !in_array($currentStatus, ['Terminée', 'Annulée', 'Historisée'], true)
+            ) {
+                $event->setStatus($statuses['Terminée']);
+                continue;
+            }
+
+            // 3. Évènement en cours
+            if ($event->getDateStart() <= $now && $endDate > $now) {
+                $event->setStatus($statuses['En cours']);
+                continue;
+            }
+
+            // 4. Gestion capacité
+            if ($currentStatus === 'Ouverte' && $registeredCount >= $maxInscription) {
+                $event->setStatus($statuses['Clôturée']);
+                continue;
+            }
+
+            if ($currentStatus === 'Clôturée' && $registeredCount < $maxInscription) {
+                $event->setStatus($statuses['Ouverte']);
+            }
         }
 
         $this->entityManager->flush();
     }
 
-    /**
-     * Synchronise automatiquement le statut des événements en fonction de leur capacité.
-     *
-     * Cette méthode :
-     * - Récupère les statuts "Ouverte" et "Clôturée" depuis la base de données.
-     * - Ferme les événements actuellement ouverts qui ont atteint leur capacité maximale.
-     * - Rouvre les événements actuellement clôturés qui sont repassés sous leur capacité maximale.
-     * - Applique les changements en base de données.
-     *
-     * @throws \LogicException Si les statuts "Ouverte" ou "Clôturée" n'existent pas en base.
-     *
-     * @return void
-     */
-    public function syncEventStatusesWithCapacity(): void
+    private function getStatuses(): array
     {
-        // Récupération des statuts nécessaires
-        $openStatus = $this->statusRepository->findOneBy(['name' => 'Ouverte']);
-        $closedStatus = $this->statusRepository->findOneBy(['name' => 'Clôturée']);
+        $names = [
+            'Ouverte',
+            'Clôturée',
+            'En cours',
+            'Terminée',
+            'Historisée'
+        ];
 
-        // Vérification de la présence des statuts en base
-        if (!$openStatus || !$closedStatus) {
-            throw new \LogicException('Les statuts "Ouverte" et "Clôturée" doivent exister en base.');
+        $statusEntities = $this->statusRepository->findByNames($names);
+
+        $statuses = [];
+        foreach ($statusEntities as $status) {
+            $statuses[$status->getName()] = $status;
         }
 
-        // Récupère les événements ouverts ayant atteint leur capacité maximale
-        $eventsToClose = $this->eventRepository->findOpenEventsAtCapacity();
-        foreach ($eventsToClose as $event) {
-            $event->setStatus($closedStatus);
+        // Sécurité : vérifier que tous les statuts existent
+        foreach ($names as $name) {
+            if (!isset($statuses[$name])) {
+                throw new \LogicException(sprintf('Le statut "%s" est introuvable en base.', $name));
+            }
         }
 
-        // Récupère les événements clôturés repassés sous la capacité maximale
-        $eventsToReopen = $this->eventRepository->findClosedEventsBelowCapacity();
-        foreach ($eventsToReopen as $event) {
-            $event->setStatus($openStatus);
-        }
-
-        // Sauvegarde des modifications en base de données
-        $this->entityManager->flush();
+        return $statuses;
     }
-
 
 }

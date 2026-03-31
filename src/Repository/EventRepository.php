@@ -77,11 +77,21 @@ class EventRepository extends ServiceEntityRepository
         // soit uniquement les événements terminés,
         // soit les événements encore "actifs" ou consultables
         if ($eventSearch->getTerminee()) {
-            $qb->andWhere('s.name = :status')
-                ->setParameter('status', 'Terminée');
+            $qb->andWhere('s.name = :statusTerminee')
+                ->setParameter('statusTerminee', 'Terminée');
         } else {
-            $qb->andWhere('s.name IN (:statuses)')
-                ->setParameter('statuses', ['En création','Ouverte', 'En cours', 'Clôturée']);
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    's.name IN (:visibleStatuses)',
+                    $qb->expr()->andX(
+                        's.name = :statusCreation',
+                        'e.organizer = :user'
+                    )
+                )
+            )
+                ->setParameter('visibleStatuses', ['Ouverte', 'En cours', 'Clôturée'])
+                ->setParameter('statusCreation', 'En création')
+                ->setParameter('user', $user);
         }
 
         // Filtre sur le campus sélectionné

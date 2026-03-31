@@ -53,9 +53,27 @@ final class EventPermissionChecker
      */
     public function canView(Event $event, mixed $user, ?Vote $vote = null): bool
     {
-        // Pour l'instant, aucun contrôle : accès libre
-        $vote?->addReason('Consultation autorisée');
-        return true;
+        if (!$user instanceof User) {
+            $vote?->addReason('Utilisateur non authentifié.');
+            return false;
+        }
+
+        $status = $event->getStatus()?->getName();
+
+        if ($status === 'Terminée') {
+            return true;
+        }
+
+        if (in_array($status, ['Ouverte', 'En cours', 'Clôturée'], true)) {
+            return true;
+        }
+
+        if ($status === 'En création' && $event->getOrganizer() === $user) {
+            return true;
+        }
+
+        $vote?->addReason('Cet événement n’est pas visible pour cet utilisateur.');
+        return false;
     }
 
     /**
@@ -187,6 +205,11 @@ final class EventPermissionChecker
         $deadline = $event->getDeadline();
         if ($deadline !== null && $deadline < new \DateTime()) {
             $vote?->addReason('Inscription refusée : date limite dépassée');
+            return false;
+        }
+
+        if ($event->getStatus()?->getName() === 'En création') {
+            $vote?->addReason('Impossible de s’inscrire à un événement en création.');
             return false;
         }
 

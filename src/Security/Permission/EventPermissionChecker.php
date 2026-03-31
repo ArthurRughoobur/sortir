@@ -80,8 +80,14 @@ final class EventPermissionChecker
             return false;
         }
 
-        // Vérifie que l'utilisateur est l'organisateur de l'événement
-        if (!$this->isOrganizer($event, $user)) {
+        // Vérifie si l'utilisateur possède le rôle administrateur
+        $isAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true);
+
+        // Vérifie si l'utilisateur est l'organisateur de l'événement
+        $isOrganizer = $this->isOrganizer($event, $user);
+
+        // Refuse l'action si l'utilisateur n'est ni administrateur ni organisateur
+        if (!$isAdmin && !$isOrganizer) {
             $vote?->addReason('Modification refusée : utilisateur non organisateur');
             return false;
         }
@@ -89,11 +95,15 @@ final class EventPermissionChecker
         // Vérifie que l'événement n'a pas déjà commencé
         $dateStart = $event->getDateStart();
         if ($dateStart !== null && $dateStart < new \DateTime()) {
-            $vote?->addReason('Modification refusée : événement déjà commencé ou passé');
+            $vote?->addReason('Annulation refusée : ni administrateur ni organisateur');
             return false;
         }
 
-        $vote?->addReason('Modification autorisée : utilisateur organisateur');
+        $vote?->addReason(
+            $isAdmin
+                ? 'Annulation autorisée : administrateur'
+                : 'Annulation autorisée : utilisateur organisateur'
+        );
         return true;
     }
 

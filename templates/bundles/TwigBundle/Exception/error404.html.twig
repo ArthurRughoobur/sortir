@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1>Oups ! Une erreur s'est produite.</h1>
+    <h2>Le serveur a renvoyé une erreur "{{ status_code }} {{ status_text }}".</h2>
+    <p>Message à nous retrouver dans l'email : "{{ exception.message }}"</p>
+
+    <div>
+        Quelque chose ne fonctionne pas correctement. Veuillez nous envoyer un e-mail à [onSfaitca@coucou.cc] en nous indiquant
+        ce que vous faisiez lorsque cette erreur s'est produite. Nous corrigerons le problème
+        dès que possible. Désolés pour la gêne occasionnée.
+    </div>
+{% endblock %}

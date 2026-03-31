@@ -62,8 +62,8 @@ final class EventPermissionChecker
      * Vérifie si l'utilisateur peut modifier un événement.
      *
      * Règles :
-     * - utilisateur connecté obligatoire
-     * - seul l'organisateur peut modifier
+     * - l'utilisateur doit être connecté
+     * - l'utilisateur doit être soit administrateur, soit organisateur de l'événement
      * - modification refusée si l'événement est déjà commencé ou passé
      *
      * @param Event $event L'événement concerné
@@ -80,9 +80,15 @@ final class EventPermissionChecker
             return false;
         }
 
-        // Vérifie que l'utilisateur est l'organisateur de l'événement
-        if (!$this->isOrganizer($event, $user)) {
-            $vote?->addReason('Modification refusée : utilisateur non organisateur');
+        // Vérifie si l'utilisateur possède le rôle administrateur
+        $isAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true);
+
+        // Vérifie si l'utilisateur est l'organisateur de l'événement
+        $isOrganizer = $this->isOrganizer($event, $user);
+
+        // Refuse l'action si l'utilisateur n'est ni administrateur ni organisateur
+        if (!$isAdmin && !$isOrganizer) {
+            $vote?->addReason('Annulation refusée : ni administrateur ni organisateur');
             return false;
         }
 
@@ -93,7 +99,11 @@ final class EventPermissionChecker
             return false;
         }
 
-        $vote?->addReason('Modification autorisée : utilisateur organisateur');
+        $vote?->addReason(
+            $isAdmin
+                ? 'Annulation autorisée : administrateur'
+                : 'Annulation autorisée : utilisateur organisateur'
+        );
         return true;
     }
 
@@ -106,7 +116,7 @@ final class EventPermissionChecker
      * - l'annulation est refusée si l'événement a déjà commencé ou est passé
      *
      * @param Event $event L'événement concerné par la demande d'annulation.
-     * @param mixed $user L'utilisateur courant. Peut être un objet User ou une autre valeur si non authentifié.
+     * @param mixed $user L'utilisateur courant. Peut-être un objet User ou une autre valeur si non authentifié.
      * @param Vote|null $vote Objet optionnel permettant d'ajouter une raison à la décision.
      *
      * @return bool Retourne true si l'annulation est autorisée, sinon false.

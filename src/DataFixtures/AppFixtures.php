@@ -100,6 +100,24 @@ class AppFixtures extends Fixture
             ['username' => 'Admin', 'roles' => ['ROLE_ADMIN']],
             ['username' => 'Arthur', 'roles' => ['ROLE_USER']],
             ['username' => 'Adrien', 'roles' => ['ROLE_USER']],
+            ['username' => 'AdrienQ', 'roles' => ['ROLE_USER']],
+            ['username' => 'Raman', 'roles' => ['ROLE_USER']],
+            ['username' => 'Lena', 'roles' => ['ROLE_USER']],
+            ['username' => 'Emilia', 'roles' => ['ROLE_USER']],
+            ['username' => 'Thomas', 'roles' => ['ROLE_USER']],
+            ['username' => 'Maud', 'roles' => ['ROLE_USER']],
+            ['username' => 'Nicolas', 'roles' => ['ROLE_USER']],
+            ['username' => 'David', 'roles' => ['ROLE_USER']],
+            ['username' => 'Baptiste', 'roles' => ['ROLE_USER']],
+            ['username' => 'Silvia', 'roles' => ['ROLE_USER']],
+            ['username' => 'Mathilde', 'roles' => ['ROLE_USER']],
+            ['username' => 'Yasmine', 'roles' => ['ROLE_USER']],
+            ['username' => 'Clara', 'roles' => ['ROLE_USER']],
+            ['username' => 'Antonin', 'roles' => ['ROLE_USER']],
+            ['username' => 'Camille', 'roles' => ['ROLE_USER']],
+            ['username' => 'Vanina', 'roles' => ['ROLE_USER']],
+            ['username' => 'Mael', 'roles' => ['ROLE_USER']],
+            ['username' => 'Almokashfi', 'roles' => ['ROLE_USER']],
         ];
 
         // Users fixes
@@ -120,7 +138,7 @@ class AppFixtures extends Fixture
         }
 
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $user = new User();
             $user->setUsername($faker->unique()->userName());
             $user->setRoles(['ROLE_USER']);

@@ -1,45 +1,124 @@
-.brand-mascot {
+/* Animation UNIQUEMENT sur le visuel */
+.mascot-visual {
+    animation: mascot-float 3.2s ease-in-out infinite;
+    transform-origin: center;
+    will-change: transform;
+}
+
+/* Hover */
+.mascot:hover .mascot-visual {
+    animation: mascot-float 3.2s ease-in-out infinite,
+    mascot-hover 0.6s ease-in-out;
+}
+
+.mascot {
+    transform-origin: center;
+    will-change: transform;
     display: flex;
     align-items: center;
     gap: 12px;
     margin: 2rem;
     width: auto;
 }
-.brand-mascot h1{
-    white-space: nowrap;
+.mascot h1 {
+    transition: opacity 0.2s ease;
 }
 
-.brand-mascot svg {
-    width:6rem;
+.mascot:hover h1 {
+    opacity: 0.85;
+}
+.brand-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.mascot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mascot svg {
+    width: 6rem;
     height: 100%;
     flex-shrink: 0;
-    filter: drop-shadow(0 14px 30px rgba(124, 58, 237, 0.22));
+    animation: glow 3s ease-in-out infinite;
 }
 
-.mascot-hand {
+/* Au survol */
+.mascot:hover .mascot-visual {
+    animation: mascot-float 3.2s ease-in-out infinite,
+    mascot-hover 0.6s ease-in-out;
+}
+
+/* Bras qui salue */
+.mascot-arm {
     transform-origin: 28% 68%;
     animation: mascot-wave 2.8s ease-in-out infinite;
+    transform-box: fill-box;
 }
 
-.brand-mascot svg:hover {
-    transform: scale(1.03);
-    filter: drop-shadow(0 0 10px rgba(233, 196, 106, 0.2));
+/* Variante bounce */
+.mascot--bounce {
+    animation: mascot-bounce 2.4s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% {
+        filter: drop-shadow(0 14px 30px rgba(124, 58, 237, 0.22));
+    }
+    50% {
+        filter: drop-shadow(0 14px 40px rgba(124, 58, 237, 0.4));
+    }
+}
+
+@keyframes mascot-float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translateY(-6px) rotate(-1deg) scale(1.02);
+    }
+}
+
+@keyframes mascot-hover {
+    0% {
+        transform: translateY(0px) rotate(-2deg);
+    }
+    25% {
+        transform: translateY(-4px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(-2px) rotate(-2deg);
+    }
+    75% {
+        transform: translateY(-4px) rotate(2deg);
+    }
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
 }
 
 @keyframes mascot-wave {
-    0% {
+    0%, 100% {
         transform: rotate(0deg);
     }
-    20% {
+    25% {
         transform: rotate(12deg);
     }
-    40% {
+    50% {
         transform: rotate(0deg);
     }
-    60% {
+    75% {
         transform: rotate(12deg);
     }
-    100% {
-        transform: rotate(0deg);
+}
+
+@keyframes mascot-bounce {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-4px);
     }
 }

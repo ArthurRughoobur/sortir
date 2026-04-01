@@ -4,23 +4,31 @@
    data-month="{{ event.dateStart|format_date(pattern='MMM', locale='fr')|upper }}">
 
     <div class="eventCard-header">
-        <h3 class="eventCard-title">{{ event.name }}</h3>
-        <span class="eventCard-status">{{ event.status.name }}</span>
+        <div>
+            <h3 class="eventCard-title">{{ event.name }}</h3>
+            <span class="eventCard-status">{{ event.status.name }}</span>
+        </div>
+
+        <img class="mascot-visual" src="{{ asset('img/favicon.svg') }}" alt="Mascot du site">
     </div>
 
-    <p class="eventCard-subtitle">
-        {{ event.category.name }}
-    </p>
+    <div class="eventCard-content">
+        <p class="eventCard-subtitle">{{ event.eventInfo }}</p>
+        <p class="eventCard-meta">{{ event.category.name }}</p>
+        <p class="eventCard-meta">{{ event.adress.city.name }}</p>
+    </div>
 
     <div class="eventCard-info">
-        <span>🕒 {{ event.dateStart|date("H:i") }}</span>
         <span>📅 {{ event.dateStart|date("d/m/Y") }}</span>
+        <span>🕒 {{ event.dateStart|date("H:i") }}</span>
     </div>
 
     <div class="eventCard-footer">
         <span class="eventCard-places">
-            {{ event.registred.count }} / {{ event.maxIscription }}
+            Inscrit: {{ event.registred.count }} / {{ event.maxIscription }}
         </span>
+
+        <span>Découvrir 👀</span>
 
         {% if app.user in event.registred %}
             <span class="eventCard-badge success">✔ Inscrit</span>

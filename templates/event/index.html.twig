@@ -23,8 +23,6 @@
             <span class="search-campus">
                    {{ form_row(eventFormSearch.campus) }}
        </span>
-
-
             {{ form_row(eventFormSearch.dateStart) }}
             {{ form_row(eventFormSearch.deadline) }}
             {{ form_row(eventFormSearch.organizer) }}
@@ -35,7 +33,7 @@
             {{ form_end(eventFormSearch) }}
         </section>
 
-        <section class="eventList desktop-events">
+        <section class="eventList">
             {% for event in events %}
                 {% include 'event/_event_card.html.twig' with { event: event } %}
             {% else %}

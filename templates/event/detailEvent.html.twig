@@ -4,7 +4,9 @@
 
 {% block body %}
     <section class="event-page">
-        <article class="event-card">
+        <article class="event-card" id=""
+                 data-day="{{ event.dateStart|date('d') }}"
+                 data-month="{{ event.dateStart|format_date(pattern='MMM', locale='fr')|upper }}">
 
             <header class="event-header">
                 <h1 class="event-title">{{ event.name }}</h1>
@@ -16,56 +18,35 @@
                     <span class="label">Catégorie</span>
                     <span class="value">{{ event.category.name }}</span>
                 </div>
-
                 <div class="event-item">
-                    <span class="label">Date et heure</span>
-                    <span class="value">{{ event.dateStart|date("d/m/Y H:i") }}</span>
-                </div>
+                    <span class="value">{{ event.maxIscription - event.registred.count }}   <span class="label"> places restantes</span> </span>
 
-                <div class="event-item">
-                    <span class="label">Date limite d'inscription</span>
-                    <span class="value">{{ event.deadline|date("d/m/Y") }}</span>
-                </div>
+                    <span class="value">{{ event.deadline|format_date(pattern="d MMMM yyyy",locale='fr') }}<span class="label"> limite d'inscription</span></span>
 
-                <div class="event-item">
-                    <span class="label">Inscrits / Places</span>
-                    <span class="value">{{ event.registred.count }}/{{ event.maxIscription }}</span>
+                    <span class="value">
+                        Début: {{ event.dateStart|format_datetime(pattern="HH'h'mm",locale="fr") }} --
+                        Fin: {{ event.dateStart|date_modify("+" ~ event.duration ~ " minutes")|format_datetime(pattern="HH'h'mm",locale="fr") }}
+                    </span>
+                    <span class="value">
+                        {{ event.deadline|format_date(pattern="d MMMM yyyy",locale='fr') }}
+                    </span>
                 </div>
 
                 <div class="event-item">
                     <span class="label">Organisateur</span>
-                    <span class="value">{{ event.organizer.name }}</span>
-                </div>
-
-                <div class="event-item">
-                    <span class="label">Campus</span>
+                    <span class="value">{{ event.organizer.name }}
+                    </span><span class="label">Campus</span>
                     <span class="value">{{ event.campus.name }}</span>
                 </div>
 
                 <div class="event-item">
-                    <span class="label">Lieu</span>
-                    <span class="value">{{ event.adress.city.name }}</span>
-                </div>
-
-                <div class="event-item">
-                    <span class="label">Rue</span>
+                    <span class="label">Adresse :</span>
                     <span class="value">{{ event.adress.street }}</span>
+                    <span class="value"> {{ event.adress.city.zipCode }} {{ event.adress.city.name }} </span>
+                    <span class="value">Latitude: {{ event.adress.latitude }} </span>
+                    <span class="value">Longitude: {{ event.adress.longitude }}</span>
                 </div>
 
-                <div class="event-item">
-                    <span class="label">Code postal</span>
-                    <span class="value">{{ event.adress.city.zipCode }}</span>
-                </div>
-
-                <div class="event-item">
-                    <span class="label">Latitude</span>
-                    <span class="value">{{ event.adress.latitude }}</span>
-                </div>
-
-                <div class="event-item">
-                    <span class="label">Longitude</span>
-                    <span class="value">{{ event.adress.longitude }}</span>
-                </div>
             </div>
 
             <div class="event-description-block">

@@ -1,93 +1,115 @@
-/* PAGE */
 .event-page {
     min-height: 100vh;
     padding: 40px 20px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    font-family: "Inter", sans-serif;
+    font-family: "Inter", "Segoe UI", sans-serif;
     color: #1f2430;
 }
 
-/* CARTE PRINCIPALE */
 .event-card {
     position: relative;
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     background: #ffffff;
     border-radius: 32px;
     padding: 32px 32px 120px;
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.06),
-        0 2px 8px rgba(0, 0, 0, 0.04);
+        0 12px 30px rgba(0, 0, 0, 0.06),
+        0 3px 10px rgba(0, 0, 0, 0.04);
     overflow: hidden;
 }
 
-/* BADGE DATE EN HAUT À GAUCHE */
 .event-card::before {
     content: attr(data-day) "\A" attr(data-month);
     white-space: pre;
     position: absolute;
     top: 24px;
     left: 24px;
-    width: 72px;
-    height: 72px;
+    width: 74px;
+    height: 74px;
     border-radius: 24px;
-    background: linear-gradient(135deg, #8c4dff 0%, #ff8c42 100%);
+    background: linear-gradient(135deg, #a855f7 0%, #fb923c 100%);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     font-weight: 800;
-    font-size: 1.3rem;
-    line-height: 1.05;
+    font-size: 1.25rem;
+    line-height: 1.1;
     padding: 10px;
     box-sizing: border-box;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* EN-TÊTE */
 .event-header {
+    height: 5rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 16px;
+    gap: 18px;
     margin-left: 110px;
-    margin-bottom: 22px;
+    margin-bottom: 3rem;
+    border-bottom:  rgba(0,0,0,0.2) 0.01rem solid;
+}
+.event-header h1 {
+    background: linear-gradient(to right, #7C3AED, #FB923C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.event-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 72%;
 }
 
 .event-title {
-    font-size: clamp(1.7rem, 2vw, 2.2rem);
+    margin: 0;
+    font-size: clamp(1.8rem, 2vw, 2.3rem);
     font-weight: 800;
     line-height: 1.2;
-    margin: 0;
-    color: #141824;
-    max-width: 70%;
+    color: #121826;
 }
 
-/* TAG ÉTAT */
 .event-status {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     background: #f3f1ef;
     color: #1e2432;
     padding: 10px 16px;
     border-radius: 999px;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 700;
     white-space: nowrap;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border: 1px solid #ece6df;
 }
 
-/* GRILLE INFOS */
+.event-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) 320px;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 24px;
+}
+
+.event-main {
+    min-width: 0;
+}
+
 .event-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(220px, 1fr));
     gap: 18px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .event-item {
@@ -96,24 +118,32 @@
     padding: 18px 20px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     border: 1px solid #f0ebe6;
 }
 
-.event-item .label {
-    font-size: 0.92rem;
-    font-weight: 600;
-    color: #8a8f9d;
+.event-item-full {
+    grid-column: 1 / -1;
 }
 
-.event-item .value {
+.label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #8b93a1;
+}
+
+.value {
     font-size: 1rem;
     font-weight: 600;
-    color: #1e2432;
-    line-height: 1.45;
+    color: #1f2430;
+    line-height: 1.5;
 }
 
-/* BLOC DESCRIPTION / ANNULATION / PARTICIPANTS */
+.coords {
+    font-size: 0.92rem;
+    color: #6b7280;
+}
+
 .event-description-block,
 .event-cancel-block,
 .participants-block {
@@ -128,7 +158,7 @@
 .event-cancel-block h2,
 .participants-block h2 {
     margin: 0 0 12px;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: #111827;
 }
@@ -136,18 +166,47 @@
 .event-description-block p,
 .event-cancel-block p {
     margin: 0;
-    color: #4d5566;
-    line-height: 1.7;
     font-size: 1rem;
+    line-height: 1.7;
+    color: #4b5563;
 }
 
-/* LISTE PARTICIPANTS */
+.participants-side {
+    position: sticky;
+    top: 24px;
+    margin-bottom: 0;
+}
+
 .participants-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
     gap: 10px;
+}
+
+.participants-scroll {
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.participants-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.participants-scroll::-webkit-scrollbar-track {
+    background: #f3eee9;
+    border-radius: 999px;
+}
+
+.participants-scroll::-webkit-scrollbar-thumb {
+    background: #d6cfc8;
+    border-radius: 999px;
+}
+
+.participants-scroll::-webkit-scrollbar-thumb:hover {
+    background: #bfb6ae;
 }
 
 .participants-list li {
@@ -158,27 +217,25 @@
 }
 
 .participants-list a {
-    color: #6d28d9;
-    font-weight: 600;
     text-decoration: none;
+    color: #7c3aed;
+    font-weight: 700;
 }
 
 .participants-list a:hover {
     text-decoration: underline;
 }
 
-/* ACTIONS EN BAS */
 .event-actions {
     position: absolute;
     right: 24px;
     bottom: 24px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
     gap: 12px;
+    justify-content: flex-end;
 }
 
-/* BOUTONS */
 .btnEventDetail {
     display: inline-flex;
     align-items: center;
@@ -194,35 +251,39 @@
     transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
-/* bouton principal type "J'y vais" */
-.event-actions form:first-child .btnEventDetail,
-.event-actions .btnEventDetail:first-child {
-    background: linear-gradient(90deg, #8c2cff 0%, #ff9a2f 100%);
-    color: #fff;
-    box-shadow: 0 10px 18px rgba(140, 44, 255, 0.22);
+.btnEventDetail:hover {
+    transform: translateY(-2px);
 }
 
-/* bouton secondaire */
-.event-actions a.btnEventDetail,
-.event-actions form + form .btnEventDetail {
+.btn-primary {
+    background: linear-gradient(90deg, #8b2cf5 0%, #fb923c 100%);
+    color: #fff;
+    box-shadow: 0 10px 18px rgba(139, 44, 245, 0.22);
+}
+
+.btn-secondary {
     background: #f3f1ef;
-    color: #1e2432;
+    color: #1f2430;
     border: 1px solid #ebe5df;
 }
 
-.btnEventDetail:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 22px rgba(0, 0, 0, 0.08);
+@media (max-width: 900px) {
+    .event-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .participants-side {
+        position: static;
+    }
+
+    .participants-scroll {
+        max-height: 260px;
+    }
 }
 
-.btnEventDetail:active {
-    transform: translateY(0);
-}
-
-/* RESPONSIVE */
 @media (max-width: 768px) {
     .event-card {
-        padding: 24px 20px 120px;
+        padding: 24px 20px 110px;
         border-radius: 24px;
     }
 
@@ -231,8 +292,8 @@
         left: 20px;
         width: 64px;
         height: 64px;
-        font-size: 1.4rem;
         border-radius: 20px;
+        font-size: 1.05rem;
     }
 
     .event-header {
@@ -241,8 +302,11 @@
         align-items: flex-start;
     }
 
-    .event-title {
+    .event-heading {
         max-width: 100%;
+    }
+
+    .event-title {
         font-size: 1.5rem;
     }
 
@@ -250,9 +314,13 @@
         grid-template-columns: 1fr;
     }
 
+    .event-item-full {
+        grid-column: auto;
+    }
+
     .event-actions {
         position: static;
-        margin-top: 10px;
+        margin-top: 16px;
         justify-content: stretch;
     }
 

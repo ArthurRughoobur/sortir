@@ -15,7 +15,10 @@ class CitySearchType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Le nom de la ville contient: ',
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Rechercher une ville ...',
+                ],
                 'required' => false,
             ])
             ->add('search', SubmitType::class, [

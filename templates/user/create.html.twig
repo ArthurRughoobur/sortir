@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
+    <h1 class="title-location"> CREEER UN PROFIL : </h1>
+
     {% embed 'views/form/template-form.html.twig' with {form : form} %}
-        {% block formTitle %} CREEER UN PROFIL : {% endblock %}
+        {% block formTitle %}{% endblock %}
         {% block buttonLabel %} Créer !{% endblock %}
     {% endembed %}
 

@@ -7,14 +7,16 @@
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
-    <link rel="icon" href="{{ asset('img/logo.png') }}">
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href='data:image/svg+xml,%3Csvg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-label="Mascotte"%3E%3Cdefs%3E%3ClinearGradient id="bodyGradient" x1="25" y1="18" x2="133" y2="140" gradientUnits="userSpaceOnUse"%3E%3Cstop stop-color="%238B5CF6"/%3E%3Cstop offset="1" stop-color="%23FB923C"/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d="M43 80C43 48.52 68.52 23 100 23C120.986 23 138 40.014 138 61C138 73.086 132.21 84.207 123.653 91.27C124.539 94.523 125 97.946 125 101.5C125 122.21 108.21 139 87.5 139H73C52.565 139 36 122.435 36 102C36 91.435 40.428 81.904 47.537 75.16C44.6 75.86 43 77.337 43 80Z" fill="url(%23bodyGradient)"/%3E%3Cellipse cx="79" cy="90" rx="34" ry="28" fill="white" fill-opacity="0.95"/%3E%3Ccircle cx="67" cy="84" r="5" fill="%2318181B"/%3E%3Ccircle cx="92" cy="84" r="5" fill="%2318181B"/%3E%3Cpath d="M68 101C71.5 106.333 78.7 111.8 89.5 102" stroke="%2318181B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/%3E%3Cpath d="M108 34C107.755 21.202 117.909 11.5 128.5 11.5C139.091 11.5 147.5 20.409 147.5 31C147.5 41.591 138.909 49.5 128.5 49.5C124.48 49.5 119.756 48.117 116 45" fill="%23FDE68A"/%3E%3Cpath d="M52 48C47.231 38.814 36.046 35.016 26.5 39.5C16.954 43.984 12.993 55.36 17.5 65C22.007 74.64 33.705 78.395 43.5 73.5" fill="%23C4B5FD"/%3E%3Cg class="mascot-hand"%3E%3Cpath d="M34 105C25.716 105 19 111.716 19 120V132C19 136.418 22.582 140 27 140H41C45.418 140 49 136.418 49 132V119C49 111.268 42.732 105 35 105H34Z" fill="%23F5F3FF"/%3E%3Ccircle cx="28" cy="122" r="4" fill="%23A855F7"/%3E%3Ccircle cx="40" cy="122" r="4" fill="%23A855F7"/%3E%3C/g%3E%3Cpath d="M101 131C101 122.163 108.163 115 117 115H118C126.837 115 134 122.163 134 131V138H101V131Z" fill="%23F5F3FF"/%3E%3Cpath d="M63 136C58.582 136 55 132.418 55 128V122" stroke="%237C3AED" stroke-width="6" stroke-linecap="round"/%3E%3Cpath d="M85 136C89.418 136 93 132.418 93 128V122" stroke="%23FB923C" stroke-width="6" stroke-linecap="round"/%3E%3C/svg%3E'
+    />
+
 </head>
 <body>
 <div class="container">
     <header class="header">
-        <a href="{{ path('main_event') }}">
-            <img class="logoNav" src="{{ asset('img/logo.png') }}" alt="logo">
-        </a>
         {% include 'views/nav/nav.html.twig' %}
     </header>
     <main>

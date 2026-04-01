@@ -9,24 +9,16 @@ header {
     backdrop-filter: blur(24px);
 }
 
-.logoNav {
-    margin: 2rem;
-    width: 10rem;
-    height: auto;
+header h1 {
+    background: linear-gradient(to right, #7C3AED, #FB923C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    font-size: 1.5rem;
 }
 
-.logoNav a {
-    text-decoration: none;
-    color: white;
-    font-size: 2rem;
-}
-
-.logoNav a:hover {
-    color: white;
-    text-decoration: none;
-}
-
-nav ul {
+.menu ul {
     list-style-type: none;
     margin-right: 2rem;
     padding: 10px;
@@ -34,14 +26,14 @@ nav ul {
     height: 2rem;
 }
 
-nav ul li {
+.menu ul li {
     display: inline-block;
     float: left;
     text-align: center;
     margin: 0 10px;
 }
 
-nav ul li a {
+.menu ul li a {
     color: grey;
     text-decoration: none;
 }

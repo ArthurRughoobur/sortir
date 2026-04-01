@@ -1,15 +1,32 @@
-<a class="eventCard" href="{{ path('event_detail', {'id': event.id}) }}">
-    <span>Nom de la sortie : {{ event.name }}</span>
-    <span>Catégorie : {{ event.category.name }}</span>
-    <span>Date : {{ event.dateStart|date("d/m/Y H:i") }}</span>
-    <span>Clôture : {{ event.deadline|date("d/m/Y") }}</span>
-    <span>Inscrits / Places : {{ event.registred.count }} / {{ event.maxIscription }}</span>
-    <span>Statut : {{ event.status.name }}</span>
-    <span>Organisateur : {{ event.organizer.name }} {{ event.organizer.lastname }}</span>
+<a class="eventCard"
+   href="{{ path('event_detail', {'id': event.id}) }}"
+   data-day="{{ event.dateStart|date('d') }}"
+   data-month="{{ event.dateStart|format_date(pattern='MMM', locale='fr')|upper }}">
 
-    {% if app.user in event.registred %}
-        <span>✔️ Inscrit</span>
-    {% else %}
-        <span>❌ Pas inscrit</span>
-    {% endif %}
+    <div class="eventCard-header">
+        <h3 class="eventCard-title">{{ event.name }}</h3>
+        <span class="eventCard-status">{{ event.status.name }}</span>
+    </div>
+
+    <p class="eventCard-subtitle">
+        {{ event.category.name }}
+    </p>
+
+    <div class="eventCard-info">
+        <span>🕒 {{ event.dateStart|date("H:i") }}</span>
+        <span>📅 {{ event.dateStart|date("d/m/Y") }}</span>
+    </div>
+
+    <div class="eventCard-footer">
+        <span class="eventCard-places">
+            {{ event.registred.count }} / {{ event.maxIscription }}
+        </span>
+
+        {% if app.user in event.registred %}
+            <span class="eventCard-badge success">✔ Inscrit</span>
+        {% else %}
+            <span class="eventCard-badge">Disponible</span>
+        {% endif %}
+    </div>
+
 </a>

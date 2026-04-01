@@ -70,6 +70,7 @@ class Event
     private Collection $registred;
 
     #[ORM\ManyToOne(inversedBy: 'organizer')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $organizer = null;
 
     #[ORM\ManyToOne(inversedBy: 'events')]

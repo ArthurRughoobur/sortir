@@ -62,6 +62,10 @@ class EventSearchType extends AbstractType
                 'label' => 'Je ne suis pas inscrit(e) ',
                 'required' => false,
             ])
+            ->add('enCreation', CheckboxType::class, [
+                'label' => 'En Création ',
+                'required' => false,
+            ])
             ->add('terminee', CheckboxType::class, [
                 'label' => 'Sorties passées ',
                 'required' => false,

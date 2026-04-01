@@ -74,6 +74,9 @@ final class UserController extends AbstractController
     ): Response
     {
         $userById = $userRepository->find($id);
+        if (!$userById) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
+        }
         return $this->render('user/userDetailById.html.twig', [
                 'userById' => $userById,
             ]
@@ -95,8 +98,11 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('password')->getData();
-
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            if (!empty($plainPassword)) {
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword($user, $plainPassword)
+                );
+            }
             $user->setActive(true);
             if ($user->getPhoto() === null) {
                 $user->setPhoto("portrait.png");
@@ -188,7 +194,7 @@ final class UserController extends AbstractController
             //Ouverture du fichier
             if (($handle = fopen($file->getPathname(), 'r')) !== false) {
                 $header = fgetcsv($handle);
-                while (($data = fgetcsv($handle,0,';')) !== false) {
+                while (($data = fgetcsv($handle, 0, ';')) !== false) {
                     $user = new User();
                     $nom = mb_convert_encoding($data[1], 'UTF-8', 'ISO-8859-1');
                     $prenom = mb_convert_encoding($data[2], 'UTF-8', 'ISO-8859-1');

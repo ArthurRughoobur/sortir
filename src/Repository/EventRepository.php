@@ -85,11 +85,22 @@ class EventRepository extends ServiceEntityRepository
                     's.name IN (:visibleStatuses)',
                     $qb->expr()->andX(
                         's.name = :statusCreation',
-                        'e.organizer = :user'
+                        $qb->expr()->orX(
+                            'e.organizer = :user',
+                            ':isAdmin = true'
+                        )
                     )
                 )
             )
                 ->setParameter('visibleStatuses', ['Ouverte', 'En cours', 'Clôturée'])
+                ->setParameter('statusCreation', 'En création')
+                ->setParameter('user', $user)
+                ->setParameter('isAdmin', in_array('ROLE_ADMIN', $user->getRoles(), true));
+        }
+
+        if ($eventSearch->getEnCreation()) {
+            $qb->andWhere('s.name = :statusCreation')
+                ->andWhere('e.organizer = :user')
                 ->setParameter('statusCreation', 'En création')
                 ->setParameter('user', $user);
         }

@@ -1,7 +1,7 @@
 .eventList {
     padding: clamp(16px, 3vw, 40px);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: clamp(16px, 2vw, 24px);
     font-family: "Inter", "Segoe UI", sans-serif;
 }
@@ -21,10 +21,9 @@
     text-decoration: none;
     color: inherit;
     border: 1px solid #eee8e2;
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.05),
-        0 2px 6px rgba(0, 0, 0, 0.04);
-    transition: all 0.25s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     overflow: hidden;
     min-width: 0;
 }
@@ -51,8 +50,12 @@
     grid-area: header;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
+}
+
+.eventCard-header > div {
+    min-width: 0;
 }
 
 .eventCard-title {
@@ -60,7 +63,9 @@
     font-size: clamp(1rem, 2vw, 1.1rem);
     font-weight: 800;
     color: #111827;
-    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .eventCard-status {
@@ -79,24 +84,28 @@
     flex-direction: column;
     gap: 6px;
     min-width: 0;
-    width: 10rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .eventCard-subtitle {
     margin: 0;
     font-size: 0.9rem;
     color: #6b7280;
-    word-break: break-word;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .eventCard-meta {
     margin: 0;
     font-size: 0.85rem;
     color: #4b5563;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 
 .eventCard-info {
     grid-area: info;
@@ -116,6 +125,11 @@
     flex-wrap: wrap;
 }
 
+.eventCard-footer span:last-child {
+    font-weight: 600;
+    color: #8b2cf5;
+}
+
 .eventCard-places {
     font-weight: 700;
     font-size: 0.9rem;
@@ -125,12 +139,17 @@
     font-size: 0.75rem;
     padding: 6px 10px;
     border-radius: 999px;
-    background: #f3f1ef;
+    background: #f1f5f9;
 }
 
 .eventCard-badge.success {
     background: #dcfce7;
     color: #166534;
+}
+
+.eventCard-badge.creation {
+    background: #fef3c7;
+    color: #92400e;
 }
 
 .eventCard img {
@@ -141,11 +160,25 @@
 }
 
 .eventCard:hover {
-    transform: translateY(-6px);
+    transform: translateY(-6px) scale(1.01);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
     border-color: #d6cfc8;
 }
 
+.mascot-visual {
+    flex-shrink: 0;
+}
+
+.eventCard {
+    cursor: pointer;
+}
+.eventCard:active {
+    transform: scale(0.99);
+}
+.eventCard::before {
+    flex-shrink: 0;
+}
+/* Mobile */
 @media (max-width: 640px) {
     .eventList {
         grid-template-columns: 1fr;
@@ -163,6 +196,15 @@
         border-radius: 20px;
     }
 
+    .eventCard-header {
+        align-items: flex-start;
+    }
+
+    .eventCard-header > div {
+        width: 100%;
+    }
+
+
     .eventCard::before {
         width: 48px;
         height: 48px;
@@ -175,5 +217,65 @@
     .eventCard-footer {
         flex-direction: column;
         align-items: flex-start;
+        gap: 8px;
+    }
+
+
+    /* Très petit mobile */
+    @media (max-width: 400px) {
+        .eventList {
+            grid-template-columns: 1fr;
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .eventCard {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+            "date"
+            "header"
+            "content"
+            "info"
+            "footer";
+            padding: 16px;
+            border-radius: 18px;
+        }
+
+        .eventCard:hover {
+            transform: none;
+        }
+
+        .eventCard::before {
+            width: 44px;
+            height: 44px;
+            font-size: 0.75rem;
+            border-radius: 12px;
+            margin-bottom: 6px;
+        }
+
+        .eventCard-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .eventCard-footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .eventCard-title {
+            font-size: 0.95rem;
+        }
+
+        .eventCard-subtitle {
+            -webkit-line-clamp: 2;
+        }
+    }
+    @media (max-width: 350px) {
+        .eventCard-title {
+            white-space: normal;
+        }
     }
 }

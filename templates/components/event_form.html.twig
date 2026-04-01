@@ -48,7 +48,12 @@
     <span>
      {{ form_row(form.duration) }} minutes
     </span>
-    {% if id is not null and is_granted('EVENT_EDIT', initialFormData) and is_granted('ROLE_ADMIN') == false %}
+
+    {% set canCreate = is_granted('EVENT_CREATE') %}
+    {% set canEdit = id is not null and is_granted('EVENT_EDIT', initialFormData) %}
+    {% set canManage = (id is null and canCreate) or canEdit %}
+
+    {% if canManage and not is_granted('ROLE_ADMIN') %}
     <div class="">
         <button
             type="submit"
@@ -63,7 +68,7 @@
     </div>
     {% endif %}
 
-    {% if id is not null and is_granted('EVENT_EDIT', initialFormData) and is_granted('ROLE_ADMIN') == false %}
+    {% if canManage and not is_granted('ROLE_ADMIN') %}
     <div class="">
         <button
             type="submit"

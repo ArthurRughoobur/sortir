@@ -16,13 +16,15 @@
             </div>
         </div>
         <section class="filtreList">
-            <h2>Filtrer les sorties</h2>
             {{ form_start(eventFormSearch) }}
+
+            {{ form_row(eventFormSearch.name) }}
+            {{ form_row(eventFormSearch.category) }}
             <span class="search-campus">
                    {{ form_row(eventFormSearch.campus) }}
        </span>
-            {{ form_row(eventFormSearch.category) }}
-            {{ form_row(eventFormSearch.name) }}
+
+
             {{ form_row(eventFormSearch.dateStart) }}
             {{ form_row(eventFormSearch.deadline) }}
             {{ form_row(eventFormSearch.organizer) }}

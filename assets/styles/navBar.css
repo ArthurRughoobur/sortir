@@ -1,4 +1,4 @@
-header {
+header  {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -9,6 +9,16 @@ header {
     backdrop-filter: blur(24px);
 }
 
+footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: rgba(0,0,0,0.2) 0.01rem solid;
+    margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(24px);
+}
 header h1 {
     background: linear-gradient(to right, #7C3AED, #FB923C);
     -webkit-background-clip: text;
@@ -17,7 +27,14 @@ header h1 {
     margin: 0;
     font-size: 1.5rem;
 }
-
+footer h1 {
+    background: linear-gradient(to right, #7C3AED, #FB923C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    font-size: 1.5rem;
+}
 .menu ul {
     list-style-type: none;
     margin-right: 2rem;
@@ -39,7 +56,7 @@ header h1 {
 }
 .btn-create-event {
     background: linear-gradient(135deg, #8B5CF6, #FB923C);
-    color: white;
+    color: white !important;
     padding: 12px 20px;
     border-radius: 999px;
     font-weight: 700;
@@ -50,8 +67,11 @@ header h1 {
     transition: 0.2s ease;
     transform: translateY(-4px);
 }
-a:hover {
-    color: black;
+.menu a:hover {
+    color: black !important;
     transition: 0.2s ease;
     transform: translateY(-4px);
+}
+.footer-infos {
+    font-weight: bold;
 }

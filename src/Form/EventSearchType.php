@@ -22,40 +22,44 @@ class EventSearchType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
+                'label' => 'Campus : ',
                 'required' => false,
                 'placeholder' => 'Tous les campus',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'label' => 'Choisissez une catégorie: ',
+                'label' => false,
                 'placeholder' => 'Choisissez une catégorie',
                 'required' => false,
             ])
             ->add('name', TextType::class, [
-                'label' => 'Le nom de la sortie contient: ',
+                'label' => 'Sortie : ',
+                'attr' => [
+                    'placeholder' => 'Rechercher....',
+                ],
                 'required' => false,
             ])
             ->add('dateStart', DateType::class, [
-                'label' => 'Entre: ',
+                'label' => 'Date de la sortie : ',
                 'required' => false,
                 'widget' => 'single_text',
             ])
             ->add('deadline', DateType::class, [
-                'label' => 'Et ',
+                'label' => "Date limite : ",
                 'required' => false,
                 'widget' => 'single_text',
             ])
             ->add('organizer', CheckboxType::class, [
-                'label' => 'Sorties dont je suis l\'organisateur/trice ',
+                'label' => "J'organise la sortie ",
                 'required' => false,
             ])
             ->add('registered', CheckboxType::class, [
-                'label' => 'Sorties auxquelles je suis inscrit/e ',
+                'label' => 'Je suis inscrit(e) ',
                 'required' => false,
             ])
             ->add('notRegistered', CheckboxType::class, [
-                'label' => 'Sorties auxquelles je ne suis pas inscrit/e ',
+                'label' => 'Je ne suis pas inscrit(e) ',
                 'required' => false,
             ])
             ->add('terminee', CheckboxType::class, [

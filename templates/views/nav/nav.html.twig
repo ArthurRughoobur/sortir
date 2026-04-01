@@ -1,3 +1,43 @@
+<a href="{{ path('main_event') }}">
+    <div class="brand-mascot">
+        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-label="Mascotte">
+            <defs>
+                <linearGradient id="bodyGradient" x1="25" y1="18" x2="133" y2="140" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#8B5CF6"/>
+                    <stop offset="1" stop-color="#FB923C"/>
+                </linearGradient>
+            </defs>
+            <path
+                d="M43 80C43 48.52 68.52 23 100 23C120.986 23 138 40.014 138 61C138 73.086 132.21 84.207 123.653 91.27C124.539 94.523 125 97.946 125 101.5C125 122.21 108.21 139 87.5 139H73C52.565 139 36 122.435 36 102C36 91.435 40.428 81.904 47.537 75.16C44.6 75.86 43 77.337 43 80Z"
+                fill="url(#bodyGradient)"/>
+            <ellipse cx="79" cy="90" rx="34" ry="28" fill="white" fill-opacity="0.95"/>
+            <circle cx="67" cy="84" r="5" fill="#18181B"/>
+            <circle cx="92" cy="84" r="5" fill="#18181B"/>
+            <path d="M68 101C71.5 106.333 78.7 111.8 89.5 102" stroke="#18181B" stroke-width="5" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+            <path
+                d="M108 34C107.755 21.202 117.909 11.5 128.5 11.5C139.091 11.5 147.5 20.409 147.5 31C147.5 41.591 138.909 49.5 128.5 49.5C124.48 49.5 119.756 48.117 116 45"
+                fill="#FDE68A"/>
+            <path
+                d="M52 48C47.231 38.814 36.046 35.016 26.5 39.5C16.954 43.984 12.993 55.36 17.5 65C22.007 74.64 33.705 78.395 43.5 73.5"
+                fill="#C4B5FD"/>
+            <g class="mascot-hand">
+                <path
+                    d="M34 105C25.716 105 19 111.716 19 120V132C19 136.418 22.582 140 27 140H41C45.418 140 49 136.418 49 132V119C49 111.268 42.732 105 35 105H34Z"
+                    fill="#F5F3FF"/>
+                <circle cx="28" cy="122" r="4" fill="#A855F7"/>
+                <circle cx="40" cy="122" r="4" fill="#A855F7"/>
+            </g>
+            <path d="M101 131C101 122.163 108.163 115 117 115H118C126.837 115 134 122.163 134 131V138H101V131Z"
+                  fill="#F5F3FF"/>
+            <path d="M63 136C58.582 136 55 132.418 55 128V122" stroke="#7C3AED" stroke-width="6"
+                  stroke-linecap="round"/>
+            <path d="M85 136C89.418 136 93 132.418 93 128V122" stroke="#FB923C" stroke-width="6"
+                  stroke-linecap="round"/>
+        </svg>
+        <h1>On S'fait ça</h1>
+    </div>
+</a>
 <nav class="menu">
     <ul>
         <li><a href="{{ path('main_event') }}">Accueil</a></li>
@@ -6,18 +46,18 @@
         {% if app.user %}
             {% if is_granted("ROLE_ADMIN") %}
 
-                    <li><a href="{{ path('app_city_index') }}">Villes</a></li>
-                    <li><a href="{{ path('app_campus_index') }}">Campus</a></li>
-                    <li><a href="{{ path('create_user') }}">Création d'utilisateur</a></li>
-                    <li><a href="{{ path('create_users_csv') }}">Ajout utilisateur CSV</a></li>
-                    <li><a href="{{ path('user_list') }}">Liste d'utilisateurs</a></li>
+                <li><a href="{{ path('app_city_index') }}">Villes</a></li>
+                <li><a href="{{ path('app_campus_index') }}">Campus</a></li>
+                <li><a href="{{ path('create_user') }}">Création d'utilisateur</a></li>
+                <li><a href="{{ path('create_users_csv') }}">Ajout utilisateur CSV</a></li>
+                <li><a href="{{ path('user_list') }}">Liste d'utilisateurs</a></li>
 
 
 
             {% endif %}
             <li><a href="{{ path('app_logout') }}">Se Déconnecter</a></li>
             <li><a href="{{ path('update', {'id': app.user.id}) }}">Mon Profil</a></li>
-            <li ><a class="btn-create-event" href="{{ path('create_event') }}">Créer un évènement</a></li>
+            <li><a class="btn-create-event" href="{{ path('create_event') }}">Créer un évènement</a></li>
 
         {% else %}
             <li><a href="{{ path('app_login') }}">Login</a></li>

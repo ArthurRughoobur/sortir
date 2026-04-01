@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Villes{% endblock %}
+{% block title %}Nouvelle Villes{% endblock %}
 
 {% block body %}
-    <h1>Créer une Ville</h1>
-    {% if is_granted("ROLE_ADMIN") %}
+<section class="index-section ">
+    <h1 class="title-location">Créer une nouvelle Ville</h1>
+
 
     {{ include('city/_form.html.twig') }}
-    <a href="{{ path('app_city_index') }}">
-        <button>Retour aux villes</button></a>
-    {% endif %}
+
+</section>
 {% endblock %}

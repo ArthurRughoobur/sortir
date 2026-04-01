@@ -3,16 +3,16 @@
 {% block title %}Campus{% endblock %}
 
 {% block body %}
-    <h1>Les Campus</h1>
+    <section class="index-section">
+    <h1 class="title-location">Les Campus</h1>
 
-    <section>
-        <h2>Filter les campus</h2>
+        <section class="filtreList location">
         {{ form_start(formCampusSearch) }}
         {{ form_row(formCampusSearch.name) }}
         {{ form_end(formCampusSearch) }}
     </section>
 
-    <table class="table">
+        <table class="tableLocation">
         <thead>
             <tr>
                 <th>Id</th>
@@ -25,12 +25,10 @@
             <tr>
                 <td>{{ campus.id }}</td>
                 <td>{{ campus.name }}</td>
-                <td>    {% if is_granted("ROLE_ADMIN") %}
-
-                    <a href="{{ path('app_campus_show', {'id': campus.id}) }}">
-                        <button>Détail</button></a>
+                <td>
+                    {% if is_granted("ROLE_ADMIN") %}
                     <a href="{{ path('app_campus_edit', {'id': campus.id}) }}">
-                        <button>Modifier</button></a>
+                        <button class="btn-update">Modifier</button></a>
                     {% endif %}
                 </td>
             </tr>
@@ -41,10 +39,9 @@
         {% endfor %}
         </tbody>
     </table>
-
-
-    <a href="{{ path('app_campus_new') }}">
     {% if is_granted("ROLE_ADMIN") %}
-        <button>Créer un campus</button></a>
+        <a href="{{ path('app_campus_new') }}">
+        <button class="retourMenu">Créer un campus</button></a>
     {% endif %}
+    </section>
 {% endblock %}

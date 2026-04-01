@@ -17,5 +17,7 @@ import './styles/about.css';
 import './styles/index.css'
 import './styles/mascot.css'
 import './styles/button.css'
+import './styles/location.css'
+import './styles/user.css'
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

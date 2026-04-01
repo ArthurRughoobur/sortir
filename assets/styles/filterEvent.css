@@ -19,8 +19,11 @@
 
 .filtreList {
     background: #e2e8f0;
-    padding: 1rem;
-    margin-top: 2rem;
+    padding-bottom: 1rem;
+    padding-top: 2rem;
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+    padding-left: 2rem;
     border-radius: 20px;
 }
 

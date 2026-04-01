@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit City{% endblock %}
+{% block title %}Modifier une ville{% endblock %}
 
 {% block body %}
-    <h1>Edit City</h1>
+    <h1>Modifier une ville</h1>
     {% if is_granted("ROLE_ADMIN") %}
-        {{ include('city/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('city/_form.html.twig', {'button_label': 'Modifier'}) }}
     {% endif %}
 
     <a href="{{ path('app_city_index') }}">

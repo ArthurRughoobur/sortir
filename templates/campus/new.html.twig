@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveaux Campus{% endblock %}
+{% block title %}Nouveau Campus{% endblock %}
 
 {% block body %}
-    <h1>Créer un nouveau campus</h1>
+    <section class="index-section ">
+    <h1 class="title-location">Créer un nouveau campus</h1>
     {% if is_granted("ROLE_ADMIN") %}
 
     {{ include('campus/_form.html.twig') }}
 
-    <a href="{{ path('app_campus_index') }}">
-        <button>Retour aux Campus</button></a>
+
     {% endif %}
+    </section>
 {% endblock %}

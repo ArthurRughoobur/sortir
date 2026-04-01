@@ -1,8 +1,11 @@
 {% form_theme form 'views/form/form-theme.html.twig' %}
 
+<div class="contenu-texte create-location marginLeft profil">
+
 <h2>{% block formTitle %}{% endblock %}</h2>
 
 {{ form_start(form) }}
 {{ form_widget(form) }}
 <button>{% block buttonLabel %}{% endblock %}</button>
+</div>
 {{ form_end(form) }}

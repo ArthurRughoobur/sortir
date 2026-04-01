@@ -10,6 +10,7 @@ header  {
 }
 
 footer{
+    height: 10vh;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -64,14 +65,13 @@ footer h1 {
 
 }
 .btn-create-event:hover {
-    transition: 0.2s ease;
-    transform: translateY(-4px);
+    box-shadow: 0 14px 22px rgba(0, 0, 0, 0.08) !important;
 }
 .menu a:hover {
     color: black !important;
-    transition: 0.2s ease;
-    transform: translateY(-4px);
+    box-shadow: 0 14px 22px rgba(0, 0, 0, 0.08) !important;
 }
 .footer-infos {
     font-weight: bold;
+    margin-right: 3rem;
 }

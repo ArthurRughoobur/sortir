@@ -1,4 +1,8 @@
-{{ form_start(form) }}
+<div class="contenu-texte create-location marginLeft">
+    {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Sauvegarder') }}</button>
+    <button class="btn-update">{{ button_label|default('Sauvegarder') }}</button>
 {{ form_end(form) }}
+    <a href="{{ path('app_campus_index') }}">
+        <button class="retourMenu">Retour aux Campus</button></a>
+</div>

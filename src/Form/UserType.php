@@ -32,10 +32,11 @@ class UserType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
                 'options' => ['attr' => ['class' => 'password-field']],
-                'required' => false,
+
                 'mapped' => false,
                 'first_options' => ['label' => 'Mot de passe : '],
                 'second_options' => ['label' => 'Mot de passe : '],
+
 
             ]);
         $builder
@@ -52,6 +53,7 @@ class UserType extends AbstractType
                 'label' => 'Email : '
             ])
             ->add('student', ChoiceType::class, [
+                'label'=> false,
                 'choices' => [
                     'Elève' => true,
                     'Ancien élève' => false,
@@ -62,7 +64,7 @@ class UserType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Campus',
+                'placeholder' => false,
             ])
             ->add('photo', FileType::class, [
                 'label' => 'Ma photo : ',
@@ -76,13 +78,12 @@ class UserType extends AbstractType
                         'Admin' => 'ROLE_ADMIN',
                         'Utilisateur' => 'ROLE_USER',
                     ],
-
+                    'label' => false,
                     'multiple' => true,
                     'expanded' => true,
 
                 ]);
             }
-
 
 
     }
@@ -91,6 +92,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'required' => false,
         ]);
     }
 }

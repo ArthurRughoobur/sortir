@@ -15,7 +15,10 @@ class CampusSearchType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Le nom du campus contient: ',
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Rechercher un campus ...',
+                ],
                 'required' => false,
             ])
             ->add('search', SubmitType::class, [

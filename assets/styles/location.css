@@ -1,0 +1,42 @@
+button#city_search_search {
+    margin-left: 0;
+}
+
+section.filtreList.location {
+    margin-left: 20em;
+    margin-right: 20em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+input#city_search_name {
+    margin-left: 10em;
+}
+
+.tableLocation {
+    width: 80%;
+    margin: auto;
+    /*border: 1px solid black;*/
+    margin-top: 1rem;
+    background: white;
+    border-radius: 30px;
+
+}
+
+.tableLocation th,
+.tableLocation td {
+    padding: 8px;
+    text-align: center;
+    /*border: 1px solid black;*/
+}
+
+.create-location {
+    justify-content: center;
+    width: 40%;
+    padding: 8px;
+    text-align: center;
+    /*border: 1px solid black;*/
+    background: white;
+}
+
+

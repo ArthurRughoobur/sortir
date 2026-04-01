@@ -1,81 +1,115 @@
 .eventList {
+    min-height: 100vh;
+    padding: 40px 20px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1.5rem;
-    margin-top: 2rem;
-    font-size: 0.95rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    font-family: "Inter", "Segoe UI", sans-serif;
 }
 
 .eventCard {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    min-height: 180px;
-    padding: 1.25rem;
-    border: 1px solid;
-    border-radius: 18px;
-    backdrop-filter: blur(3px);
-    text-align: center;
+    gap: 14px;
+    padding: 22px;
+    border-radius: 24px;
+    background: #ffffff;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #eee8e2;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
     overflow: hidden;
-    transition: transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease,
-    background 0.25s ease;
-}
-.eventCard:hover,
-.eventCard:focus-visible {
-    transform: translateY(-6px);
-    border-color: black;
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
 }
 
-.eventCard:focus-visible {
-    outline: 2px solid black;
-    outline-offset: 4px;
-}
-
-.desktop-events {
-    display: grid;
-}
-
-.mobile-events {
-    display: none;
-}
-.mobile-message{
-    display: none;
-}
-
-@media screen and (max-width: 767px) {
-    .mobile-message {
-        display: block;
-        padding: 1rem;
-        margin: 1rem 0;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #f7f7f7;
-    }
-
-    .desktop-event-form {
-        display: none;
-    }
-
-    .search-campus{
-        display: none;
-    }
-
-    .btn-create-event {
-        display: none;
-    }
-
-    .desktop-events {
-        display: none;
-    }
-
-    .mobile-events {
-        display: grid;
-    }
-    .mobile-message{
+.eventCard::before {
+    content: attr(data-day) "\A" attr(data-month);
+    white-space: pre;
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #8b2cf5 0%, #fb923c 100%);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
     display: flex;
-    }
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.1;
+}
+
+
+.eventCard-header {
+    margin-left: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.eventCard-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.eventCard-status {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #f3f1ef;
+    font-weight: 600;
+}
+
+
+.eventCard-subtitle {
+    margin-left: 70px;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+
+.eventCard-info {
+    display: flex;
+    gap: 12px;
+    margin-left: 70px;
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
+
+.eventCard-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.eventCard-places {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.eventCard-badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #f3f1ef;
+}
+
+.eventCard-badge.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.eventCard:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+    border-color: #d6cfc8;
 }

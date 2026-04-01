@@ -195,7 +195,6 @@ class AppFixtures extends Fixture
         $eventsPerUser = 3;
         $registrationsPerUser = 3;
 
-        // On garde seulement les utilisateurs non admin
         $normalUsers = array_values(array_filter($users, function ($user) {
             return !in_array('ROLE_ADMIN', $user->getRoles(), true)
                 && $user->getUsername() !== 'Admin';
@@ -203,20 +202,18 @@ class AppFixtures extends Fixture
 
         $allEvents = [];
 
-        // 1) Chaque utilisateur non admin crée 5 events
         foreach ($normalUsers as $user) {
             for ($i = 1; $i <= $eventsPerUser; $i++) {
                 $event = new Event();
 
                 $baseName = $faker->randomElement($sorties);
-                $eventName = $baseName . ' #' . $i . ' - ' . $user->getUsername();
 
                 $dateStart = $faker->dateTimeBetween('-1 month', '+2 months');
                 $deadline = (clone $dateStart)->modify('-' . rand(1, 5) . ' days');
                 $durationInMinutes = $faker->numberBetween(30, 360);
                 $dateEnd = (clone $dateStart)->modify('+' . $durationInMinutes . ' minutes');
 
-                $event->setName($eventName);
+                $event->setName($baseName);
                 $event->setDateStart($dateStart);
                 $event->setDeadline($deadline);
                 $event->setDuration($durationInMinutes);

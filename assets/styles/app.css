@@ -50,7 +50,35 @@ a {
     display: flex;
     flex-direction: column;
 }
+.mobile-events {
+    display: none;
+}
 
+@media screen and (max-width: 767px) {
+    .mobile-message {
+        display: block;
+        padding: 1rem;
+        margin: 1rem 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+    }
+
+    .desktop-event-form {
+        display: none;
+    }
+
+    .search-campus{
+        display: none;
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+    .mobile-events {
+        display: block;
+    }
+}
 
 
 

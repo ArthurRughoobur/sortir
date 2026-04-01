@@ -30,8 +30,12 @@
 
         <span>Découvrir 👀</span>
 
-        {% if app.user in event.registred %}
+        {% if event.status.name == 'En création' %}
+            <span class="eventCard-badge creation">🛠 En création</span>
+
+        {% elseif app.user in event.registred %}
             <span class="eventCard-badge success">✔ Inscrit</span>
+
         {% else %}
             <span class="eventCard-badge">Disponible</span>
         {% endif %}

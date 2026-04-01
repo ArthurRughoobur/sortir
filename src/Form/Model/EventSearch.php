@@ -18,7 +18,17 @@ class EventSearch
     private ?bool $notRegistered = false;
 
     private ?bool $terminee = false;
+    private ?bool $enCreation = false;
 
+    public function getEnCreation(): ?bool
+    {
+        return $this->enCreation;
+    }
+
+    public function setEnCreation(?bool $enCreation): void
+    {
+        $this->enCreation = $enCreation;
+    }
     public function getCampus(): ?Campus
     {
         return $this->campus;

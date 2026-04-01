@@ -42,3 +42,9 @@ button:hover {
     margin-top: 3rem;
     margin-left: 15rem;
 }
+@media screen and (max-width: 767px) {
+
+    .btn-create-event {
+        display: none;
+    }
+}

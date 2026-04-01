@@ -30,14 +30,18 @@ class UserType extends AbstractType
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
+                'required' => false,
+                'mapped' => false,
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
                 'options' => ['attr' => ['class' => 'password-field']],
-
-                'mapped' => false,
-                'first_options' => ['label' => 'Mot de passe : '],
-                'second_options' => ['label' => 'Mot de passe : '],
-
-
+                'first_options' => [
+                    'label' => 'Mot de passe : ',
+                    'required' => false,
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer le mot de passe : ',
+                    'required' => false,
+                ],
             ]);
         $builder
             ->add('lastname', TextType::class, [

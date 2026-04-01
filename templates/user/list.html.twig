@@ -43,13 +43,14 @@
                             <a href="{{ path('activate_user',{'id': user.id}) }}">
                                 <button class="btn-update">Activer</button>
                             </a>
+                            {% if 'ROLE_ADMIN' not in user.roles %}
                             <a href="{{ path('deactivate_user',{'id': user.id}) }}">
                                 <button class="btn-delete">Désactiver</button>
                             </a>
                             <a href="{{ path('delete_user',{'id': user.id}) }}">
                                 <button class="btn-delete">Supprimer</button>
                             </a>
-
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}

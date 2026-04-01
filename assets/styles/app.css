@@ -5,7 +5,7 @@ body {
     radial-gradient(circle at right, rgba(251,146,60,0.12), transparent 20%),
     linear-gradient(135deg, #faf5ff 0%, #ffffff 38%, #fff7ed 100%);
     text-rendering: optimizeLegibility;
-    font-family: Inter, sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 16px;
     line-height: 1.5;
     color: #18181B;

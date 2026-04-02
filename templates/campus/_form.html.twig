@@ -1,9 +1,20 @@
 <div class="contenu-texte create-location marginLeft">
+
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn-update">{{ button_label|default('Sauvegarder') }}</button>
-{{ form_end(form) }}
-    <a href="{{ path('app_campus_index') }}">
-        <button class="retourMenu">Retour aux Campus</button></a>
-    {{ include('campus/_delete_form.html.twig') }}
+
+    <div class="form-actions">
+        <button class="btn-update">
+            {{ button_label|default('Sauvegarder') }}
+        </button>
+
+        <a href="{{ path('app_campus_index') }}" class="retourMenu">
+            Retour aux Campus
+        </a>
+
+        {{ include('campus/_delete_form.html.twig') }}
+    </div>
+
+    {{ form_end(form) }}
+
 </div>

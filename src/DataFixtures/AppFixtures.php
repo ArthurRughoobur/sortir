@@ -97,27 +97,27 @@ class AppFixtures extends Fixture
         $campus = $manager->getRepository(Campus::class)->findAll();
 
         $usersData = [
-            ['username' => 'Admin', 'roles' => ['ROLE_ADMIN']],
-            ['username' => 'Arthur', 'roles' => ['ROLE_USER']],
-            ['username' => 'Adrien', 'roles' => ['ROLE_USER']],
-            ['username' => 'AdrienQ', 'roles' => ['ROLE_USER']],
-            ['username' => 'Raman', 'roles' => ['ROLE_USER']],
-            ['username' => 'Lena', 'roles' => ['ROLE_USER']],
-            ['username' => 'Emilia', 'roles' => ['ROLE_USER']],
-            ['username' => 'Thomas', 'roles' => ['ROLE_USER']],
-            ['username' => 'Maud', 'roles' => ['ROLE_USER']],
-            ['username' => 'Nicolas', 'roles' => ['ROLE_USER']],
-            ['username' => 'David', 'roles' => ['ROLE_USER']],
-            ['username' => 'Baptiste', 'roles' => ['ROLE_USER']],
-            ['username' => 'Silvia', 'roles' => ['ROLE_USER']],
-            ['username' => 'Mathilde', 'roles' => ['ROLE_USER']],
-            ['username' => 'Yasmine', 'roles' => ['ROLE_USER']],
-            ['username' => 'Clara', 'roles' => ['ROLE_USER']],
-            ['username' => 'Antonin', 'roles' => ['ROLE_USER']],
-            ['username' => 'Camille', 'roles' => ['ROLE_USER']],
-            ['username' => 'Vanina', 'roles' => ['ROLE_USER']],
-            ['username' => 'Mael', 'roles' => ['ROLE_USER']],
-            ['username' => 'Almokashfi', 'roles' => ['ROLE_USER']],
+            ['username' => 'Sly','lastname'=> 'Tropée', "name" => "Sylvain", 'roles' => ['ROLE_ADMIN']],
+            ['username' => 'Arthur', 'lastname'=> 'Rughoobur', "name" => "Arthur", 'roles' => ['ROLE_ADMIN']],
+            ['username' => 'Adrien','lastname'=> 'Le Clech', "name" => "Adrien", 'roles' => ['ROLE_ADMIN']],
+            ['username' => 'AdrienQ','lastname'=> 'Quintard', "name" => "Adrien", 'roles' => ['ROLE_USER']],
+            ['username' => 'Raman', 'lastname'=> 'Khaniakou', "name" => "Raman", 'roles' => ['ROLE_USER']],
+            ['username' => 'Lena','lastname'=> 'Morfoisse', "name" => "Lena", 'roles' => ['ROLE_USER']],
+            ['username' => 'Emilia', 'lastname'=> 'Resanovic', "name" => "Emilia",'roles' => ['ROLE_USER']],
+            ['username' => 'Thomas', 'lastname'=> 'Danger', "name" => "Thomas",'roles' => ['ROLE_USER']],
+            ['username' => 'Maud', 'lastname'=> 'Butin', "name" => "Maud", 'roles' => ['ROLE_USER']],
+            ['username' => 'Nicolas', 'lastname'=> 'Tolantin', "name" => "Nicolas",'roles' => ['ROLE_USER']],
+            ['username' => 'David', 'lastname'=> 'Thebault', "name" => "David",'roles' => ['ROLE_USER']],
+            ['username' => 'Baptiste', 'lastname'=> 'Leblanc', "name" => "Baptiste",'roles' => ['ROLE_USER']],
+            ['username' => 'Silvia', 'lastname'=> 'Bamas', "name" => "Sylvia",'roles' => ['ROLE_USER']],
+            ['username' => 'Mathilde','lastname'=> 'Guedon', "name" => "Mathilde", 'roles' => ['ROLE_USER']],
+            ['username' => 'Yasmine', 'lastname'=> 'Hailoul', "name" => "Yasmine",'roles' => ['ROLE_USER']],
+            ['username' => 'Clara','lastname'=> 'Huet', "name" => "Clara", 'roles' => ['ROLE_USER']],
+            ['username' => 'Antonin','lastname'=> 'Martel', "name" => "Antonin", 'roles' => ['ROLE_USER']],
+            ['username' => 'Camille','lastname'=> 'Payen', "name" => "Camille", 'roles' => ['ROLE_USER']],
+            ['username' => 'Vanina', 'lastname'=> 'Martignoni', "name" => "Vanina",'roles' => ['ROLE_USER']],
+            ['username' => 'Mael','lastname'=> 'Seigneur', "name" => "Maël", 'roles' => ['ROLE_USER']],
+            ['username' => 'Almokashfi','lastname'=> 'Kabbashi Ali Hamed', "name" => "Almokashfi", 'roles' => ['ROLE_USER']],
         ];
 
         // Users fixes
@@ -126,8 +126,8 @@ class AppFixtures extends Fixture
             $user->setUsername($data['username']);
             $user->setRoles($data['roles']);
             $user->setPassword($this->passwordHasher->hashPassword($user, '123456'));
-            $user->setName($faker->firstName());
-            $user->setLastname($faker->lastName());
+            $user->setName($data['name']);
+            $user->setLastname($data['lastname']);
             $user->setPhone($faker->phoneNumber());
             $user->setEmail($faker->unique()->safeEmail());
             $user->setActive(true);

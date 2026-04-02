@@ -38,7 +38,8 @@ final class EventFormComponent extends AbstractController
     use ComponentToolsTrait;
     // Fournit des outils utiles pour les LiveComponents (ex: gestion des requêtes).
     #[LiveProp]
-    //Définit une propriété comme "LiveProp", c'est-à-dire qu'elle peut être mise à jour dynamiquement côté client et synchronisée avec le serveur.
+    //Définit une propriété comme "LiveProp", c'est-à-dire qu'elle peut être mise à jour
+    // dynamiquement côté client et synchronisée avec le serveur.
     //Synchronisent automatiquement les données entre le client et le serveur.
     public ?Event $initialFormData = null;
 

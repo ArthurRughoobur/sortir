@@ -1,0 +1,107 @@
+.error-page {
+    width: min(72rem, 100% - 2rem);
+    margin-inline: auto;
+    padding: 3rem 0;
+    min-height: calc(100dvh - 12rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.error-card {
+    width: min(100%, 42rem);
+    background: #ffffff;
+    border: 1px solid #eee8e2;
+    border-radius: 28px;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    text-align: center;
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.06),
+        0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.error-code {
+    margin: 0 0 0.5rem;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(to right, #7C3AED, #FB923C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.error-title {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: #121826;
+}
+
+.error-subtitle {
+    margin: 0.9rem 0 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.error-message {
+    margin: 1.25rem 0 0;
+    padding: 1rem 1.1rem;
+    background: #faf8f6;
+    border: 1px solid #f0ebe6;
+    border-radius: 18px;
+    color: #374151;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.error-text {
+    margin: 1.25rem 0 0;
+    color: #6b7280;
+    line-height: 1.75;
+}
+
+.error-text a {
+    color: #7c3aed;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.error-text a:hover {
+    text-decoration: underline;
+}
+
+.error-actions {
+    margin-top: 1.75rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+    .error-page {
+        width: min(100% - 1rem, 72rem);
+        padding: 1.5rem 0 2rem;
+        min-height: auto;
+    }
+
+    .error-card {
+        border-radius: 20px;
+        padding: 1.25rem 1rem;
+    }
+
+    .error-subtitle,
+    .error-text,
+    .error-message {
+        font-size: 0.95rem;
+    }
+}

@@ -1,110 +1,133 @@
-<div {{ attributes }}>
+<div {{ attributes }} class="event-form-page">
     {{ form_errors(form) }}
 
     {{ form_start(form, {
         attr: {
+            class: 'event-form',
             'data-model': 'on(change)|*',
             'data-action': 'live#action:prevent',
             'onsubmit': 'return false;'
-
         }
     }) }}
-    <div class="">
-        {{ form_row(form.city) }}
-    </div>
-    <div class="">
-        {{ form_row(form.adress) }}
-        <a href="{{ path('create_adress') }}">➕</a>
-    </div>
-    <div class="">
-        <label>Rue :
-            <input type="text" value="{{ street }}" readonly class="form-control">
-        </label>
-    </div>
-    <div class="">
-        <label>Latitude :
-            <input type="text" value="{{ latitude }}" readonly class="form-control">
-        </label>
-    </div>
-    <div class="">
-        <label>Longitude :
-            <input type="text" value="{{ longitude }}" readonly class="form-control">
-        </label>
-    </div>
 
-    <div class="">
-        <label>Campus :
-            <input type="text" value="{{ app.user.campus.name }}" readonly class="form-control">
-        </label>
-    </div>
+    <div class="event-form-card">
+        <header class="event-form-header">
+            <div>
+                <p class="event-form-eyebrow">Organisation</p>
+                <h1 class="event-form-title">
+                    {{ id is not null ? 'Modifier une sortie' : 'Créer une sortie' }}
+                </h1>
+                <p class="event-form-subtitle">
+                    Renseigne les informations de la sortie puis choisis l’action à effectuer.
+                </p>
+            </div>
+        </header>
 
+        <div class="event-form-grid">
+            <div class="form-field">
+                {{ form_row(form.city) }}
+            </div>
 
-    {% for field in form.children %}
-        {% if field.vars.name not in ['adress', 'save', 'publish','cancel','duration','city'] %}
-            {{ form_row(field) }}
-        {% endif %}
-    {% endfor %}
+            <div class="form-field form-field-address">
+                {{ form_row(form.adress) }}
+                <a class="inline-action-link" href="{{ path('create_adress') }}">➕ Ajouter une adresse</a>
+            </div>
 
-    <span>
-     {{ form_row(form.duration) }} minutes
-    </span>
+            <div class="form-field form-field-readonly">
+                <label>
+                    <span>Rue</span>
+                    <input type="text" value="{{ street }}" readonly class="form-control">
+                </label>
+            </div>
 
-    {% set canCreate = is_granted('EVENT_CREATE') %}
-    {% set canEdit = id is not null and is_granted('EVENT_EDIT', initialFormData) %}
-    {% set canManage = (id is null and canCreate) or canEdit %}
+            <div class="form-field form-field-readonly">
+                <label>
+                    <span>Latitude</span>
+                    <input type="text" value="{{ latitude }}" readonly class="form-control">
+                </label>
+            </div>
 
-    {% if canManage and not is_granted('ROLE_ADMIN') %}
-    <div class="">
-        <button
-            type="submit"
-            name="save"
-            value="save"
-            class="btn btn-secondary"
-            data-action="live#action"
-            data-live-action-param="save"
-        >
-            Sauvegarder
-        </button>
-    </div>
-    {% endif %}
+            <div class="form-field form-field-readonly">
+                <label>
+                    <span>Longitude</span>
+                    <input type="text" value="{{ longitude }}" readonly class="form-control">
+                </label>
+            </div>
 
-    {% if canManage and not is_granted('ROLE_ADMIN') %}
-    <div class="">
-        <button
-            type="submit"
-            name="publish"
-            value="publish"
-            class="btn btn-primary"
-            data-action="live#action"
-            data-live-action-param="publish"
-        >
-            Publier la sortie
-        </button>
-    </div>
-    {% endif %}
+            <div class="form-field form-field-readonly">
+                <label>
+                    <span>Campus</span>
+                    <input type="text" value="{{ app.user.campus.name }}" readonly class="form-control">
+                </label>
+            </div>
 
-    {% if id is not null and is_granted('EVENT_CANCEL', initialFormData) %}
-    <div class="">
-        <button
-            type="button"
-            class="btn btn-secondary"
-            onclick="openCancel()"
-        >
-            Annuler la sortie
-        </button>
-    </div>
-    {% endif %}
+            {% for field in form.children %}
+                {% if field.vars.name not in ['adress', 'save', 'publish', 'cancel', 'duration', 'city'] %}
+                    <div class="form-field">
+                        {{ form_row(field) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
 
-        <div class="">
-            <a href="{{ path('main_event') }}">
-                <button class="btn btn-secondary">
-                    Retour au menu
-                </button>
-            </a>
+            <div class="form-field form-field-duration">
+                <label class="duration-field">
+                    <span>Durée</span>
+                    <div class="duration-input">
+                        {{ form_widget(form.duration) }}
+                        <span class="duration-unit">minutes</span>
+                    </div>
+                    {{ form_errors(form.duration) }}
+                </label>
+            </div>
         </div>
 
+        {% set canCreate = is_granted('EVENT_CREATE') %}
+        {% set canEdit = id is not null and is_granted('EVENT_EDIT', initialFormData) %}
+        {% set canManage = (id is null and canCreate) or canEdit %}
 
-    {#            Popup motif annulation #}
+        <div class="event-form-actions">
+            {% if canManage and not is_granted('ROLE_ADMIN') %}
+                <button
+                    type="submit"
+                    name="save"
+                    value="save"
+                    class="btn btn-secondary"
+                    data-action="live#action"
+                    data-live-action-param="save"
+                >
+                    Sauvegarder
+                </button>
+            {% endif %}
+
+            {% if canManage and not is_granted('ROLE_ADMIN') %}
+                <button
+                    type="submit"
+                    name="publish"
+                    value="publish"
+                    class="btn btn-primary"
+                    data-action="live#action"
+                    data-live-action-param="publish"
+                >
+                    Publier la sortie
+                </button>
+            {% endif %}
+
+            {% if id is not null and is_granted('EVENT_CANCEL', initialFormData) %}
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="openCancel()"
+                >
+                    Annuler la sortie
+                </button>
+            {% endif %}
+
+            <a href="{{ path('main_event') }}" class="btn btn-secondary btn-link-like">
+                Retour au menu
+            </a>
+        </div>
+    </div>
+
     <div id="cancel" class="cancelPopUp" style="display:none;">
         <div class="popUpContent">
             <p>Voulez vous vraiment annuler l'évènement ?</p>
@@ -112,27 +135,28 @@
             <label>
                 <textarea data-model="cancelReason" placeholder="Motif d'annulation (obligatoire)"></textarea>
             </label>
-            <div>
+            <div class="popup-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeCancel()">Fermer</button>
-                <button type="button" class="btn btn-secondary" data-action="live#action"
-                        data-live-action-param="cancel">Confirmer
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-action="live#action"
+                    data-live-action-param="cancel"
+                >
+                    Confirmer
                 </button>
             </div>
         </div>
     </div>
 
-
     <script>
         function openCancel() {
             document.getElementById('cancel').style.display = 'flex';
         }
-
         function closeCancel() {
             document.getElementById('cancel').style.display = 'none';
-
         }
-
     </script>
-    {{ form_end(form) }}
 
+    {{ form_end(form) }}
 </div>

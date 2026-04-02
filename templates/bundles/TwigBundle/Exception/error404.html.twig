@@ -1,14 +1,25 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Page introuvable{% endblock %}
 
 {% block body %}
-    <h1>Oups ! Une erreur s'est produite.</h1>
-    <h2>Le serveur a renvoyé une erreur "{{ status_code }} {{ status_text }}".</h2>
-    <p>Message à nous retrouver dans l'email : "{{ exception.message }}"</p>
+    <main class="error-page">
+        <section class="error-container">
+            <div class="error-card">
+                <p class="error-code">404</p>
+                <h1 class="error-title">Page introuvable</h1>
+                <h2 class="error-subtitle">
+                    La page que vous cherchez n’existe pas ou n’est plus disponible.
+                </h2>
 
-    <div>
-        Quelque chose ne fonctionne pas correctement. Veuillez nous envoyer un e-mail à [onSfaitca@coucou.cc] en nous indiquant
-        ce que vous faisiez lorsque cette erreur s'est produite. Nous corrigerons le problème
-        dès que possible. Désolés pour la gêne occasionnée.
-    </div>
+                <p class="error-text">
+                    Vérifiez l’adresse saisie ou retournez à l’accueil pour continuer votre navigation.
+                </p>
+
+                <div class="error-actions">
+                    <a href="{{ path('main_event') }}" class="btn btn-primary">Retour au site</a>
+                </div>
+            </div>
+        </section>
+    </main>
 {% endblock %}

@@ -4,166 +4,207 @@
 
 {% block body %}
     <main class="legal-page">
-        <section class="container">
-            <h1>Mentions légales et RGPD</h1>
+        <section class="legal-container">
+            <header class="legal-header">
+                <p class="legal-eyebrow">Informations</p>
+                <h1 class="legal-title">Mentions légales et RGPD</h1>
+                <p class="legal-intro">
+                    Retrouvez ici les informations légales relatives au site, à son hébergement,
+                    à la gestion des données personnelles et aux droits des utilisateurs.
+                </p>
+            </header>
 
-            <h2>1. Éditeur du site</h2>
-            <p>
-                Le présent site <strong>On-S'fait-ça.com</strong> est édité dans le cadre d’un projet pédagogique réalisé
-                par des apprenants de l’ENI École Informatique.
-            </p>
-            <ul>
-                <li><strong>Nom du site :</strong> Sortir.com</li>
-                <li><strong>Statut :</strong> Projet pédagogique non commercial</li>
-                <li><strong>Éditeur :</strong> {{ editeur_nom|default('Nom / équipe projet') }}</li>
-                <li><strong>Responsable de publication :</strong> {{ responsable_publication|default('Nom du responsable') }}</li>
-                <li><strong>Email de contact :</strong> <a href="mailto:{{ contact_email|default('contact@example.com') }}">{{ contact_email|default('contact@example.com') }}</a></li>
-            </ul>
+            <div class="legal-content">
+                <section class="legal-block">
+                    <h2>1. Éditeur du site</h2>
+                    <p>
+                        Le présent site <strong>On-S'fait-ça.com</strong> est édité dans le cadre d’un projet pédagogique réalisé
+                        par des apprenants de l’ENI École Informatique.
+                    </p>
+                    <ul class="legal-list">
+                        <li><strong>Nom du site :</strong> Sortir.com</li>
+                        <li><strong>Statut :</strong> Projet pédagogique non commercial</li>
+                        <li><strong>Éditeur :</strong> {{ editeur_nom|default('Nom / équipe projet') }}</li>
+                        <li><strong>Responsable de publication :</strong> {{ responsable_publication|default('Nom du responsable') }}</li>
+                        <li><strong>Email de contact :</strong> <a href="mailto:{{ contact_email|default('contact@example.com') }}">{{ contact_email|default('contact@example.com') }}</a></li>
+                    </ul>
+                </section>
 
-            <h2>2. Hébergement</h2>
-            <p>Le site est hébergé par :</p>
-            <ul>
-                <li><strong>Hébergeur :</strong> {{ hebergeur_nom|default('OVHcloud') }}</li>
-                <li><strong>Adresse :</strong> {{ hebergeur_adresse|default('2 rue Kellermann, 59100 Roubaix, France') }}</li>
-                <li><strong>Site web :</strong> <a href="https://www.ovhcloud.com" target="_blank" rel="noopener noreferrer">www.ovhcloud.com</a></li>
-            </ul>
+                <section class="legal-block">
+                    <h2>2. Hébergement</h2>
+                    <p>Le site est hébergé par :</p>
+                    <ul class="legal-list">
+                        <li><strong>Hébergeur :</strong> {{ hebergeur_nom|default('OVHcloud') }}</li>
+                        <li><strong>Adresse :</strong> {{ hebergeur_adresse|default('2 rue Kellermann, 59100 Roubaix, France') }}</li>
+                        <li><strong>Site web :</strong> <a href="https://www.ovhcloud.com" target="_blank" rel="noopener noreferrer">www.ovhcloud.com</a></li>
+                    </ul>
+                </section>
 
-            <h2>3. Objet du site</h2>
-            <p>
-                Le site <strong>Sortir.com</strong> est une plateforme web destinée à permettre aux stagiaires actifs
-                et anciens stagiaires d’organiser des sorties et activités hors temps de formation.
-            </p>
-            <p>
-                Il permet notamment la consultation de sorties, l’inscription à des événements,
-                la gestion de profil utilisateur ainsi que l’organisation d’activités entre membres.
-            </p>
+                <section class="legal-block">
+                    <h2>3. Objet du site</h2>
+                    <p>
+                        Le site <strong>Sortir.com</strong> est une plateforme web destinée à permettre aux stagiaires actifs
+                        et anciens stagiaires d’organiser des sorties et activités hors temps de formation.
+                    </p>
+                    <p>
+                        Il permet notamment la consultation de sorties, l’inscription à des événements,
+                        la gestion de profil utilisateur ainsi que l’organisation d’activités entre membres.
+                    </p>
+                </section>
 
-            <h2>4. Accès au site</h2>
-            <p>
-                L’accès au site est réservé aux utilisateurs disposant d’un compte.
-                L’inscription peut être soumise à validation par un administrateur.
-            </p>
-            <p>
-                L’utilisateur s’engage à fournir des informations exactes, à jour et complètes lors de son inscription
-                et de l’utilisation du site.
-            </p>
+                <section class="legal-block">
+                    <h2>4. Accès au site</h2>
+                    <p>
+                        L’accès au site est réservé aux utilisateurs disposant d’un compte.
+                        L’inscription peut être soumise à validation par un administrateur.
+                    </p>
+                    <p>
+                        L’utilisateur s’engage à fournir des informations exactes, à jour et complètes lors de son inscription
+                        et de l’utilisation du site.
+                    </p>
+                </section>
 
-            <h2>5. Propriété intellectuelle</h2>
-            <p>
-                L’ensemble des contenus présents sur le site, notamment les textes, éléments graphiques,
-                logos, icônes, images, structure et code source, sont protégés par les dispositions en vigueur
-                relatives à la propriété intellectuelle.
-            </p>
-            <p>
-                Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie
-                des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sans autorisation préalable.
-            </p>
+                <section class="legal-block">
+                    <h2>5. Propriété intellectuelle</h2>
+                    <p>
+                        L’ensemble des contenus présents sur le site, notamment les textes, éléments graphiques,
+                        logos, icônes, images, structure et code source, sont protégés par les dispositions en vigueur
+                        relatives à la propriété intellectuelle.
+                    </p>
+                    <p>
+                        Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie
+                        des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sans autorisation préalable.
+                    </p>
+                </section>
 
-            <h2>6. Responsabilité</h2>
-            <p>
-                L’éditeur s’efforce de fournir sur le site des informations aussi précises que possible.
-                Toutefois, il ne pourra être tenu responsable des omissions, inexactitudes ou carences dans la mise à jour.
-            </p>
-            <p>
-                L’éditeur ne pourra également être tenu responsable en cas de dysfonctionnement technique,
-                d’indisponibilité temporaire du site ou de dommages liés à son utilisation.
-            </p>
-            <p>
-                Chaque utilisateur reste responsable de son comportement sur la plateforme ainsi que de sa participation
-                aux sorties et événements proposés.
-            </p>
+                <section class="legal-block">
+                    <h2>6. Responsabilité</h2>
+                    <p>
+                        L’éditeur s’efforce de fournir sur le site des informations aussi précises que possible.
+                        Toutefois, il ne pourra être tenu responsable des omissions, inexactitudes ou carences dans la mise à jour.
+                    </p>
+                    <p>
+                        L’éditeur ne pourra également être tenu responsable en cas de dysfonctionnement technique,
+                        d’indisponibilité temporaire du site ou de dommages liés à son utilisation.
+                    </p>
+                    <p>
+                        Chaque utilisateur reste responsable de son comportement sur la plateforme ainsi que de sa participation
+                        aux sorties et événements proposés.
+                    </p>
+                </section>
 
-            <h2>7. Données personnelles – RGPD</h2>
-            <p>
-                Dans le cadre du fonctionnement de la plateforme, des données personnelles peuvent être collectées
-                et traitées conformément au Règlement Général sur la Protection des Données (RGPD).
-            </p>
+                <section class="legal-block">
+                    <h2>7. Données personnelles – RGPD</h2>
+                    <p>
+                        Dans le cadre du fonctionnement de la plateforme, des données personnelles peuvent être collectées
+                        et traitées conformément au Règlement Général sur la Protection des Données (RGPD).
+                    </p>
 
-            <h3>7.1 Données collectées</h3>
-            <p>Les données susceptibles d’être collectées sont notamment :</p>
-            <ul>
-                <li>nom et prénom ;</li>
-                <li>adresse email ;</li>
-                <li>numéro de téléphone ;</li>
-                <li>mot de passe chiffré ;</li>
-                <li>campus de rattachement ;</li>
-                <li>éventuellement photo de profil et informations liées aux sorties.</li>
-            </ul>
+                    <div class="legal-subsection">
+                        <h3>7.1 Données collectées</h3>
+                        <p>Les données susceptibles d’être collectées sont notamment :</p>
+                        <ul class="legal-list">
+                            <li>nom et prénom ;</li>
+                            <li>adresse email ;</li>
+                            <li>numéro de téléphone ;</li>
+                            <li>mot de passe chiffré ;</li>
+                            <li>campus de rattachement ;</li>
+                            <li>éventuellement photo de profil et informations liées aux sorties.</li>
+                        </ul>
+                    </div>
 
-            <h3>7.2 Finalités du traitement</h3>
-            <p>Les données personnelles sont collectées pour les finalités suivantes :</p>
-            <ul>
-                <li>création et gestion des comptes utilisateurs ;</li>
-                <li>organisation et gestion des sorties ;</li>
-                <li>mise en relation des participants ;</li>
-                <li>gestion administrative et sécurisation de la plateforme ;</li>
-                <li>amélioration du fonctionnement du site.</li>
-            </ul>
+                    <div class="legal-subsection">
+                        <h3>7.2 Finalités du traitement</h3>
+                        <p>Les données personnelles sont collectées pour les finalités suivantes :</p>
+                        <ul class="legal-list">
+                            <li>création et gestion des comptes utilisateurs ;</li>
+                            <li>organisation et gestion des sorties ;</li>
+                            <li>mise en relation des participants ;</li>
+                            <li>gestion administrative et sécurisation de la plateforme ;</li>
+                            <li>amélioration du fonctionnement du site.</li>
+                        </ul>
+                    </div>
 
-            <h3>7.3 Base légale</h3>
-            <p>
-                Les traitements reposent sur l’exécution du service proposé par la plateforme,
-                l’intérêt légitime lié à son bon fonctionnement et, le cas échéant, le consentement
-                de l’utilisateur pour certains traitements spécifiques.
-            </p>
+                    <div class="legal-subsection">
+                        <h3>7.3 Base légale</h3>
+                        <p>
+                            Les traitements reposent sur l’exécution du service proposé par la plateforme,
+                            l’intérêt légitime lié à son bon fonctionnement et, le cas échéant, le consentement
+                            de l’utilisateur pour certains traitements spécifiques.
+                        </p>
+                    </div>
 
-            <h3>7.4 Destinataires des données</h3>
-            <p>
-                Les données sont destinées uniquement aux personnes habilitées à les traiter dans le cadre du projet,
-                notamment les administrateurs de la plateforme.
-                Elles ne sont ni vendues ni cédées à des tiers à des fins commerciales.
-            </p>
+                    <div class="legal-subsection">
+                        <h3>7.4 Destinataires des données</h3>
+                        <p>
+                            Les données sont destinées uniquement aux personnes habilitées à les traiter dans le cadre du projet,
+                            notamment les administrateurs de la plateforme.
+                            Elles ne sont ni vendues ni cédées à des tiers à des fins commerciales.
+                        </p>
+                    </div>
 
-            <h3>7.5 Durée de conservation</h3>
-            <p>
-                Les données sont conservées pendant la durée strictement nécessaire aux finalités pour lesquelles elles
-                sont traitées, et au maximum pendant la durée d’utilisation du compte, sauf obligation légale contraire.
-            </p>
+                    <div class="legal-subsection">
+                        <h3>7.5 Durée de conservation</h3>
+                        <p>
+                            Les données sont conservées pendant la durée strictement nécessaire aux finalités pour lesquelles elles
+                            sont traitées, et au maximum pendant la durée d’utilisation du compte, sauf obligation légale contraire.
+                        </p>
+                    </div>
 
-            <h3>7.6 Sécurité</h3>
-            <p>
-                L’éditeur met en œuvre des mesures techniques et organisationnelles raisonnables afin d’assurer
-                la sécurité des données personnelles et d’en empêcher l’accès non autorisé, l’altération ou la divulgation.
-            </p>
+                    <div class="legal-subsection">
+                        <h3>7.6 Sécurité</h3>
+                        <p>
+                            L’éditeur met en œuvre des mesures techniques et organisationnelles raisonnables afin d’assurer
+                            la sécurité des données personnelles et d’en empêcher l’accès non autorisé, l’altération ou la divulgation.
+                        </p>
+                    </div>
 
-            <h3>7.7 Droits des utilisateurs</h3>
-            <p>
-                Conformément à la réglementation applicable, chaque utilisateur dispose des droits suivants :
-            </p>
-            <ul>
-                <li>droit d’accès ;</li>
-                <li>droit de rectification ;</li>
-                <li>droit à l’effacement ;</li>
-                <li>droit à la limitation du traitement ;</li>
-                <li>droit d’opposition ;</li>
-                <li>droit à la portabilité, lorsque applicable.</li>
-            </ul>
+                    <div class="legal-subsection">
+                        <h3>7.7 Droits des utilisateurs</h3>
+                        <p>
+                            Conformément à la réglementation applicable, chaque utilisateur dispose des droits suivants :
+                        </p>
+                        <ul class="legal-list">
+                            <li>droit d’accès ;</li>
+                            <li>droit de rectification ;</li>
+                            <li>droit à l’effacement ;</li>
+                            <li>droit à la limitation du traitement ;</li>
+                            <li>droit d’opposition ;</li>
+                            <li>droit à la portabilité, lorsque applicable.</li>
+                        </ul>
 
-            <p>
-                Pour exercer ces droits, l’utilisateur peut contacter :
-                <a href="mailto:{{ contact_email|default('contact@example.com') }}">{{ contact_email|default('contact@example.com') }}</a>.
-            </p>
+                        <p>
+                            Pour exercer ces droits, l’utilisateur peut contacter :
+                            <a href="mailto:{{ contact_email|default('contact@example.com') }}">{{ contact_email|default('contact@example.com') }}</a>.
+                        </p>
 
-            <p>
-                En cas de difficulté non résolue, l’utilisateur peut également introduire une réclamation
-                auprès de la CNIL.
-            </p>
+                        <p>
+                            En cas de difficulté non résolue, l’utilisateur peut également introduire une réclamation
+                            auprès de la CNIL.
+                        </p>
+                    </div>
+                </section>
 
-            <h2>8. Cookies</h2>
-            <p>
-                Le site peut utiliser des cookies ou traceurs strictement nécessaires à son fonctionnement,
-                notamment pour la gestion de session et l’authentification.
-            </p>
-            <p>
-                Si des cookies non essentiels sont utilisés, ils devront faire l’objet d’une information
-                et, si nécessaire, du recueil du consentement de l’utilisateur.
-            </p>
+                <section class="legal-block">
+                    <h2>8. Cookies</h2>
+                    <p>
+                        Le site peut utiliser des cookies ou traceurs strictement nécessaires à son fonctionnement,
+                        notamment pour la gestion de session et l’authentification.
+                    </p>
+                    <p>
+                        Si des cookies non essentiels sont utilisés, ils devront faire l’objet d’une information
+                        et, si nécessaire, du recueil du consentement de l’utilisateur.
+                    </p>
+                </section>
 
-            <h2>9. Droit applicable</h2>
-            <p>
-                Les présentes mentions légales sont soumises au droit français.
-                En cas de litige, et à défaut de résolution amiable, les tribunaux français seront seuls compétents.
-            </p>
+                <section class="legal-block">
+                    <h2>9. Droit applicable</h2>
+                    <p>
+                        Les présentes mentions légales sont soumises au droit français.
+                        En cas de litige, et à défaut de résolution amiable, les tribunaux français seront seuls compétents.
+                    </p>
+                </section>
+            </div>
         </section>
     </main>
 {% endblock %}

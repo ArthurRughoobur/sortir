@@ -6,18 +6,16 @@ import './stimulus_bootstrap.js';
  * which should already be in your base.html.twig.
  */
 import './styles/normalise.css';
-import './styles/app.css';
-import './styles/navBar.css';
-import './styles/filterEvent.css';
-import './styles/detailEvent.css';
-import './styles/blocListEvent.css';
-import './styles/flash.css';
-import './styles/mentions.css';
-import './styles/about.css';
-import './styles/index.css'
-import './styles/mascot.css'
-import './styles/button.css'
-import './styles/location.css'
-import './styles/user.css'
+import './styles/base.css'
+import './styles/layout.css'
+import './styles/components.css'
+import './styles/pages-home.css'
+import './styles/pages-events.css'
+import './styles/pages-auth.css'
+import './styles/pages-event-form.css'
+import './styles/pages-user-details.css'
+import './styles/pages-about.css'
+import './styles/pages-legal.css'
+import './styles/pages-error.css'
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

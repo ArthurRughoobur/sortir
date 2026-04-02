@@ -3,33 +3,75 @@
 {% block title %}On s'fait ça !{% endblock %}
 
 {% block body %}
-    <SECTION class="index-section">
+    <section class="index-section">
         <div class="conteneur-flex">
             <div class="contenu-texte">
                 <h3 class="accroche">Des sorties simples, proches et étudiantes !</h3>
                 <h1 class="titre1">Trouve quoi faire</h1>
                 <h2 class="titre2">entre deux cours.</h2>
             </div>
+
             <div class="pseudoInfo">
-                <span>   {{ 'now' | date ("d/m/Y") }}<br>  </span>
-                <span>  {{ app.user.name }} {{ app.user.lastname|first }}.  </span>
+                <span>{{ 'now' | date ("d/m/Y") }}<br></span>
+                <span>{{ app.user.name }} {{ app.user.lastname|first }}.</span>
             </div>
         </div>
+
         <section class="filtreList">
             {{ form_start(eventFormSearch) }}
 
             {{ form_row(eventFormSearch.name) }}
             {{ form_row(eventFormSearch.category) }}
+
             <span class="search-campus">
-                   {{ form_row(eventFormSearch.campus) }}
-       </span>
+                {{ form_row(eventFormSearch.campus) }}
+            </span>
+
             {{ form_row(eventFormSearch.dateStart) }}
             {{ form_row(eventFormSearch.deadline) }}
-            {{ form_row(eventFormSearch.organizer) }}
-            {{ form_row(eventFormSearch.registered) }}
-            {{ form_row(eventFormSearch.notRegistered) }}
-            {{ form_row(eventFormSearch.terminee) }}
-            {{ form_row (eventFormSearch.enCreation) }}
+
+            <div class="filter-toggle-group checkFiltre">
+                <div class="filter-toggle">
+                    {{ form_widget(eventFormSearch.organizer, {'attr': {'class': 'filter-toggle-input'}}) }}
+                    <label for="{{ eventFormSearch.organizer.vars.id }}" class="filter-toggle-ui"></label>
+                    <label for="{{ eventFormSearch.organizer.vars.id }}" class="filter-toggle-text">
+                        {{ eventFormSearch.organizer.vars.label }}
+                    </label>
+                </div>
+
+                <div class="filter-toggle">
+                    {{ form_widget(eventFormSearch.registered, {'attr': {'class': 'filter-toggle-input'}}) }}
+                    <label for="{{ eventFormSearch.registered.vars.id }}" class="filter-toggle-ui"></label>
+                    <label for="{{ eventFormSearch.registered.vars.id }}" class="filter-toggle-text">
+                        {{ eventFormSearch.registered.vars.label }}
+                    </label>
+                </div>
+
+                <div class="filter-toggle">
+                    {{ form_widget(eventFormSearch.notRegistered, {'attr': {'class': 'filter-toggle-input'}}) }}
+                    <label for="{{ eventFormSearch.notRegistered.vars.id }}" class="filter-toggle-ui"></label>
+                    <label for="{{ eventFormSearch.notRegistered.vars.id }}" class="filter-toggle-text">
+                        {{ eventFormSearch.notRegistered.vars.label }}
+                    </label>
+                </div>
+
+                <div class="filter-toggle">
+                    {{ form_widget(eventFormSearch.terminee, {'attr': {'class': 'filter-toggle-input'}}) }}
+                    <label for="{{ eventFormSearch.terminee.vars.id }}" class="filter-toggle-ui"></label>
+                    <label for="{{ eventFormSearch.terminee.vars.id }}" class="filter-toggle-text">
+                        {{ eventFormSearch.terminee.vars.label }}
+                    </label>
+                </div>
+
+                <div class="filter-toggle">
+                    {{ form_widget(eventFormSearch.enCreation, {'attr': {'class': 'filter-toggle-input'}}) }}
+                    <label for="{{ eventFormSearch.enCreation.vars.id }}" class="filter-toggle-ui"></label>
+                    <label for="{{ eventFormSearch.enCreation.vars.id }}" class="filter-toggle-text">
+                        {{ eventFormSearch.enCreation.vars.label }}
+                    </label>
+                </div>
+            </div>
+
             {{ form_row(eventFormSearch.search) }}
             {{ form_end(eventFormSearch) }}
         </section>
@@ -41,7 +83,5 @@
                 <p>Aucune sortie trouvée</p>
             {% endfor %}
         </section>
-    </SECTION>
+    </section>
 {% endblock %}
-
-

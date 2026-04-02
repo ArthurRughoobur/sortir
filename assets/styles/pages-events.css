@@ -500,9 +500,12 @@ section.filtreList.location {
         margin-top: 1rem;
         justify-content: stretch;
     }
+    .search-campus{
+        display: none;
+    }
 
-    .btnEventDetail {
-        width: 100%;
+    .hide-mobile {
+        display: none;
     }
 }
 

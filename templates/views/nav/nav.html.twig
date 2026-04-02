@@ -57,7 +57,7 @@
 
             <li><a href="{{ path('update', {'id': app.user.id}) }}">Mon Profil</a></li>
             <li><a href="{{ path('app_logout') }}">Se Déconnecter</a></li>
-            <li><a class="btn-create-event" href="{{ path('create_event') }}">Créer un évènement</a></li>
+            <li><a class="btn-create-event hide-mobile" href="{{ path('create_event') }}">Créer un évènement</a></li>
         {% else %}
             <li><a href="{{ path('app_login') }}">Login</a></li>
         {% endif %}

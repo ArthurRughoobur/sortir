@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="profilUpdate">
     {% embed 'views/form/template-form.html.twig' with {form : userForm2} %}
         {% block formTitle %} MON PROFIL : {% endblock %}
         {% block buttonLabel %} Update !{% endblock %}
        {% endembed %}
-    <img src="{{ asset('img/'~ user.photo) }}" alt="{{ user.photo}}">
+    <img class="photoProfil" src="{{ asset('img/'~ user.photo) }}" alt="{{ user.photo}}">
+    </div>
 {% endblock %}
 

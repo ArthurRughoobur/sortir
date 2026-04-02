@@ -13,20 +13,23 @@ footer,
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-4);
-    padding: 0.9rem 1.25rem;
-    background: rgba(255, 255, 255, 0.75);
+    gap: var(--space-3);
+    background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(24px);
-    height: 10vh;
+    z-index: 20;
 }
 
 header,
 .header {
+    height: 64px;
+    padding: 0 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     margin-bottom: 3rem;
 }
 
 footer {
+    height: 44px;
+    padding: 0 1rem;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
     margin-top: 2rem;
 }
@@ -50,12 +53,7 @@ footer h1,
     align-items: center;
     justify-content: flex-end;
     flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-.menu ul li {
-    display: block;
-    margin: 0;
+    gap: 0.5rem;
 }
 
 .menu ul li a,
@@ -63,8 +61,8 @@ footer h1,
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 44px;
-    padding: 0.7rem 1rem;
+    min-height: 36px;
+    padding: 0.45rem 0.85rem;
     border-radius: var(--radius-pill);
     transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }

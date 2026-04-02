@@ -1,0 +1,112 @@
+.about-page {
+    width: min(72rem, 100% - 2rem);
+    margin-inline: auto;
+    padding: 2rem 0 3rem;
+}
+
+.about-container {
+    background: #ffffff;
+    border: 1px solid #eee8e2;
+    border-radius: 28px;
+    padding: clamp(1.5rem, 2vw, 2.5rem);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.06),
+        0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.about-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.about-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+.about-title {
+    margin: 0;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    line-height: 1.1;
+    color: #121826;
+}
+
+.about-intro {
+    margin: 0.9rem 0 0;
+    max-width: 65ch;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4b5563;
+}
+
+.about-content {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.about-block {
+    background: #faf8f6;
+    border: 1px solid #f0ebe6;
+    border-radius: 22px;
+    padding: 1.25rem 1.4rem;
+}
+
+.about-block h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.about-block p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.75;
+}
+
+.about-list,
+.team-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #4b5563;
+}
+
+.about-list li,
+.team-list li {
+    margin-bottom: 0.55rem;
+    line-height: 1.6;
+}
+
+.about-contact a {
+    color: #7c3aed;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.about-contact a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .about-page {
+        width: min(100% - 1rem, 72rem);
+        padding: 1rem 0 2rem;
+    }
+
+    .about-container {
+        border-radius: 20px;
+        padding: 1rem;
+    }
+
+    .about-block {
+        border-radius: 18px;
+        padding: 1rem;
+    }
+
+    .about-title {
+        font-size: 1.8rem;
+    }
+}

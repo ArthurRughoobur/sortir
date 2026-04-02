@@ -4,67 +4,85 @@
 
 {% block body %}
     <main class="about-page">
-        <section class="container">
-            <h1>Qui sommes-nous ?</h1>
+        <section class="about-container">
+            <header class="about-header">
+                <p class="about-eyebrow">À propos</p>
+                <h1 class="about-title">Qui sommes-nous ?</h1>
+                <p class="about-intro">
+                    Bienvenue sur <strong>On-S'fait-ça.com</strong>, une plateforme dédiée aux stagiaires
+                    et anciens stagiaires de l’ENI École Informatique.
+                </p>
+            </header>
 
-            <p class="intro">
-                Bienvenue sur <strong>On-S'fait-ça.com</strong>, une plateforme dédiée aux stagiaires
-                et anciens stagiaires de l’ENI École Informatique.
-            </p>
+            <div class="about-content">
+                <section class="about-block">
+                    <h2>Notre mission</h2>
+                    <p>
+                        Notre objectif est simple : <strong>favoriser les échanges et les rencontres en dehors du cadre de formation</strong>.
+                        Sortir.com permet à chacun d’organiser et de participer à des activités variées :
+                        sportives, culturelles ou simplement conviviales.
+                    </p>
+                </section>
 
-            <h2>Notre mission</h2>
-            <p>
-                Notre objectif est simple : <strong>favoriser les échanges et les rencontres en dehors du cadre de formation</strong>.
-                Sortir.com permet à chacun d’organiser et de participer à des activités variées :
-                sportives, culturelles ou simplement conviviales.
-            </p>
+                <section class="about-block">
+                    <h2>Le projet</h2>
+                    <p>
+                        Ce site a été conçu dans le cadre d’un projet pédagogique par une équipe d’apprenants en développement web.
+                        Il répond à un besoin réel : faciliter la communication et l’organisation d’événements entre stagiaires,
+                        qui étaient auparavant limités à des affichages physiques.
+                    </p>
+                </section>
 
-            <h2>Le projet</h2>
-            <p>
-                Ce site a été conçu dans le cadre d’un projet pédagogique par une équipe d’apprenants en développement web.
-                Il répond à un besoin réel : faciliter la communication et l’organisation d’événements entre stagiaires,
-                qui étaient auparavant limités à des affichages physiques.
-            </p>
+                <section class="about-block">
+                    <h2>Pour qui ?</h2>
+                    <ul class="about-list">
+                        <li>Les stagiaires actuellement en formation</li>
+                        <li>Les anciens stagiaires souhaitant rester en contact</li>
+                        <li>Les personnes souhaitant partager des activités et créer du lien</li>
+                    </ul>
+                </section>
 
-            <h2>Pour qui ?</h2>
-            <ul>
-                <li>Les stagiaires actuellement en formation</li>
-                <li>Les anciens stagiaires souhaitant rester en contact</li>
-                <li>Les personnes souhaitant partager des activités et créer du lien</li>
-            </ul>
+                <section class="about-block">
+                    <h2>Ce que nous proposons</h2>
+                    <ul class="about-list">
+                        <li>Créer et organiser des sorties</li>
+                        <li>Rejoindre des événements proposés par d'autres utilisateurs</li>
+                        <li>Rencontrer des personnes partageant les mêmes centres d’intérêt</li>
+                        <li>Renforcer la cohésion entre les membres de la communauté ENI</li>
+                    </ul>
+                </section>
 
-            <h2>Ce que nous proposons</h2>
-            <ul>
-                <li>Créer et organiser des sorties</li>
-                <li>Rejoindre des événements proposés par d'autres utilisateurs</li>
-                <li>Rencontrer des personnes partageant les mêmes centres d’intérêt</li>
-                <li>Renforcer la cohésion entre les membres de la communauté ENI</li>
-            </ul>
+                <section class="about-block">
+                    <h2>Notre vision</h2>
+                    <p>
+                        Nous croyons que les rencontres en dehors du cadre professionnel ou scolaire sont essentielles
+                        pour créer des liens durables, développer un réseau et enrichir l’expérience humaine.
+                    </p>
+                </section>
 
-            <h2>Notre vision</h2>
-            <p>
-                Nous croyons que les rencontres en dehors du cadre professionnel ou scolaire sont essentielles
-                pour créer des liens durables, développer un réseau et enrichir l’expérience humaine.
-            </p>
+                <section class="about-block">
+                    <h2>L’équipe</h2>
+                    <p>
+                        Ce projet est réalisé par une équipe de développeurs en formation.
+                    </p>
 
-            <h2>L’équipe</h2>
-            <p>
-                Ce projet est réalisé par une équipe de développeurs en formation.
-            </p>
+                    <ul class="team-list">
+                        <li>{{ membre_1|default('Arthur') }} – Développeur Web En formation a L'ENI Rennes</li>
+                        <li>{{ membre_2|default('Adrien') }} – Développeur Web En formation a L'ENI Rennes</li>
+                    </ul>
+                </section>
 
-            <ul class="team-list">
-                <li>{{ membre_1|default('Arthur') }} – Développeur</li>
-                <li>{{ membre_2|default('Adrien') }} – Développeur</li>
-            </ul>
-
-            <h2>Contact</h2>
-            <p>
-                Une question ? Une suggestion ?
-                N’hésitez pas à nous contacter :
-                <a href="mailto:{{ contact_email|default('contact@example.com') }}">
-                    {{ contact_email|default('contact@example.com') }}
-                </a>
-            </p>
+                <section class="about-block about-contact">
+                    <h2>Contact</h2>
+                    <p>
+                        Une question ? Une suggestion ?
+                        N’hésitez pas à nous contacter :
+                        <a href="mailto:{{ contact_email|default('contact@example.com') }}">
+                            {{ contact_email|default('contact@example.com') }}
+                        </a>
+                    </p>
+                </section>
+            </div>
         </section>
     </main>
 {% endblock %}

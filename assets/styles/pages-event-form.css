@@ -1,0 +1,250 @@
+.event-form-page {
+    width: min(72rem, 100% - 2rem);
+    margin-inline: auto;
+    padding: 2rem 0 3rem;
+}
+
+.event-form {
+    display: block;
+}
+
+.event-form-card {
+    background: #ffffff;
+    border: 1px solid #eee8e2;
+    border-radius: 28px;
+    padding: clamp(1.25rem, 2vw, 2rem);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.06),
+        0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.event-form-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.event-form-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+.event-form-title {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    line-height: 1.15;
+    color: #121826;
+}
+
+.event-form-subtitle {
+    margin: 0.6rem 0 0;
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 60ch;
+}
+
+.event-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.form-field {
+    min-width: 0;
+}
+
+.form-field label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-field label > span {
+    font-size: 0.95rem;
+    color: #6b7280;
+    font-weight: 700;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea,
+.form-field .form-control {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.85rem 1rem;
+    border: 1px solid #e5ddd6;
+    border-radius: 16px;
+    background: #faf8f6;
+    color: #111827;
+    font: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.form-field textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus,
+.form-field .form-control:focus {
+    outline: none;
+    border-color: rgba(124, 58, 237, 0.45);
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+    background: #ffffff;
+}
+
+.form-field-readonly input,
+.form-field-readonly .form-control {
+    background: #f3f4f6;
+    color: #4b5563;
+    cursor: default;
+}
+
+.form-field-address {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.inline-action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: fit-content;
+    color: #7c3aed;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.inline-action-link:hover {
+    text-decoration: underline;
+}
+
+.form-field-duration {
+    grid-column: 1 / -1;
+}
+
+.duration-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.duration-input {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.duration-input input {
+    max-width: 160px;
+}
+
+.duration-unit {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.event-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.btn-link-like {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancelPopUp {
+    position: fixed;
+    inset: 0;
+    padding: 1rem;
+    background: rgba(17, 24, 39, 0.45);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popUpContent {
+    width: min(560px, 100%);
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.18),
+        0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.popUpContent p {
+    margin-top: 0;
+    color: #374151;
+}
+
+.popUpContent textarea {
+    width: 100%;
+    min-height: 140px;
+    margin-top: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e5ddd6;
+    border-radius: 16px;
+    background: #faf8f6;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.popup-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+    .event-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .event-form-page {
+        width: min(100% - 1rem, 72rem);
+        padding: 1rem 0 2rem;
+    }
+
+    .event-form-card {
+        border-radius: 20px;
+        padding: 1rem;
+    }
+
+    .event-form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .event-form-actions > * {
+        width: 100%;
+    }
+
+    .duration-input {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .duration-input input {
+        max-width: 100%;
+    }
+}

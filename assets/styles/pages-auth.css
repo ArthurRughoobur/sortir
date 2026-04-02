@@ -1,0 +1,84 @@
+.container-form-login,
+.marginLeft {
+    width: min(100%, 520px);
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+}
+
+.container-form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 80svh;
+    overflow: auto;
+    scrollbar-gutter: stable;
+}
+
+.loginTitre {
+    margin: 0;
+    font-size: clamp(1.8rem, 2vw, 2.3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: #121826;
+}
+
+.labelLogin {
+    display: block;
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+}
+
+.inputLogin {
+    max-width: 100%;
+    margin: 0;
+}
+
+.marginLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.marginLeft form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.marginLeft .form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.marginLeft .form-check-label {
+    margin: 0;
+}
+
+.marginLeft input[type="radio"],
+.marginLeft input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.marginLeft button {
+    align-self: flex-start;
+}
+
+.profil {
+    width: min(100%, 40rem) !important;
+}
+
+@media (max-width: 640px) {
+    .container-form-login,
+    .marginLeft {
+        padding: 1.25rem;
+    }
+}

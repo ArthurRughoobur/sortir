@@ -210,7 +210,7 @@ class AppFixtures extends Fixture
         ];
 
         $now = new \DateTime();
-        $eventsPerUser = 3;
+        $eventsPerUser = 4;
         $registrationsPerUser = 3;
 
         $normalUsers = array_values(array_filter($users, function ($user) {
@@ -225,37 +225,89 @@ class AppFixtures extends Fixture
                 $event = new Event();
 
                 $baseName = $faker->randomElement($sorties);
-
-                $dateStart = $faker->dateTimeBetween('-1 month', '+2 months');
-                $deadline = (clone $dateStart)->modify('-' . rand(1, 5) . ' days');
                 $durationInMinutes = $faker->numberBetween(30, 360);
-                $dateEnd = (clone $dateStart)->modify('+' . $durationInMinutes . ' minutes');
+
+                // On choisit un type d'event
+                $scenario = $faker->randomElement([
+                    'past_old',      // passé depuis +30 jours
+                    'past_finished', // passé récent terminé
+                    'current',       // en cours
+                    'future_open',   // futur ouvert
+                    'future_closed', // futur mais deadline dépassée
+                    'cancelled',     // annulé
+                ]);
+
+                switch ($scenario) {
+                    case 'past_old':
+                        // Event commencé il y a plus de 30 jours et déjà terminé
+                        $dateStart = $faker->dateTimeBetween('-4 months', '-31 days');
+                        $dateEnd = (clone $dateStart)->modify("+{$durationInMinutes} minutes");
+                        $deadline = (clone $dateStart)->modify('-' . rand(2, 10) . ' days');
+                        $status = $faker->randomElement([
+                            $statusMap['Terminée'],
+                            $statusMap['Historisée'],
+                        ]);
+                        break;
+
+                    case 'past_finished':
+                        // Event terminé récemment
+                        $dateStart = $faker->dateTimeBetween('-30 days', '-2 hours');
+                        $dateEnd = (clone $dateStart)->modify("+{$durationInMinutes} minutes");
+
+                        // Si jamais la fin tombe encore dans le futur, on force la fin dans le passé
+                        if ($dateEnd > $now) {
+                            $dateEnd = (clone $now)->modify('-30 minutes');
+                            $dateStart = (clone $dateEnd)->modify("-{$durationInMinutes} minutes");
+                        }
+
+                        $deadline = (clone $dateStart)->modify('-' . rand(1, 5) . ' days');
+                        $status = $statusMap['Terminée'];
+                        break;
+
+                    case 'current':
+                        // Event en cours maintenant
+                        $dateStart = (clone $now)->modify('-' . rand(10, 90) . ' minutes');
+                        $dateEnd = (clone $now)->modify('+' . rand(10, 180) . ' minutes');
+                        $durationInMinutes = (int) $dateStart->diff($dateEnd)->format('%h') * 60
+                            + (int) $dateStart->diff($dateEnd)->format('%i');
+                        $deadline = (clone $dateStart)->modify('-' . rand(1, 3) . ' days');
+                        $status = $statusMap['En cours'];
+                        break;
+
+                    case 'future_closed':
+                        // Event futur mais inscriptions closes
+                        $dateStart = $faker->dateTimeBetween('+2 days', '+2 months');
+                        $dateEnd = (clone $dateStart)->modify("+{$durationInMinutes} minutes");
+                        $deadline = $faker->dateTimeBetween('-10 days', '-1 day');
+                        $status = $statusMap['Clôturée'];
+                        break;
+
+                    case 'cancelled':
+                        // Event annulé, futur ou récent
+                        $dateStart = $faker->dateTimeBetween('-15 days', '+2 months');
+                        $dateEnd = (clone $dateStart)->modify("+{$durationInMinutes} minutes");
+                        $deadline = (clone $dateStart)->modify('-' . rand(1, 5) . ' days');
+                        $status = $statusMap['Annulée'];
+                        break;
+
+                    case 'future_open':
+                    default:
+                        // Event futur encore ouvert ou en création
+                        $dateStart = $faker->dateTimeBetween('+1 day', '+2 months');
+                        $dateEnd = (clone $dateStart)->modify("+{$durationInMinutes} minutes");
+                        $deadline = $faker->dateTimeBetween('now', (clone $dateStart)->modify('-1 day'));
+                        $status = $faker->randomElement([
+                            $statusMap['En création'],
+                            $statusMap['Ouverte'],
+                        ]);
+                        break;
+                }
 
                 $event->setName($baseName);
                 $event->setDateStart($dateStart);
                 $event->setDeadline($deadline);
                 $event->setDuration($durationInMinutes);
-
-                if (rand(1, 15) === 1) {
-                    $event->setStatus($statusMap['Annulée']);
-                } elseif ($now < $dateStart) {
-                    if ($deadline < $now) {
-                        $event->setStatus($statusMap['Clôturée']);
-                    } else {
-                        $event->setStatus($faker->randomElement([
-                            $statusMap['En création'],
-                            $statusMap['Ouverte'],
-                        ]));
-                    }
-                } elseif ($now >= $dateStart && $now <= $dateEnd) {
-                    $event->setStatus($statusMap['En cours']);
-                } else {
-                    $event->setStatus($faker->randomElement([
-                        $statusMap['Terminée'],
-                        $statusMap['Historisée'],
-                    ]));
-                }
-
+                $event->setStatus($status);
                 $event->setMaxIscription($faker->numberBetween(6, 20));
                 $event->setEventInfo($faker->realText(255));
                 $event->setCategory($faker->randomElement($categories));
@@ -271,7 +323,7 @@ class AppFixtures extends Fixture
             }
         }
 
-        // 2) Chaque utilisateur est inscrit à au moins 5 events qui ne sont pas les siens
+        // Chaque utilisateur s'inscrit à quelques events qui ne sont pas les siens
         foreach ($normalUsers as $user) {
             $otherEvents = array_values(array_filter($allEvents, function ($event) use ($user) {
                 return $event->getOrganizer() !== $user;
@@ -287,14 +339,16 @@ class AppFixtures extends Fixture
             );
 
             foreach ($eventsToJoin as $event) {
-                if (!$event->getRegistred()->contains($user)
-                    && $event->getRegistred()->count() < $event->getMaxIscription()) {
+                if (
+                    !$event->getRegistred()->contains($user)
+                    && $event->getRegistred()->count() < $event->getMaxIscription()
+                ) {
                     $event->addRegistred($user);
                 }
             }
         }
 
-        // 3) On ajoute encore quelques inscrits aléatoires pour enrichir les events
+        // Quelques inscrits aléatoires supplémentaires
         foreach ($allEvents as $event) {
             $availableParticipants = array_values(array_filter($normalUsers, function ($user) use ($event) {
                 return $user !== $event->getOrganizer()

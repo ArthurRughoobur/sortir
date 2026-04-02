@@ -78,7 +78,7 @@ body {
     min-height: 100dvh;
     height: 100dvh;
     display: grid;
-    grid-template-rows: 80px minmax(0, 1fr) auto;
+    grid-template-rows: 95px minmax(0, 1fr) auto;
 }
 
 main {

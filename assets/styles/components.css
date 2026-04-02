@@ -105,9 +105,9 @@ button:hover,
 
 .flash {
     position: fixed;
-    top: 1rem;
+    top: 7rem;
     right: 1rem;
-    z-index: 999;
+    z-index: 2500;
     max-inline-size: min(25ch, 90vw);
     padding: 10px 14px;
     border-radius: var(--radius-sm);
@@ -415,12 +415,31 @@ button:hover,
     color: #4b5563;
     cursor: pointer;
 }
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+
+    header {
+        min-height: 60px;
+        padding: 0.5rem;
+    }
+
     .mascot svg {
-        width: 2.5rem;
+        width: 2rem;
     }
 
     .mascot h1 {
-        font-size: 1.2rem;
+        font-size: 1rem;
+    }
+
+    .menu ul {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+
+    .event-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filtreList form {
+        grid-template-columns: 1fr;
     }
 }

@@ -58,20 +58,15 @@ class EventRepository extends ServiceEntityRepository
      */
     public function findEventList(EventSearch $eventSearch, User $user): array
     {
-        // Initialise le QueryBuilder principal sur l'entité Event
         $qb = $this->createQueryBuilder('e')
             ->distinct()
-            // Charge les relations utiles pour éviter certains accès supplémentaires en base
-            ->leftJoin('e.registred', 'r')
-            ->addSelect('r')
-            ->leftJoin('e.organizer', 'o')
-            ->addSelect('o')
-            ->leftJoin('e.campus', 'c')
-            ->addSelect('c')
-            ->leftJoin('e.category', 'ca')
-            ->addSelect('ca')
-            ->leftJoin('e.status', 's')
-            ->addSelect('s');
+            ->leftJoin('e.registred', 'r')->addSelect('r')
+            ->leftJoin('e.organizer', 'o')->addSelect('o')
+            ->leftJoin('e.campus', 'c')->addSelect('c')
+            ->leftJoin('e.category', 'ca')->addSelect('ca')
+            ->leftJoin('e.status', 's')->addSelect('s')
+            ->leftJoin('e.adress', 'a')->addSelect('a')
+            ->leftJoin('a.city', 'ci')->addSelect('ci');
 
         // Filtre sur le statut des événements :
         // soit uniquement les événements terminés,
@@ -214,32 +209,6 @@ class EventRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
-    }
-
-    /**
-     * Récupère les événements dont la date de fin est dépassée.
-     *
-     * La date de fin est calculée à partir de :
-     * - la date de début
-     * - la durée de l'événement en minutes
-     *
-     * Les événements ayant déjà les statuts "Terminée", "Annulée"
-     * ou "Historisée" sont exclus.
-     *
-     * @return Event[] Liste des événements arrivés à échéance
-     */
-    public function findEventWithEndDate(): array
-    {
-        return $this->createQueryBuilder('event')
-            ->join('event.status', 'status')
-            // Calcule la fin de l'événement avec DATE_ADD(dateStart, duration, 'minute')
-            ->where('DATE_ADD(event.dateStart, event.duration, \'minute\') < :now')
-            // Exclut les événements déjà traités côté workflow
-            ->andWhere('status.name NOT IN (:excludedStatusNames)')
-            ->setParameter('now', new \DateTime())
-            ->setParameter('excludedStatusNames', ['Terminée', 'Annulée', 'Historisée'])
-            ->getQuery()
-            ->getResult();
     }
 
     public function findAllForStatusUpdate(): array

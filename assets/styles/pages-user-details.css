@@ -76,6 +76,16 @@
     color: #1f2430;
     word-break: break-word;
 }
+.photoProfil {
+    max-width: 25%;
+    border-radius: 30px;
+    margin-right: 10rem;
+}
+.profilUpdate {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
 
 /* MOBILE */
 @media (max-width: 640px) {

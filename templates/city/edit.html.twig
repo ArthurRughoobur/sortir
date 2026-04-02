@@ -3,13 +3,10 @@
 {% block title %}Modifier une ville{% endblock %}
 
 {% block body %}
-    <h1>Modifier une ville</h1>
+    <h1 class="title-location">Modifier une ville</h1>
     {% if is_granted("ROLE_ADMIN") %}
         {{ include('city/_form.html.twig', {'button_label': 'Modifier'}) }}
     {% endif %}
 
-    <a href="{{ path('app_city_index') }}">
-        <button>Retour aux villes</button></a>
 
-    {{ include('city/_delete_form.html.twig') }}
 {% endblock %}

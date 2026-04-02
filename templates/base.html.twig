@@ -39,6 +39,29 @@
         </div>
     </footer>
 </div>
-{% block extraJs %} {% endblock %}
+{% block extraJs %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.querySelector('.nav-toggle');
+            const menu = document.querySelector('.menu');
+
+            if (!toggle || !menu) return;
+
+            toggle.addEventListener('click', () => {
+                const isOpen = menu.classList.toggle('is-open');
+                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                toggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 980) {
+                    menu.classList.remove('is-open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    toggle.setAttribute('aria-label', 'Ouvrir le menu');
+                }
+            });
+        });
+    </script>
+{% endblock %}
 </body>
 </html>

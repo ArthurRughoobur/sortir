@@ -415,3 +415,12 @@ button:hover,
     color: #4b5563;
     cursor: pointer;
 }
+@media (max-width: 640px) {
+    .mascot svg {
+        width: 2.5rem;
+    }
+
+    .mascot h1 {
+        font-size: 1.2rem;
+    }
+}

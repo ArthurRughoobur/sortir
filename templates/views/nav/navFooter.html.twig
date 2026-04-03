@@ -39,6 +39,8 @@
     <ul>
         <li><a href="{{ path('main_event') }}">Accueil</a></li>
         <li><a href="{{ path('main_about') }}">Qui sommes nous</a></li>
+        <li><a href="{{ path('main_mentions') }}">Mentions légales</a></li>
+
 
         {% if app.user %}
             {% if is_granted("ROLE_ADMIN") %}

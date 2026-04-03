@@ -55,7 +55,10 @@ footer .mascot h1 {
     font-size: 0.8rem;
     line-height: 1;
 }
+.git {
+    height: 1.5rem;
 
+}
 .footer-nav ul {
     gap: 0.2rem;
     flex-wrap: nowrap;
@@ -77,6 +80,11 @@ footer .mascot h1 {
     margin: 0;
     font-size: 0.72rem;
     line-height: 1.1;
+}
+.footer-infos p a img {
+   display: inline-flex;
+    /*justify-content: center;*/
+    padding-top: 0.2rem;
 }
 
 header h1,

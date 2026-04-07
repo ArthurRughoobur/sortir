@@ -1,0 +1,104 @@
+.user-detail-page {
+    width: min(60rem, 100% - 2rem);
+    margin-inline: auto;
+    padding: 2rem 0 3rem;
+}
+
+/* CARD PRINCIPALE */
+.user-detail-card {
+    background: #ffffff;
+    border: 1px solid #eee8e2;
+    border-radius: 28px;
+    padding: clamp(1.5rem, 2vw, 2rem);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.06),
+        0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* HEADER */
+.user-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.user-detail-username {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 800;
+    background: linear-gradient(to right, #7C3AED, #FB923C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* STATUS */
+.user-detail-status {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: #f3f1ef;
+    color: #374151;
+}
+
+/* GRID INFOS */
+.user-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+/* ITEM */
+.user-detail-item {
+    background: #faf8f6;
+    border: 1px solid #f0ebe6;
+    border-radius: 20px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* LABEL / VALUE */
+.user-detail-item .label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #8b93a1;
+}
+
+.user-detail-item .value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2430;
+    word-break: break-word;
+}
+.photoProfil {
+    max-width: 25%;
+    border-radius: 30px;
+    margin-right: 10rem;
+}
+.profilUpdate {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+    .user-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .user-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-detail-status {
+        align-self: flex-start;
+    }
+}

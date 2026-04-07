@@ -1,0 +1,132 @@
+.legal-page {
+    width: min(72rem, 100% - 2rem);
+    margin-inline: auto;
+    padding: 2rem 0 3rem;
+}
+
+.legal-container {
+    background: #ffffff;
+    border: 1px solid #eee8e2;
+    border-radius: 28px;
+    padding: clamp(1.5rem, 2vw, 2.5rem);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.06),
+        0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.legal-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.legal-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+.legal-title {
+    margin: 0;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    line-height: 1.1;
+    color: #121826;
+}
+
+.legal-intro {
+    margin: 0.9rem 0 0;
+    max-width: 65ch;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4b5563;
+}
+
+.legal-content {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.legal-block {
+    background: #faf8f6;
+    border: 1px solid #f0ebe6;
+    border-radius: 22px;
+    padding: 1.25rem 1.4rem;
+}
+
+.legal-block h2 {
+    margin: 0 0 0.9rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.legal-block p {
+    margin: 0 0 1rem;
+    color: #4b5563;
+    line-height: 1.75;
+}
+
+.legal-block p:last-child {
+    margin-bottom: 0;
+}
+
+.legal-subsection {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.legal-subsection h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #374151;
+}
+
+.legal-list {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    color: #4b5563;
+}
+
+.legal-list li {
+    margin-bottom: 0.5rem;
+    line-height: 1.65;
+}
+
+.legal-list li:last-child {
+    margin-bottom: 0;
+}
+
+.legal-container a {
+    color: #7c3aed;
+    font-weight: 700;
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.legal-container a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .legal-page {
+        width: min(100% - 1rem, 72rem);
+        padding: 1rem 0 2rem;
+    }
+
+    .legal-container {
+        border-radius: 20px;
+        padding: 1rem;
+    }
+
+    .legal-block {
+        border-radius: 18px;
+        padding: 1rem;
+    }
+
+    .legal-title {
+        font-size: 1.8rem;
+    }
+}

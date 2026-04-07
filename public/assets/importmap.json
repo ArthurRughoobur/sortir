@@ -1,0 +1,94 @@
+{
+    "app": {
+        "path": "\/assets\/app-aPlWLym.js",
+        "type": "js"
+    },
+    "\/assets\/stimulus_bootstrap.js": {
+        "path": "\/assets\/stimulus_bootstrap-Ed8MeUU.js",
+        "type": "js"
+    },
+    "\/assets\/@symfony\/stimulus-bundle\/controllers.js": {
+        "path": "\/assets\/@symfony\/stimulus-bundle\/controllers-2mHNCgc.js",
+        "type": "js"
+    },
+    "\/assets\/@symfony\/ux-live-component\/live_controller.js": {
+        "path": "\/assets\/@symfony\/ux-live-component\/live_controller-qMGNvHD.js",
+        "type": "js"
+    },
+    "\/assets\/@symfony\/ux-live-component\/live.min.css": {
+        "path": "\/assets\/@symfony\/ux-live-component\/live.min-WRZuO3t.css",
+        "type": "css"
+    },
+    "\/assets\/controllers\/hello_controller.js": {
+        "path": "\/assets\/controllers\/hello_controller-h7Y4WCm.js",
+        "type": "js"
+    },
+    "\/assets\/controllers\/csrf_protection_controller.js": {
+        "path": "\/assets\/controllers\/csrf_protection_controller-xsifGyW.js",
+        "type": "js"
+    },
+    "\/assets\/styles\/normalise.css": {
+        "path": "\/assets\/styles\/normalise-7obYFGt.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/base.css": {
+        "path": "\/assets\/styles\/base-aKfOcWx.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/layout.css": {
+        "path": "\/assets\/styles\/layout-4Le6TQD.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/components.css": {
+        "path": "\/assets\/styles\/components-PNOrdgZ.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-home.css": {
+        "path": "\/assets\/styles\/pages-home-mtq23_k.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-events.css": {
+        "path": "\/assets\/styles\/pages-events-oKllT9E.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-auth.css": {
+        "path": "\/assets\/styles\/pages-auth-KsE1Raz.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-event-form.css": {
+        "path": "\/assets\/styles\/pages-event-form-csvuC1Y.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-user-details.css": {
+        "path": "\/assets\/styles\/pages-user-details-nkAbo-1.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-about.css": {
+        "path": "\/assets\/styles\/pages-about-_aswBlu.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-legal.css": {
+        "path": "\/assets\/styles\/pages-legal-lAOmB1L.css",
+        "type": "css"
+    },
+    "\/assets\/styles\/pages-error.css": {
+        "path": "\/assets\/styles\/pages-error-pdJCbPS.css",
+        "type": "css"
+    },
+    "@hotwired\/stimulus": {
+        "path": "\/assets\/vendor\/@hotwired\/stimulus\/stimulus.index-S4zNcea.js",
+        "type": "js"
+    },
+    "@symfony\/stimulus-bundle": {
+        "path": "\/assets\/@symfony\/stimulus-bundle\/loader-IOzBDLu.js",
+        "type": "js"
+    },
+    "@hotwired\/turbo": {
+        "path": "\/assets\/vendor\/@hotwired\/turbo\/turbo.index-pT15T6h.js",
+        "type": "js"
+    },
+    "@symfony\/ux-live-component": {
+        "path": "\/assets\/vendor\/@symfony\/ux-live-component\/ux-live-component.index-Q1XEBp6.js",
+        "type": "js"
+    }
+}

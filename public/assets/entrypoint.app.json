@@ -1,0 +1,22 @@
+[
+    "\/assets\/stimulus_bootstrap.js",
+    "\/assets\/styles\/normalise.css",
+    "\/assets\/styles\/base.css",
+    "\/assets\/styles\/layout.css",
+    "\/assets\/styles\/components.css",
+    "\/assets\/styles\/pages-home.css",
+    "\/assets\/styles\/pages-events.css",
+    "\/assets\/styles\/pages-auth.css",
+    "\/assets\/styles\/pages-event-form.css",
+    "\/assets\/styles\/pages-user-details.css",
+    "\/assets\/styles\/pages-about.css",
+    "\/assets\/styles\/pages-legal.css",
+    "\/assets\/styles\/pages-error.css",
+    "@symfony\/stimulus-bundle",
+    "@symfony\/ux-live-component",
+    "@hotwired\/stimulus",
+    "\/assets\/@symfony\/stimulus-bundle\/controllers.js",
+    "\/assets\/@symfony\/ux-live-component\/live_controller.js",
+    "\/assets\/@symfony\/ux-live-component\/live.min.css",
+    "\/assets\/controllers\/hello_controller.js"
+]
